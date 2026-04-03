@@ -1,4 +1,4 @@
-# Icebrk_Social
+# Dispart_Social
 An app/website for connecting with strangers on campus to plan something together
 PRD: Breakr (UW-only MVP) — Restricted “Join My Plan” Events App
 
