@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Host Dashboard - Breakr</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#fa4747",
+              "background-light": "#f8f5f5",
+              "background-dark": "#230f0f",
+            },
+            fontFamily: {
+              "display": ["Spline Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Spline Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light text-background-dark font-display">
+<!-- SHARED COMPONENT START (Strict Inclusion) -->
+<div class="relative flex h-auto min-h-screen w-full flex-row bg-[#fcf8f8] group/design-root overflow-x-hidden" style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+<!-- Side Nav Sidebar Area -->
+<div class="flex h-full min-h-screen w-[240px] flex-col justify-between bg-[#fcf8f8] p-4 shrink-0 border-r border-gray-200 fixed">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Default generic user avatar placeholder with geometric patterns" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVDaJcAF9PCpt49hmhn0dBd93ANBvjSFwwqIvnJVwBxSaVSYyY3uIdNAOb7zGKxtgZDAzjjLiqIyip_UrZ69vEQvcjeED8RAMbRAUpR7aoskiiyQnAopNdDe-M0ZrCRg0B6fWOUJ9B8wBuOqMBQW86wcjrHFKymmY-wX0HaHwVnYUhqqKLDyAMlVmcp_EH2gUqUGAtvXwoj1wyhaG3WnWhBvFdDdFZGb0wahYLDjvpSK_7LWP-s0MDaT7ktdO6-aLx82hlThgmZFA");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#1c0d0d] text-base font-medium leading-normal">Host Name</h1>
+<p class="text-[#9e4747] text-sm font-normal leading-normal">Verified Organizer</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-[#f4e6e6]">
+<div class="text-[#1c0d0d]" data-icon="Layout" data-size="24px" data-weight="fill">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H216V96H40ZM216,200H112V112H216v88Z"></path>
+</svg>
+</div>
+<p class="text-[#1c0d0d] text-sm font-medium leading-normal">Dashboard</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2">
+<div class="text-[#1c0d0d]" data-icon="Calendar" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-96-88v64a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm59.16,30.45L152,176h16a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136,23.76,23.76,0,0,1,171.16,150.45Z"></path>
+</svg>
+</div>
+<p class="text-[#1c0d0d] text-sm font-medium leading-normal">Events</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2">
+<div class="text-[#1c0d0d]" data-icon="Users" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path>
+</svg>
+</div>
+<p class="text-[#1c0d0d] text-sm font-medium leading-normal">Requests</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2">
+<div class="text-[#1c0d0d]" data-icon="Gear" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"></path>
+</svg>
+</div>
+<p class="text-[#1c0d0d] text-sm font-medium leading-normal">Settings</p>
+</div>
+</div>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#fa4747] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Host New Event</span>
+</button>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 ml-[240px] flex flex-col p-8 gap-8 max-w-7xl mx-auto w-full">
+<!-- Welcome Header from Shared Component -->
+<div class="flex flex-wrap justify-between gap-3 pt-4">
+<div class="flex min-w-72 flex-col gap-3">
+<p class="text-[#1c0d0d] tracking-light text-[32px] font-bold leading-tight">Welcome back, Host Name</p>
+<p class="text-[#9e4747] text-sm font-normal leading-normal">Here's what's happening with your events today.</p>
+</div>
+</div>
+<!-- NEW CONTENT: Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Total Views -->
+<div class="bg-white rounded-xl p-6 shadow-[0_12px_32px_rgba(45,49,66,0.04)] border border-gray-100 flex flex-col gap-2">
+<div class="flex items-center justify-between text-gray-500">
+<span class="text-sm font-medium">Total Views</span>
+<span class="material-symbols-outlined text-primary" data-icon="visibility">visibility</span>
+</div>
+<h3 class="text-3xl font-bold text-background-dark mt-2">14,209</h3>
+<p class="text-sm text-green-600 font-medium">+12% from last week</p>
+</div>
+<!-- Squads Formed -->
+<div class="bg-white rounded-xl p-6 shadow-[0_12px_32px_rgba(45,49,66,0.04)] border border-gray-100 flex flex-col gap-2">
+<div class="flex items-center justify-between text-gray-500">
+<span class="text-sm font-medium">Squads Formed</span>
+<span class="material-symbols-outlined text-green-500" data-icon="group">group</span>
+</div>
+<h3 class="text-3xl font-bold text-background-dark mt-2">34</h3>
+<p class="text-sm text-gray-500">Across 8 active events</p>
+</div>
+<!-- Tickets Clicked -->
+<div class="bg-white rounded-xl p-6 shadow-[0_12px_32px_rgba(45,49,66,0.04)] border border-gray-100 flex flex-col gap-2">
+<div class="flex items-center justify-between text-gray-500">
+<span class="text-sm font-medium">Tickets Clicked</span>
+<span class="material-symbols-outlined text-yellow-500" data-icon="local_activity">local_activity</span>
+</div>
+<h3 class="text-3xl font-bold text-background-dark mt-2">1,842</h3>
+<p class="text-sm text-gray-500">Outbound conversions</p>
+</div>
+</div>
+<!-- NEW CONTENT: Requests Table -->
+<div class="bg-white rounded-xl shadow-[0_12px_32px_rgba(45,49,66,0.04)] border border-gray-100 overflow-hidden">
+<div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+<h2 class="text-lg font-bold text-background-dark">Pending Group Requests</h2>
+<span class="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full">3 New</span>
+</div>
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="flex items-start md:items-center gap-4 p-6 border-b border-gray-50 hover:bg-gray-50 transition-colors">
+<img alt="Avatar" class="w-12 h-12 rounded-full object-cover shrink-0" data-alt="Portrait of a young woman smiling warmly with natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdDNmFPsrV75sW8rLFzXbnPvvtDAF-tvn7k2JqRv0bMsu3HPSAhn8rnO5eKlfjKPgggA5n25tbZBVFiVgBDLnO46Y62iYsVaJcDJSHpP13JZPuGnAChcLwCqjwrrFr6YgdBw7N1R4Ue6lWCDWHiVh49wVtdG3iubXAUmmVr6wtqpHX1fDAECfI8OLb25D5a7D0KRdtijHkMRynSFhmFMA1JTCbeMeMZRWMRCtO7vzSgPIyORB3ae09SorUMxS3fZXTj4fPHiOSP2Y"/>
+<div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+<div class="min-w-[150px]">
+<h4 class="font-bold text-background-dark">Sarah Jenkins</h4>
+<p class="text-xs text-gray-500">Pottery Workshop</p>
+</div>
+<p class="text-sm text-gray-600 italic flex-1">"I've been doing ceramics for a year and would love to meet other creatives! Bringing good vibes and snacks."</p>
+</div>
+<div class="flex items-center gap-2 shrink-0 mt-4 md:mt-0">
+<button class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-100 transition-colors" title="Approve">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors" title="Deny">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="flex items-start md:items-center gap-4 p-6 border-b border-gray-50 hover:bg-gray-50 transition-colors">
+<img alt="Avatar" class="w-12 h-12 rounded-full object-cover shrink-0" data-alt="Portrait of a young man with a casual messy hairstyle and confident expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEkb_ldDdhiYFBbcl0tu-uk3TpjCx1OAYfdFtGIcwLSXLz1JgR56eL0drJwSkcf5IQFG112A63wdhwa4Avkft1Er2cYPkaOpjIxToXruGRvV2HwkFb6wEB74zjw-xhqhXZ-82Pr8OfjZYbwud6o4yJ3vh5ck6lsyJNIlp7IdDJs_DPnV7wHeYGiCzOr7ZQubyH1K1P3AvVfPs1FgJvC8w6gGQwtqG5rOxeWzQwLP9mWK4BWXb47CfrTyC5Yp452gfQ9Mt0aC4SUCI"/>
+<div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+<div class="min-w-[150px]">
+<h4 class="font-bold text-background-dark">Marcus Thorne</h4>
+<p class="text-xs text-gray-500">Indie Rock Night</p>
+</div>
+<p class="text-sm text-gray-600 italic flex-1">"Huge fan of the headliner. Looking for a squad that wants to get there early and grab front row spots."</p>
+</div>
+<div class="flex items-center gap-2 shrink-0 mt-4 md:mt-0">
+<button class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-100 transition-colors" title="Approve">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors" title="Deny">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- NEW CONTENT: Announcement Input Tool -->
+<div class="bg-white rounded-xl shadow-[0_12px_32px_rgba(45,49,66,0.04)] border border-gray-100 p-6 flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="campaign">campaign</span>
+<h2 class="text-lg font-bold text-background-dark">Broadcast Announcement</h2>
+</div>
+<p class="text-sm text-gray-500">Send an alert to all active squad spaces for your upcoming events.</p>
+<div class="flex flex-col gap-3 mt-2">
+<textarea class="w-full bg-background-light border-none rounded-lg p-4 text-sm text-background-dark focus:ring-2 focus:ring-primary/50 resize-none min-h-[100px]" placeholder="e.g., 'Hey everyone! The venue changed their bag policy, please read...'"></textarea>
+<div class="flex justify-end">
+<button class="bg-primary text-white font-bold py-2 px-6 rounded-full hover:bg-primary/90 transition-colors flex items-center gap-2">
+<span>Send to all squads</span>
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

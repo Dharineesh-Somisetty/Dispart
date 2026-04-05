@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity Detail - Vibrant Social Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ec1313",
+          "background-light": "#f8f6f6",
+          "background-dark": "#221010",
+          "cream": "#FFF9F0",
+          "navy": "#1A2238",
+          "lavender": "#A8A3B5",
+          "mint": "#4ECDC4"
+        },
+        fontFamily: {
+          "display": ["Spline Sans", "sans-serif"]
+        },
+        borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        boxShadow: {
+            'soft': '0 12px 24px -8px rgba(236, 19, 19, 0.25)',
+            'float': '0 20px 40px -12px rgba(26, 34, 56, 0.08)',
+        }
+      },
+    },
+  }
+</script>
+<style>
+    body {
+        font-family: 'Spline Sans', sans-serif;
+        background-color: #FFF9F0; /* Warm cream background */
+        color: #1A2238;
+        /* Subtle noise texture */
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+    
+    /* Tactile button press effect */
+    .btn-tactile:active {
+        transform: translateY(4px) scale(0.98);
+        box-shadow: 0 4px 12px -4px rgba(236, 19, 19, 0.25);
+    }
+    
+    /* Smooth transitions */
+    .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+    }
+
+    /* Custom massive border radius for hero image */
+    @media (min-width: 1024px) {
+        .hero-clip {
+            border-bottom-right-radius: 80px;
+        }
+    }
+    
+    /* Hide scrollbar for cleaner look in details panel */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+</head>
+<body class="h-screen w-full overflow-hidden flex flex-col lg:flex-row bg-cream">
+<!-- Minimal Header / Back Navigation (Focused View) -->
+<header class="absolute top-0 left-0 w-full z-50 flex items-center justify-between p-6 lg:p-10 pointer-events-none">
+<a class="pointer-events-auto flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-float text-navy hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</a>
+<div class="pointer-events-auto flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-float">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="material-symbols-outlined text-navy text-xl" style="font-variation-settings: 'FILL' 0;">share</span>
+</div>
+</header>
+<!-- Left Panel: Immersive Hero Image (60%) -->
+<div class="relative w-full lg:w-[60%] h-[409px] lg:h-full bg-lavender lg:hero-clip overflow-hidden shadow-float z-10 shrink-0">
+<!-- Background Image with Parallax feel (implemented via object-cover and height) -->
+<img alt="Vibrant painting class with colorful canvases and happy people enjoying art" class="absolute inset-0 w-full h-full object-cover object-center" data-alt="Vibrant painting class with colorful canvases, paintbrushes, and happy young adults enjoying art in a sunlit studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyzX9iw1wyJUVt9W1kEgHv_WM56i4eAv0jxmfk0dkFXMeck_g2GBPSCBSNuRkvN3ylP9J8pL6B21XHe1JzLRMVoaaiOlx8I6mijbZujtMPehPEMSM4wO4A_H45UZPR5T13bpPn9xh5jsJw3gtR9PHaBCGzlTqrM6GI2TZow39daLoSF3Czs6LC-pbSW9ZsMexHVvFVZBCcABpz3Vr7YO9yu73GZHnEql7-p4_aNUJ3yOyVGQFvo8oq411JuJ0m9_OUJOE26vTGAtY"/>
+<!-- Gradient overlay for text legibility if needed, though mostly clean image -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent lg:hidden"></div>
+</div>
+<!-- Right Panel: Scrollable Details (40%) -->
+<div class="w-full lg:w-[40%] h-[614px] lg:h-full flex flex-col relative z-20 bg-cream">
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto no-scrollbar p-6 lg:p-10 pb-32 lg:pb-40">
+<!-- Category Tag -->
+<div class="inline-block px-4 py-1.5 bg-white border border-lavender/30 rounded-full text-sm font-bold text-navy mb-4 shadow-sm">
+                Arts &amp; Crafts
+            </div>
+<!-- Title Block -->
+<h1 class="text-4xl lg:text-[48px] font-bold text-navy leading-tight mb-6 tracking-tight font-display">
+                Sunset Pottery &amp; Wine
+            </h1>
+<!-- Host Badge -->
+<div class="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-lavender/10 mb-8 cursor-pointer hover:shadow-md transition-all">
+<div class="relative flex -space-x-4">
+<img alt="Sarah, the host" class="w-12 h-12 rounded-full border-2 border-white object-cover" data-alt="Smiling young woman with short hair wearing a yellow sweater, bright friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfjt10OZ9nvTc-b5TaBhF5NDuKbUPByNPtpk2Ejlc1PsQ0wP8-a2H8NIAUxpNttYfqhCXZUHtica2N89H3fyEJmnNkZwnGqqdwDhJLldvkHF5OpIqm81vo71z9wifaqLU6XkbOWn7KhM60NugF-fwQrw7lY7fLBUY9pecr3oVCNZSnuJw0HW05UVcC2qC7k5U_fiU9wZA7_rXVSzsHfX1Ziskdyi_06nSZuSyelZLDH9Amkva9Kzas8BD1cgp9M48Rku2yEhHj3S0"/>
+</div>
+<div>
+<p class="text-sm font-bold text-lavender uppercase tracking-wider mb-0.5">Hosted By</p>
+<p class="text-lg font-bold text-navy leading-none">Sarah Jenkins</p>
+</div>
+<div class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-cream text-primary">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<!-- Quick Info Rows -->
+<div class="space-y-6 mb-10">
+<!-- Date/Time -->
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-mint/20 text-mint shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-navy">Friday, Oct 24</h3>
+<p class="text-navy/70 font-medium">6:30 PM - 9:00 PM</p>
+</div>
+</div>
+<!-- Location -->
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-mint/20 text-mint shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-navy">Clay &amp; Co. Studio</h3>
+<p class="text-navy/70 font-medium">124 Main St, Arts District</p>
+<a class="text-primary font-bold text-sm hover:underline mt-1 inline-block" href="#">View map</a>
+</div>
+</div>
+<!-- Attendees -->
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-mint/20 text-mint shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-navy">12 spots left</h3>
+<p class="text-navy/70 font-medium">8 people are going</p>
+</div>
+</div>
+</div>
+<!-- About Section -->
+<div class="mb-8">
+<h2 class="text-2xl font-bold text-navy mb-4 font-display">About the Event</h2>
+<p class="text-lg text-navy/80 font-medium leading-relaxed mb-4">
+                    Unwind after a long week with our beginner-friendly pottery class! We'll provide all the clay, tools, and a glass of natural wine to get your creative juices flowing. 
+                </p>
+<p class="text-lg text-navy/80 font-medium leading-relaxed">
+                    You'll learn basic hand-building techniques to create your own unique mug or bowl. No prior experience needed—just bring good vibes and clothes you don't mind getting a little dusty!
+                </p>
+</div>
+<!-- Tags Section -->
+<div class="flex flex-wrap gap-2 mb-8">
+<span class="px-4 py-2 bg-white rounded-full text-sm font-bold text-navy shadow-sm border border-lavender/20">#BeginnerFriendly</span>
+<span class="px-4 py-2 bg-white rounded-full text-sm font-bold text-navy shadow-sm border border-lavender/20">#WineIncluded</span>
+<span class="px-4 py-2 bg-white rounded-full text-sm font-bold text-navy shadow-sm border border-lavender/20">#ChillVibes</span>
+</div>
+</div>
+<!-- Sticky RSVP Footer -->
+<div class="absolute bottom-0 left-0 w-full p-6 lg:p-10 bg-gradient-to-t from-cream via-cream to-transparent pointer-events-none pb-8 lg:pb-12">
+<div class="pointer-events-auto">
+<!-- 
+                  Note on interaction: In a real app, clicking this would trigger JS to:
+                  1. Depress the button (Y-axis translation)
+                  2. Fire a confetti animation overlay
+                  3. Change bg to mint, text to "You're In!", icon to check
+                -->
+<button class="w-full h-16 bg-primary text-white text-xl font-bold rounded-full shadow-soft btn-tactile transition-all flex items-center justify-center gap-2 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-primary/30 font-display">
+                    Join the Fun
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">celebration</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vibrant - Discovery Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 12px 24px -8px rgba(236, 19, 19, 0.25)',
+                        'float': '0 20px 40px -12px rgba(34, 16, 16, 0.08)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background-color: #f8f6f6;
+            color: #221010;
+        }
+        
+        /* Noise texture overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* CSS Masonry */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Hide scrollbar for category pills */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden">
+<!-- Floating Top Nav (Desktop/Tablet) -->
+<div class="hidden md:flex fixed top-[40px] lg:top-[80px] left-0 w-full justify-center z-40 px-4 pointer-events-none">
+<nav class="bg-white rounded-full shadow-float px-6 py-3 flex items-center justify-between gap-8 pointer-events-auto max-w-2xl w-full border border-gray-100">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-display font-bold text-xl tracking-tight text-background-dark">Vibrant</span>
+</div>
+<div class="flex-1 max-w-xs">
+<div class="relative flex items-center w-full h-12 rounded-full bg-background-light overflow-hidden px-4">
+<span class="material-symbols-outlined text-gray-400 mr-2">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-background-dark placeholder-gray-400 p-0" placeholder="Find an activity..." type="text"/>
+</div>
+</div>
+<button class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Portrait of a young woman smiling warmly, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi5OdZjX-fCaUA_dqlbEBzHRAogxDKdfs6oUFHhN250lgKJOxiZ4WWoBbo0pVW6cYeWyuadvEYA2LFHt9-nfZvzciyTFyfjaHEhPwuJXfJZ399CxfbmFzTmwDiusAqdwGczGokmPmsM_N_E8zSjA4ebR7PDOeSBO-2y515CKykjK8zS78Rj7utJcKlQJCx39qZQtyNpZB_o--vdMqHTANEfFXX1y-5-Uz7wYDk1gFlFk_tRXLHv9Ii0AcuZ9dZvOsh64jQiBKU5UI"/>
+</button>
+</nav>
+</div>
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-[180px] lg:pt-[220px] pb-24 lg:pb-12 flex flex-col lg:flex-row gap-8 lg:gap-12 relative z-10">
+<!-- Sticky Left Sidebar (Dates) - Desktop Only -->
+<aside class="hidden lg:block w-48 shrink-0">
+<div class="sticky top-[220px] flex flex-col gap-6">
+<h3 class="font-display font-bold text-gray-400 text-sm tracking-wider uppercase pl-4">When</h3>
+<nav class="flex flex-col gap-2">
+<button class="text-left px-4 py-3 rounded-full font-bold text-2xl text-background-dark bg-white shadow-sm transition-transform hover:translate-x-1">Today</button>
+<button class="text-left px-4 py-3 rounded-full font-bold text-2xl text-gray-400 hover:text-background-dark transition-colors">This Week</button>
+<button class="text-left px-4 py-3 rounded-full font-bold text-2xl text-gray-400 hover:text-background-dark transition-colors">This Weekend</button>
+<button class="text-left px-4 py-3 rounded-full font-bold text-2xl text-gray-400 hover:text-background-dark transition-colors">Later</button>
+</nav>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 w-full min-w-0">
+<!-- Mobile/Tablet Header & Search -->
+<div class="md:hidden flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-display font-bold text-lg text-background-dark">Vibrant</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark">search</span>
+</button>
+</div>
+<!-- Mobile/Tablet Date Filters -->
+<div class="lg:hidden flex overflow-x-auto no-scrollbar gap-3 mb-6 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+<button class="shrink-0 px-6 py-2.5 rounded-full font-bold text-sm bg-background-dark text-white">Today</button>
+<button class="shrink-0 px-6 py-2.5 rounded-full font-bold text-sm bg-white text-gray-500 border border-gray-200">This Week</button>
+<button class="shrink-0 px-6 py-2.5 rounded-full font-bold text-sm bg-white text-gray-500 border border-gray-200">This Weekend</button>
+<button class="shrink-0 px-6 py-2.5 rounded-full font-bold text-sm bg-white text-gray-500 border border-gray-200">Later</button>
+</div>
+<!-- Category Pills -->
+<div class="flex overflow-x-auto no-scrollbar gap-3 mb-8 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-primary text-white shadow-soft transition-transform hover:scale-105 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">interests</span>
+                    All Interests
+                </button>
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-white text-background-dark hover:bg-gray-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+                    Creative
+                </button>
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-white text-background-dark hover:bg-gray-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">directions_run</span>
+                    Active
+                </button>
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-white text-background-dark hover:bg-gray-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+                    Food &amp; Drink
+                </button>
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-white text-background-dark hover:bg-gray-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">music_note</span>
+                    Music
+                </button>
+<button class="shrink-0 px-5 py-3 rounded-full font-semibold text-sm bg-white text-background-dark hover:bg-gray-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">sports_esports</span>
+                    Games
+                </button>
+</div>
+<!-- Masonry Grid -->
+<div class="masonry-grid">
+<!-- Card 1 -->
+<article class="masonry-item bg-white rounded-[24px] overflow-hidden shadow-float group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative w-full overflow-hidden bg-gray-100" style="min-height: 280px;">
+<img alt="Pottery Class" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close-up of hands working wet clay on a pottery wheel, earthy tones, soft workshop lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFBY4MCS_DItPTJTjQBVLXPu8DcT3RcKk2G-ZxNop7bwVc0jqWpL2wHncvII_FdMLCAjKwuVKgMDF3yE16e8pGuiPI-bSKyfrGJihnB-bvvVyNSvSZlQNBbSK_913D8ZMbYI28zwy7hqrlPlYVeLxHwqLxgOCgJkIY1dmi7Qp3kueZHULGKba-AvFIpQY0NIM8NVgtPO1_arI0y4GNNP8F61-wBJxfyUHhcxlq2UTAJRauMGQIOTpd522XYuSOmR47gCzVsKLIdmM"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-background-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            12 Joined
+                        </div>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 text-primary font-bold text-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Today, 6:00 PM
+                        </div>
+<h2 class="font-display font-bold text-2xl text-background-dark leading-tight mb-2">Beginner's Wheel Throwing</h2>
+<p class="text-gray-500 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            Mud Room Studio • 0.5m
+                        </p>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="masonry-item bg-white rounded-[24px] overflow-hidden shadow-float group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative w-full overflow-hidden bg-gray-100" style="min-height: 340px;">
+<img alt="Run Club" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Group of young adults jogging through a sunlit urban park, energetic mood, golden hour light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHLPffFqHrkKWMf4RgGyk9SvONUDkj4HD--JeB0yopMA2eHQzk6nUSQ3bHNSJ6w_xM2Z5phjpHggF6GJs0iRMdBMxvnxXozVfAKnLZrO8HxQcc1y8mPQ7D3XiciyxicdCCL01llm6DzOLP2Uo9IO5MJKPjFxfpHlUqE8NKQCrjkHMvBGEWZqh2uGmSNwrCg3_tLt-oMin3pXbVxk7milVrpVfMq18MW6UA2Igi9yPleW7DHwOXcJBeRFR19ziIY8-lY_STrpULPGw"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-background-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            45 Joined
+                        </div>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 text-primary font-bold text-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Tomorrow, 7:00 AM
+                        </div>
+<h2 class="font-display font-bold text-2xl text-background-dark leading-tight mb-2">Sunrise 5K &amp; Coffee</h2>
+<p class="text-gray-500 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            Downtown Park • 1.2m
+                        </p>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="masonry-item bg-white rounded-[24px] overflow-hidden shadow-float group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative w-full overflow-hidden bg-gray-100" style="min-height: 250px;">
+<img alt="Board Games" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close-up of colorful wooden board game pieces on a table, warm indoor lighting, cozy atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_EvWiJoV5u_2eN30NwxOpzobtXmDxaHqnNAl1UBEHSFj1T5re6iKGVeiXQyA4Oq0HuED6JCDrGecdgbjwLLaX8FQH7eDQcaA_204OQtGNc04_NHvK4X5Gr97vvflwtjODVhDP7YzsV1c90esIvb-FG1QurIJmSdDxqLnrl-mnQZS3Z7eBaqgcKUs4Edynr_qP9-9zFrqZomOpluu7ZW3l3tyCSegJEBXyejLW-oN8S1YgTnLkA-j1662AHfjNXuRkOXEwXtn7QMs"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-background-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            8 Joined
+                        </div>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 text-primary font-bold text-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Friday, 8:00 PM
+                        </div>
+<h2 class="font-display font-bold text-2xl text-background-dark leading-tight mb-2">Catan &amp; Craft Beer Night</h2>
+<p class="text-gray-500 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            The Local Pub • 2.0m
+                        </p>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="masonry-item bg-white rounded-[24px] overflow-hidden shadow-float group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative w-full overflow-hidden bg-gray-100" style="min-height: 300px;">
+<img alt="Photography Walk" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Vintage film camera held by hands against a blurred city street background, hipster aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXhRsbXaSmfs89HSUI_y-lzx69Cj78zrHD7DlsyK5A3GaQDEq6bH7IdANnJzwn6twtLjrzjQh2a6ueR2pNPi_uRodRO-iB1tyI187psmNgwk3efzXdLSL5pyUzbK4O2C4I95Umev5nKNHB7Yvo1rXOBrAXiEaoO5mjnraZLI82Z8iB_s7APYKjuldo3yNH5ONduO60B3sYLVywumeSs8yN28R4gUTqzQPWIjAFIB-IrojzvNnV8mh7HQZVFtXc4uqZMvdAQnZ3dQY"/>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 text-primary font-bold text-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Saturday, 4:00 PM
+                        </div>
+<h2 class="font-display font-bold text-2xl text-background-dark leading-tight mb-2">Golden Hour Photo Walk</h2>
+<p class="text-gray-500 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            Historic District • 3.5m
+                        </p>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="masonry-item bg-white rounded-[24px] overflow-hidden shadow-float group cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="relative w-full overflow-hidden bg-gray-100" style="min-height: 380px;">
+<img alt="Cooking Class" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Fresh pasta being made by hand on a wooden table sprinkled with flour, rustic kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYXEL4qzhYemsFW81wtcqQKE-3EbiIVDebWd9X2GRMG9v-htvGY1iGSmK5u0Y5qG2bwV-XmyB9oNzED0ygbW0okpoj-M6hhL0jVKH0LobRCK1p84iUpssceZfcEyGOE7adXER5-m56B1YJ4P38pw7lsGRoon2lx7NYKHVz6ybduraWmg3Aj0d8gFHiseU0q_aiPWDq4doWVxusL5stkXo2FuLsW3Ql-1uDbV5j6XnT_ZtfXLwqdSAmcsIT9xH8gOyF1Tcoeh9YKBg"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-background-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                            6 Joined
+                        </div>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 text-primary font-bold text-sm mb-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Sunday, 11:00 AM
+                        </div>
+<h2 class="font-display font-bold text-2xl text-background-dark leading-tight mb-2">Handmade Pasta Workshop</h2>
+<p class="text-gray-500 text-sm font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                            Culinary Arts Center • 4.1m
+                        </p>
+</div>
+</article>
+</div>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 pb-safe z-50">
+<div class="flex justify-around items-center h-16">
+<button class="flex flex-col items-center justify-center w-full h-full text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="text-[10px] font-bold mt-1">Discover</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-background-dark transition-colors">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-bold mt-1">Schedule</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-background-dark transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-[10px] font-bold mt-1">Host</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-background-dark transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold mt-1">Profile</span>
+</button>
+</div>
+</div>
+</body></html>
