@@ -181,7 +181,7 @@ export default function ActivityDetailPage() {
             )}
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <div className="absolute bottom-0 left-0 right-0 p-7 md:p-10">
             <div className="mb-3 flex flex-wrap gap-2">
               <span className="rounded-full bg-teal-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-teal-200">
                 {event.category}
@@ -196,7 +196,7 @@ export default function ActivityDetailPage() {
           </div>
         </section>
 
-        <section className="-mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.95fr)]">
+        <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.95fr)]">
           <div className="space-y-6">
             <div className="surface-card rounded-[34px] px-6 py-6 md:px-7">
               <div className="grid gap-4 md:grid-cols-3">
