@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -126,12 +127,14 @@ export default function HostProfilePage() {
       <main className="max-w-2xl mx-auto w-full px-4 py-8">
         {/* Profile header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-full bg-coral-100 flex items-center justify-center mx-auto mb-3">
+          <div className="relative w-20 h-20 rounded-full bg-coral-100 flex items-center justify-center mx-auto mb-3 overflow-hidden">
             {profile.avatar_url ? (
-              <img
+              <Image
                 src={profile.avatar_url}
                 alt={profile.display_name}
-                className="w-full h-full rounded-full object-cover"
+                fill
+                sizes="80px"
+                className="rounded-full object-cover"
               />
             ) : (
               <span className="text-3xl font-bold text-coral-500">
@@ -188,7 +191,7 @@ export default function HostProfilePage() {
               {stats.upcomingGroups.map((g) => (
                 <a
                   key={g.id}
-                  href={`/events/${g.event.id}`}
+                  href={`/activities/${g.event.id}`}
                   className="block bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition"
                 >
                   <h3 className="font-semibold text-sm text-gray-900">

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -8,13 +9,22 @@ import PinnedPlanCard from "@/components/PinnedPlanCard";
 import ChatComposer from "@/components/ChatComposer";
 import ReportModal from "@/components/ReportModal";
 import BlockButton from "@/components/BlockButton";
-import type { Group, Event, GroupMember, Message, JoinRequest } from "@/lib/types";
+import type {
+  Group,
+  Event,
+  GroupMember,
+  Message,
+  JoinRequest,
+} from "@/lib/types";
+
+const PAGE_SIZE = 50;
 
 export default function GroupSpacePage() {
   const params = useParams();
   const router = useRouter();
   const groupId = params.id as string;
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const [group, setGroup] = useState<Group | null>(null);
   const [event, setEvent] = useState<Event | null>(null);
@@ -34,10 +44,13 @@ export default function GroupSpacePage() {
     []
   );
   const [socialRequests, setSocialRequests] = useState<JoinRequest[]>([]);
-  // Track request_type for each member
   const [memberRequestTypes, setMemberRequestTypes] = useState<
     Record<string, string>
   >({});
+  const [hasOlderMessages, setHasOlderMessages] = useState(false);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
 
   const supabase = createClient();
 
@@ -75,13 +88,17 @@ export default function GroupSpacePage() {
 
       setMembers((membersData as GroupMember[]) || []);
 
-      const { data: messagesData } = await supabase
+      // Load recent messages with pagination
+      const { data: messagesData, count } = await supabase
         .from("messages")
-        .select("*, users(*)")
+        .select("*, users(*)", { count: "exact" })
         .eq("group_id", groupId)
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: false })
+        .range(0, PAGE_SIZE - 1);
 
-      setMessages((messagesData as Message[]) || []);
+      const sorted = ((messagesData as Message[]) || []).reverse();
+      setMessages(sorted);
+      setHasOlderMessages((count || 0) > PAGE_SIZE);
 
       // Load existing share link
       const { data: shareLinks } = await supabase
@@ -133,6 +150,7 @@ export default function GroupSpacePage() {
       }
 
       setLoading(false);
+      setIsInitialLoad(false);
     }
 
     load();
@@ -158,7 +176,11 @@ export default function GroupSpacePage() {
             .single();
 
           if (data) {
-            setMessages((prev) => [...prev, data as Message]);
+            setMessages((prev) => {
+              // Prevent duplicates
+              if (prev.some((m) => m.id === data.id)) return prev;
+              return [...prev, data as Message];
+            });
           }
         }
       )
@@ -169,10 +191,100 @@ export default function GroupSpacePage() {
     };
   }, [groupId, supabase]);
 
-  // Auto-scroll to bottom
+  // Typing indicator channel (client-only broadcast)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (!currentUserId) return;
+
+    const channel = supabase
+      .channel(`typing:${groupId}`)
+      .on("broadcast", { event: "typing" }, ({ payload }) => {
+        if (payload.user_id === currentUserId) return;
+        setTypingUsers((prev) => new Set(prev).add(payload.display_name));
+
+        // Auto-clear after 3 seconds
+        setTimeout(() => {
+          setTypingUsers((prev) => {
+            const next = new Set(prev);
+            next.delete(payload.display_name);
+            return next;
+          });
+        }, 3000);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [groupId, currentUserId, supabase]);
+
+  // Auto-scroll to bottom on new messages (only if near bottom)
+  useEffect(() => {
+    if (isInitialLoad) return;
+    const container = messagesContainerRef.current;
+    if (!container) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    const isNearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight <
+      150;
+    if (isNearBottom) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isInitialLoad]);
+
+  // Initial scroll to bottom
+  useEffect(() => {
+    if (!loading && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView();
+    }
+  }, [loading, messages.length === 0]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Load older messages on scroll to top
+  const loadOlderMessages = useCallback(async () => {
+    if (loadingOlder || !hasOlderMessages || messages.length === 0) return;
+    setLoadingOlder(true);
+
+    const oldestMessage = messages[0];
+    const { data: olderData, count } = await supabase
+      .from("messages")
+      .select("*, users(*)", { count: "exact" })
+      .eq("group_id", groupId)
+      .lt("created_at", oldestMessage.created_at)
+      .order("created_at", { ascending: false })
+      .range(0, PAGE_SIZE - 1);
+
+    if (olderData && olderData.length > 0) {
+      const container = messagesContainerRef.current;
+      const prevHeight = container?.scrollHeight || 0;
+
+      setMessages((prev) => [
+        ...((olderData as Message[]) || []).reverse(),
+        ...prev,
+      ]);
+
+      // Maintain scroll position after prepending
+      requestAnimationFrame(() => {
+        if (container) {
+          container.scrollTop = container.scrollHeight - prevHeight;
+        }
+      });
+
+      setHasOlderMessages((count || 0) > PAGE_SIZE);
+    } else {
+      setHasOlderMessages(false);
+    }
+
+    setLoadingOlder(false);
+  }, [loadingOlder, hasOlderMessages, messages, supabase, groupId]);
+
+  function handleScroll() {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    if (container.scrollTop < 100 && hasOlderMessages && !loadingOlder) {
+      loadOlderMessages();
+    }
+  }
 
   async function handleSend(body: string) {
     if (!currentUserId) return;
@@ -184,6 +296,19 @@ export default function GroupSpacePage() {
     });
   }
 
+  function handleTyping() {
+    if (!currentUserId) return;
+    const members_list = members.find((m) => m.user_id === currentUserId);
+    supabase.channel(`typing:${groupId}`).send({
+      type: "broadcast",
+      event: "typing",
+      payload: {
+        user_id: currentUserId,
+        display_name: members_list?.users?.display_name || "Someone",
+      },
+    });
+  }
+
   async function handleCheckin(status: string) {
     if (!currentUserId) return;
     await supabase
@@ -191,6 +316,14 @@ export default function GroupSpacePage() {
       .update({ checkin_status: status })
       .eq("group_id", groupId)
       .eq("user_id", currentUserId);
+
+    if (event && status !== "none") {
+      await supabase.from("event_interactions").insert({
+        user_id: currentUserId,
+        event_id: event.id,
+        type: "check_in",
+      });
+    }
 
     setMembers((prev) =>
       prev.map((m) =>
@@ -256,8 +389,12 @@ export default function GroupSpacePage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-6xl mx-auto p-4 animate-pulse">
-          <div className="h-64 bg-gray-200 rounded-2xl" />
+        <div className="max-w-6xl mx-auto p-4">
+          <div className="flex gap-4 h-[calc(100vh-56px)]">
+            <div className="w-56 bg-white rounded-2xl animate-pulse" />
+            <div className="flex-1 bg-gray-50 rounded-2xl animate-pulse" />
+            <div className="w-64 bg-white rounded-2xl animate-pulse" />
+          </div>
         </div>
       </>
     );
@@ -277,8 +414,7 @@ export default function GroupSpacePage() {
   const isMember = members.some((m) => m.user_id === currentUserId);
   const currentMember = members.find((m) => m.user_id === currentUserId);
   const isHost =
-    currentMember?.role === "host" ||
-    group.host_user_id === currentUserId;
+    currentMember?.role === "host" || group.host_user_id === currentUserId;
 
   // Privacy gate: non-members get redirected
   if (!isMember && !loading) {
@@ -294,10 +430,10 @@ export default function GroupSpacePage() {
             You need to be accepted into this squad to view the group space.
           </p>
           <button
-            onClick={() => router.push(`/events/${event.id}`)}
+            onClick={() => router.push(`/activities/${event.id}`)}
             className="px-6 py-2.5 bg-coral-500 text-white rounded-xl font-medium text-sm hover:bg-coral-600 transition"
           >
-            Back to Event
+            Back to Activity
           </button>
         </div>
       </>
@@ -365,7 +501,6 @@ export default function GroupSpacePage() {
                       )}
                     </div>
                   </div>
-                  {/* Block/report for non-self members */}
                   {m.user_id !== currentUserId && (
                     <div className="shrink-0 flex gap-1">
                       <button
@@ -400,7 +535,7 @@ export default function GroupSpacePage() {
             })}
           </div>
 
-          {/* Block buttons for members (expanded view) */}
+          {/* Block buttons for members */}
           {members.filter((m) => m.user_id !== currentUserId).length > 0 && (
             <div className="mt-4 pt-3 border-t border-gray-100">
               <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
@@ -543,7 +678,33 @@ export default function GroupSpacePage() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div
+            ref={messagesContainerRef}
+            onScroll={handleScroll}
+            className="flex-1 overflow-y-auto p-4 space-y-4"
+          >
+            {/* Load older button */}
+            {hasOlderMessages && (
+              <div className="text-center">
+                <button
+                  onClick={loadOlderMessages}
+                  disabled={loadingOlder}
+                  className="text-xs text-gray-400 hover:text-gray-600 transition disabled:opacity-50"
+                >
+                  {loadingOlder ? "Loading..." : "Load older messages"}
+                </button>
+              </div>
+            )}
+
+            {messages.length === 0 && (
+              <div className="text-center py-12 text-gray-400">
+                <p className="text-sm">No messages yet</p>
+                <p className="text-xs mt-1">
+                  Start the conversation with your squad!
+                </p>
+              </div>
+            )}
+
             {messages.map((msg) => {
               const isOwn = msg.sender_user_id === currentUserId;
               const isSystem = !msg.sender_user_id;
@@ -598,24 +759,33 @@ export default function GroupSpacePage() {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Typing indicator */}
+          {typingUsers.size > 0 && (
+            <div className="px-4 pb-1 text-xs text-gray-400 animate-pulse">
+              {Array.from(typingUsers).join(", ")}{" "}
+              {typingUsers.size === 1 ? "is" : "are"} typing...
+            </div>
+          )}
+
           {/* Composer */}
-          <ChatComposer onSend={handleSend} />
+          <ChatComposer onSend={handleSend} onTyping={handleTyping} />
         </div>
 
         {/* Right sidebar: Event info + Check-in */}
         <aside className="w-full lg:w-64 border-l border-gray-100 bg-white p-4 shrink-0 overflow-y-auto">
-          {/* Event card */}
           <div className="rounded-xl overflow-hidden mb-4">
-            <div className="aspect-video bg-gray-200">
+            <div className="relative aspect-video bg-gray-200">
               {event.image_url ? (
-                <img
+                <Image
                   src={event.image_url}
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 16rem, 100vw"
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-coral-100 to-teal-100 flex items-center justify-center text-3xl">
-                  {event.mode === "WATCH" ? "🎭" : "🎯"}
+                  🎯
                 </div>
               )}
             </div>
@@ -639,7 +809,6 @@ export default function GroupSpacePage() {
             </div>
           </div>
 
-          {/* Exact location for members */}
           {group.meetup_exact_location_encrypted && (
             <div className="mb-4 p-3 bg-teal-50 rounded-xl">
               <p className="text-[10px] font-semibold text-teal-700 uppercase mb-1">
@@ -651,14 +820,12 @@ export default function GroupSpacePage() {
             </div>
           )}
 
-          {/* Proximity only notice */}
           <div className="mb-4 p-3 bg-gray-50 rounded-xl">
             <p className="text-[10px] text-gray-400">
               📍 Exact location shared only after host accepts you.
             </p>
           </div>
 
-          {/* Check-in */}
           {currentMember && (
             <div>
               <p className="text-xs text-gray-400 mb-2 text-center">
@@ -683,7 +850,7 @@ export default function GroupSpacePage() {
                 }`}
               >
                 {currentMember.checkin_status === "arrived"
-                  ? "✓ I'm Here"
+                  ? "I'm Here"
                   : currentMember.checkin_status === "otw"
                     ? "🚗 On the Way"
                     : "👋 I'm Here"}

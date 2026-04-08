@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import type { Event, Organizer } from "@/lib/types";
+import type { Event } from "@/lib/types";
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -28,7 +29,6 @@ function formatDate(dateStr: string) {
 interface EventCardProps {
   event: Event;
   groupCount?: number;
-  organizer?: Organizer | null;
   saved?: boolean;
   onSave?: (eventId: string) => void;
   onDismiss?: (eventId: string) => void;
@@ -37,7 +37,6 @@ interface EventCardProps {
 export default function EventCard({
   event,
   groupCount = 0,
-  organizer,
   saved = false,
   onSave,
   onDismiss,
@@ -86,33 +85,27 @@ export default function EventCard({
   if (dismissed) return null;
 
   return (
-    <Link href={`/events/${event.id}`} className="block group">
+    <Link href={`/activities/${event.id}`} className="block group">
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         {/* Image */}
         <div className="relative aspect-[4/3] bg-gray-200 overflow-hidden">
           {event.image_url ? (
-            <img
+            <Image
               src={event.image_url}
               alt={event.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              fill
+              sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-coral-100 to-teal-100 flex items-center justify-center">
-              <span className="text-4xl">
-                {event.mode === "WATCH" ? "🎭" : "🎯"}
-              </span>
+              <span className="text-4xl">🎯</span>
             </div>
           )}
 
           {/* Date badge */}
-          <div
-            className={`absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1 ${
-              event.mode === "WATCH"
-                ? "bg-white/90 text-gray-700"
-                : "bg-teal-500/90 text-white"
-            }`}
-          >
-            <span>{event.mode === "WATCH" ? "📅" : "🔴"}</span>
+          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1 bg-teal-500/90 text-white">
+            <span>🔴</span>
             {formatDate(event.start_time)}
           </div>
 
@@ -145,23 +138,11 @@ export default function EventCard({
 
         {/* Content */}
         <div className="p-4">
-          {/* Organizer badge */}
-          {organizer && (
-            <div className="mb-1.5">
-              <span
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                  organizer.verified
-                    ? "bg-teal-50 text-teal-700"
-                    : "bg-gray-100 text-gray-500"
-                }`}
-              >
-                {organizer.verified ? "✓" : "○"}{" "}
-                {organizer.verified ? "Verified" : ""} {organizer.name}
-              </span>
-            </div>
-          )}
+          <span className="text-[10px] font-medium text-teal-600 uppercase tracking-wider">
+            {event.category}
+          </span>
 
-          <h3 className="font-semibold text-gray-900 leading-snug line-clamp-2">
+          <h3 className="font-semibold text-gray-900 leading-snug line-clamp-2 mt-0.5">
             {event.title}
           </h3>
           <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
@@ -187,17 +168,11 @@ export default function EventCard({
             {event.venue_name || event.area_label}
           </p>
 
-          {/* Price display */}
-          {event.price_display && (
-            <p className="text-xs text-gray-400 mt-1">{event.price_display}</p>
-          )}
-
           <div className="mt-3 flex items-center justify-between">
             <span className="text-xs font-medium text-teal-600">
-              {groupCount} group{groupCount !== 1 ? "s" : ""} going
+              {groupCount} squad{groupCount !== 1 ? "s" : ""} going
             </span>
 
-            {/* Avatar stack placeholder */}
             <div className="flex -space-x-2">
               {[0, 1, 2].map((i) => (
                 <div

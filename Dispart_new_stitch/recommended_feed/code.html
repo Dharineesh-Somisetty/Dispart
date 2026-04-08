@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dispart - Recommended for You</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "surface-container-low": "#ffedeb",
+                        "surface-container-high": "#ffdad6",
+                        "surface-container-highest": "#ffd3ce",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#4e211e",
+                        "on-surface-variant": "#834d48",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "on-primary": "#ffefeb",
+                        "on-primary-container": "#491300",
+                        "secondary": "#006666",
+                        "on-secondary": "#bbfffe",
+                        "secondary-container": "#8dedec",
+                        "outline-variant": "#e09c95",
+                        "surface-dim": "#ffc7c1",
+                        "surface-bright": "#fff4f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #fff4f3; color: #4e211e; }
+        .headline-font { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#fff4f3]/80 backdrop-blur-lg flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="close up portrait of a young woman with a friendly expression in soft natural lighting outdoor setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaItOQGilSca5y_9spvfkLXByd_P531URWaP5RZnYLHMwWWLKOxqGb1G6AkgmaFf34hU8TLYkth6lDuh7aywZJneuwy9VncRrhyFyhd5p2IWrCd9_t8nuSovM9_MR-rDpuR4VW6MT2On3Iwi0bi01MBIXTQkF-YdsaIl2_YEXdQ2y6TH3_rDVCd5T4Oh0se0Hu5-0MvKF89IX7HYlrrt2uNn5DyPH2vqwB0wty6N0koYw3ibUmYe08gNgoqobRB9A6htvV9YImOZk"/>
+</div>
+<span class="text-2xl font-black text-[#FF7F50] tracking-tight headline-font">Dispart</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#ffedeb] transition-colors">
+<span class="material-symbols-outlined text-[#FF7F50]" data-icon="notifications">notifications</span>
+</button>
+</nav>
+<main class="pt-20 px-6 max-w-2xl mx-auto">
+<!-- Header -->
+<header class="mb-8">
+<h1 class="text-4xl font-extrabold headline-font text-on-surface tracking-tight leading-tight">Recommended for You</h1>
+</header>
+<!-- Filters Section -->
+<section class="space-y-6 mb-10">
+<!-- Time Filter -->
+<div class="flex p-1.5 bg-surface-container-low rounded-full w-fit">
+<button class="px-6 py-2 rounded-full bg-secondary text-on-secondary font-semibold text-sm transition-all shadow-sm">Today</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Week</button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Month</button>
+</div>
+<!-- Categories Scroll -->
+<div class="flex gap-3 overflow-x-auto no-scrollbar -mx-6 px-6">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-secondary text-on-secondary rounded-full whitespace-nowrap font-semibold">
+<span class="material-symbols-outlined text-[18px]" data-icon="explore">explore</span>
+<span>All Activities</span>
+</button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full whitespace-nowrap font-medium hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="palette">palette</span>
+<span>Creative</span>
+</button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full whitespace-nowrap font-medium hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="fitness_center">fitness_center</span>
+<span>Wellness</span>
+</button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full whitespace-nowrap font-medium hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="restaurant">restaurant</span>
+<span>Foodies</span>
+</button>
+</div>
+<!-- Distance Slider Container -->
+<div class="bg-surface-container-low p-6 rounded-lg">
+<div class="flex justify-between items-center mb-4">
+<label class="font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="distance">distance</span>
+                        Distance
+                    </label>
+<span class="text-primary font-bold text-lg">Within 5 mi</span>
+</div>
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="25" min="1" type="range" value="5"/>
+<div class="flex justify-between mt-2 text-[10px] uppercase font-bold tracking-widest text-on-surface-variant opacity-60">
+<span>1 mi</span>
+<span>25 mi</span>
+</div>
+</div>
+</section>
+<!-- Feed Section: Activity Cards -->
+<section class="space-y-8">
+<!-- Activity Card 1 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0_8px_30px_rgb(78,33,30,0.04)] hover:shadow-[0_20px_40px_rgb(78,33,30,0.08)] transition-all duration-300">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="serene rooftop yoga session at sunrise with people in silhouettes against a warm orange glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1sulBBh1WUBjFWUzOSJB2ztXCIQiw8sHaOiXZdHV8Q_N5sMcgf4isJIwq0gdTpMhO5JSp7M3rx4Nvkp8r4C3Zxw4jahNlPNSlptM41vnAT2pLGPOtrJHss2_fjT8AB1zKCPpQt-rJu0Y9AqDLI_IAdp0zcVmL9psxh7dMs_RZd4Hfj-6gN6J2Q5IbuDRiqRdM-ZFABnqOCO6gakcg_YA8TuO3eGX9cU90hEyThzXy7c36g4CWsfuYQ3wjxRNp9qACOXWJX8GZ35Y"/>
+<div class="absolute top-4 right-4 flex flex-col gap-2">
+<button class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-sm active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+<button class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-on-surface-variant shadow-sm active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="absolute bottom-4 left-4">
+<span class="px-4 py-1.5 bg-secondary text-on-secondary rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+                            3 squads going
+                        </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-2xl font-bold headline-font text-on-surface group-hover:text-primary transition-colors">Sunrise Rooftop Vinyasa</h3>
+<span class="text-sm font-bold text-primary">~1.2 mi</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant mb-4 text-sm font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                            07:30 AM
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                            Silver Lake
+                        </div>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-[11px] font-bold uppercase tracking-tight">Beginner-friendly</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-[11px] font-bold uppercase tracking-tight">Chill</span>
+</div>
+</div>
+</article>
+<!-- Activity Card 2 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0_8px_30px_rgb(78,33,30,0.04)] hover:shadow-[0_20px_40px_rgb(78,33,30,0.08)] transition-all duration-300">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="overhead view of artisanal pottery studio with hands molding clay on a potter's wheel and soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS7i_Kc0o3qDOh7h_A64lkCCEwWKtOGVnVttQUPZ5e5eGFcIQhucMzZ78qKiklp3oMrFP1FlkikywOO23IkjbKVIR6c5zg02YENtKvs22sM5yfXz7OrC9a5GuBWv5uwz2eK8JIblG_N15a3FxVBfd3uqelb2100aNBDlQATHCsN06-Of0MoMZywMQO0tHUURANrlc2GZVwdjFoUkoGgZPCkrnUk-LdjRyDz9s7BMaJYOwFNK4Lpy8fb8_w0liEEM5coxLK9hG5_dY"/>
+<div class="absolute top-4 right-4 flex flex-col gap-2">
+<button class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-sm active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+<button class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-on-surface-variant shadow-sm active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="absolute bottom-4 left-4">
+<span class="px-4 py-1.5 bg-secondary text-on-secondary rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+                            5 squads going
+                        </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-2xl font-bold headline-font text-on-surface group-hover:text-primary transition-colors">Intro to Hand-Building Pottery</h3>
+<span class="text-sm font-bold text-primary">~0.8 mi</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant mb-4 text-sm font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                            06:00 PM
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                            Echo Park
+                        </div>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-[11px] font-bold uppercase tracking-tight">Creative</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-[11px] font-bold uppercase tracking-tight">Social</span>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fff4f3]/80 backdrop-blur-lg z-50 rounded-t-xl shadow-[0_-8px_40px_rgba(78,33,30,0.06)]">
+<a class="flex flex-col items-center justify-center bg-[#ffd3ce] text-[#a03a0f] rounded-[2rem] px-5 py-2" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold tracking-wide uppercase mt-1">Recommended</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="explore">explore</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold tracking-wide uppercase mt-1">Discover</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="add_circle">add_circle</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold tracking-wide uppercase mt-1">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="group">group</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold tracking-wide uppercase mt-1">Squads</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-bold tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+<!-- Floating Action Button (Only on Home/Feed) -->
+<button class="fixed bottom-28 right-6 w-16 h-16 bg-primary-container text-on-primary rounded-full flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-[32px]" data-icon="add" style="font-variation-settings: 'wght' 700;">add</span>
+</button>
+</body></html>

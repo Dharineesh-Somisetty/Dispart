@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#805100",
+                    "tertiary-fixed": "#feb246",
+                    "on-primary-fixed": "#020000",
+                    "on-background": "#4e211e",
+                    "tertiary-fixed-dim": "#eea439",
+                    "error-container": "#fb5151",
+                    "on-tertiary-fixed": "#3a2300",
+                    "background": "#fff4f3",
+                    "surface-container": "#ffe2de",
+                    "inverse-surface": "#240303",
+                    "on-primary-container": "#491300",
+                    "on-primary-fixed-variant": "#591800",
+                    "surface-container-high": "#ffdad6",
+                    "error-dim": "#9f0519",
+                    "on-surface": "#4e211e",
+                    "surface-bright": "#fff4f3",
+                    "on-tertiary": "#fff0e3",
+                    "surface": "#fff4f3",
+                    "primary-fixed": "#fe7e4f",
+                    "surface-container-low": "#ffedeb",
+                    "inverse-primary": "#fe7e4f",
+                    "on-secondary-fixed": "#004343",
+                    "primary-fixed-dim": "#ed7244",
+                    "on-error": "#ffefee",
+                    "secondary-fixed-dim": "#7fdede",
+                    "error": "#b31b25",
+                    "surface-variant": "#ffd3ce",
+                    "secondary-dim": "#005959",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#623d00",
+                    "primary-dim": "#902e02",
+                    "surface-tint": "#a03a0f",
+                    "outline-variant": "#e09c95",
+                    "secondary-container": "#8dedec",
+                    "surface-dim": "#ffc7c1",
+                    "on-error-container": "#570008",
+                    "on-secondary-fixed-variant": "#006262",
+                    "primary": "#a03a0f",
+                    "primary-container": "#fe7e4f",
+                    "on-secondary-container": "#005858",
+                    "outline": "#a36761",
+                    "on-secondary": "#bbfffe",
+                    "secondary": "#006666",
+                    "secondary-fixed": "#8dedec",
+                    "tertiary-container": "#feb246",
+                    "on-tertiary-container": "#563500",
+                    "tertiary-dim": "#704700",
+                    "on-surface-variant": "#834d48",
+                    "surface-container-highest": "#ffd3ce",
+                    "on-primary": "#ffefeb",
+                    "inverse-on-surface": "#ce8c86"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-surface-container-low {
+            background-color: #ffedeb;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#fff4f3]/80 dark:bg-[#1a0b0a]/80 backdrop-blur-lg fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="portrait of a smiling young woman with warm lighting and a soft artistic bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4kSuzk12zzSDHqganINdl9WXQtuygMzkME382by5aySI-SfjyND4N6bEg12WOdt4JSYcqzLW4ESQPqf88N4qiUYbCm7MgMVVhm2ebk0vDPbTG-OO3EiDg3F_hF3lhWe_0qApo_GZ5sXcWQobXOlWBakvBRO6WeZuHBiO8aQcn0YYZaCNefpidLWe4Fqrr41JVD_qHds63PM_80lQW4XA15T_uPmeYHUdo_0gZCi-bLgY6D1vcfJ0xC4X1GDZw8AyD--aeRpdNqhI"/>
+</div>
+<span class="text-2xl font-black text-[#FF7F50] tracking-tight font-headline">Dispart</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#FF7F50] dark:text-[#ffb399] hover:bg-[#ffedeb] dark:hover:bg-[#2d1614] transition-colors p-2 rounded-full">notifications</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Profile Hero -->
+<section class="flex flex-col items-center text-center space-y-4">
+<div class="relative group">
+<div class="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-4 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="headshot of a creative professional woman in a bright studio setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCktTWtp707cB_KtevF3uKGQlOyMiWzIWBbko6UlcWG2DXM5TEW5POKvmgZd6n8ZmP4G_-vaHbtz_898GUl6FdxWzPhYkFaHyc5HK4N9JRYRcUToSmLrEowS9a-u-D9lSicri1PzuT0s3HQauZJPEQ_Lbo56H3CT8OH9Afi4sZHl4Kfdp57LgzBjRBw66LD9jR2w5CTXBCyXCqqyXarBwCaB8Rv4A2A4nG_bzbMKS2Axuz9tLitmhxYy9zbJdCDYPG8viyfRqZgiBE"/>
+</div>
+<button class="absolute -bottom-2 -right-2 bg-secondary text-on-secondary p-2 rounded-full shadow-md hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div>
+<h1 class="font-headline font-bold text-3xl text-on-surface">Maya Sterling</h1>
+<p class="text-on-surface-variant font-medium mt-1">@mayasterling • Explorer &amp; Curator</p>
+<p class="mt-4 max-w-sm text-on-surface/80 leading-relaxed">Finding the hidden gems in every neighborhood. Lover of art, urban hikes, and community gardens.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-2 pt-2">
+<span class="bg-surface-container-highest px-4 py-1.5 rounded-full text-xs font-semibold text-primary">Urban Art</span>
+<span class="bg-surface-container-highest px-4 py-1.5 rounded-full text-xs font-semibold text-primary">Photography</span>
+<span class="bg-surface-container-highest px-4 py-1.5 rounded-full text-xs font-semibold text-primary">Late Night Coffee</span>
+</div>
+</section>
+<!-- Communities Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<h2 class="font-headline font-bold text-xl px-2">Your Squads</h2>
+<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                    Add new
+                </button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg flex flex-col gap-3 group hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-weight="fill">brush</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_vert</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Canvas Collect</h3>
+<p class="text-xs text-on-surface-variant mt-1">128 Members</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex flex-col gap-3 group hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-weight="fill">park</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_vert</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Park Pathfinders</h3>
+<p class="text-xs text-on-surface-variant mt-1">45 Members</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommendation Controls -->
+<section class="bg-surface-container-low rounded-xl p-6 space-y-8">
+<h2 class="font-headline font-bold text-xl border-b border-outline-variant/15 pb-4">Discovery Engine</h2>
+<!-- Category Allowlist -->
+<div class="space-y-4">
+<div class="flex items-center gap-2 text-tertiary font-bold">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label text-sm uppercase tracking-widest">Personalize Categories</span>
+</div>
+<div class="flex flex-wrap gap-3">
+<!-- Chip Active -->
+<button class="bg-secondary text-on-secondary px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">check</span> Festivals
+                    </button>
+<!-- Chip Active -->
+<button class="bg-secondary text-on-secondary px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">check</span> Art Shows
+                    </button>
+<!-- Chip Inactive/Muted -->
+<button class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-lg">block</span> Sports
+                    </button>
+<!-- Chip Active -->
+<button class="bg-secondary text-on-secondary px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">check</span> Food Pop-ups
+                    </button>
+<!-- Chip Inactive -->
+<button class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
+                         Workshops
+                    </button>
+</div>
+</div>
+<!-- Distance Radius -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2 text-tertiary font-bold">
+<span class="material-symbols-outlined">distance</span>
+<span class="font-label text-sm uppercase tracking-widest">Search Radius</span>
+</div>
+<span class="font-bold text-primary">15 km</span>
+</div>
+<div class="relative h-6 flex items-center">
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full"></div>
+<div class="absolute h-1.5 bg-primary rounded-full" style="width: 60%"></div>
+<div class="absolute w-5 h-5 bg-primary-container border-2 border-surface-container-lowest rounded-full shadow-md left-[60%] -translate-x-1/2"></div>
+</div>
+<div class="flex justify-between text-[10px] text-on-surface-variant font-bold uppercase tracking-tighter">
+<span>Walking (1km)</span>
+<span>City-wide (50km)</span>
+</div>
+</div>
+<!-- Notification Frequency -->
+<div class="space-y-4">
+<div class="flex items-center gap-2 text-tertiary font-bold">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-label text-sm uppercase tracking-widest">Update Frequency</span>
+</div>
+<div class="grid grid-cols-3 gap-2 p-1 bg-surface-container-highest rounded-full">
+<button class="py-2 text-xs font-bold rounded-full transition-all">Real-time</button>
+<button class="py-2 text-xs font-bold rounded-full bg-secondary text-on-secondary shadow-sm">Daily Digest</button>
+<button class="py-2 text-xs font-bold rounded-full transition-all">Weekly</button>
+</div>
+</div>
+</section>
+<!-- Danger Zone / Log Out -->
+<div class="pt-4 flex flex-col gap-4">
+<button class="w-full bg-surface-container-highest/50 py-4 rounded-lg font-bold text-on-surface flex justify-center items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-lg">logout</span>
+                Log Out
+            </button>
+<p class="text-center text-[10px] text-on-surface-variant font-medium tracking-widest uppercase">Version 2.4.0 • Dispart Protocol</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fff4f3]/80 dark:bg-[#1a0b0a]/80 backdrop-blur-lg z-50 rounded-t-[3rem] shadow-[0_-8px_40px_rgba(78,33,30,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Recommended</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Discover</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Squads</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#ffd3ce] dark:bg-[#4e211e] text-[#a03a0f] dark:text-[#ffb399] rounded-[2rem] px-5 py-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

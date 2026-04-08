@@ -18,7 +18,7 @@ export default function CommunityBadge({
       } ${
         community.type === "domain"
           ? "bg-teal-50 text-teal-700"
-          : "bg-purple-50 text-purple-700"
+          : "bg-coral-50 text-coral-700"
       }`}
     >
       {community.type === "domain" ? "🏫" : "🎨"} {community.name}

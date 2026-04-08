@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#805100",
+                    "tertiary-fixed": "#feb246",
+                    "on-primary-fixed": "#020000",
+                    "on-background": "#4e211e",
+                    "tertiary-fixed-dim": "#eea439",
+                    "error-container": "#fb5151",
+                    "on-tertiary-fixed": "#3a2300",
+                    "background": "#fff4f3",
+                    "surface-container": "#ffe2de",
+                    "inverse-surface": "#240303",
+                    "on-primary-container": "#491300",
+                    "on-primary-fixed-variant": "#591800",
+                    "surface-container-high": "#ffdad6",
+                    "error-dim": "#9f0519",
+                    "on-surface": "#4e211e",
+                    "surface-bright": "#fff4f3",
+                    "on-tertiary": "#fff0e3",
+                    "surface": "#fff4f3",
+                    "primary-fixed": "#fe7e4f",
+                    "surface-container-low": "#ffedeb",
+                    "inverse-primary": "#fe7e4f",
+                    "on-secondary-fixed": "#004343",
+                    "primary-fixed-dim": "#ed7244",
+                    "on-error": "#ffefee",
+                    "secondary-fixed-dim": "#7fdede",
+                    "error": "#b31b25",
+                    "surface-variant": "#ffd3ce",
+                    "secondary-dim": "#005959",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#623d00",
+                    "primary-dim": "#902e02",
+                    "surface-tint": "#a03a0f",
+                    "outline-variant": "#e09c95",
+                    "secondary-container": "#8dedec",
+                    "surface-dim": "#ffc7c1",
+                    "on-error-container": "#570008",
+                    "on-secondary-fixed-variant": "#006262",
+                    "primary": "#a03a0f",
+                    "primary-container": "#fe7e4f",
+                    "on-secondary-container": "#005858",
+                    "outline": "#a36761",
+                    "on-secondary": "#bbfffe",
+                    "secondary": "#006666",
+                    "secondary-fixed": "#8dedec",
+                    "tertiary-container": "#feb246",
+                    "on-tertiary-container": "#563500",
+                    "tertiary-dim": "#704700",
+                    "on-surface-variant": "#834d48",
+                    "surface-container-highest": "#ffd3ce",
+                    "on-primary": "#ffefeb",
+                    "inverse-on-surface": "#ce8c86"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Be Vietnam Pro"],
+                    "label": ["Be Vietnam Pro"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- Top Navigation (Contextually Suppressed for Onboarding Flow) -->
+<!-- The TopAppBar is not rendered here as per "Shell Visibility & Relevance" rules for Linear/Transactional screens -->
+<main class="min-h-screen flex flex-col items-center px-6 pt-12 pb-24 overflow-x-hidden">
+<!-- Hero Section -->
+<header class="w-full max-w-md text-center space-y-4 mb-10">
+<div class="inline-block px-4 py-1.5 bg-surface-container-high text-primary font-bold tracking-widest text-[10px] uppercase rounded-full">
+                Welcome to Dispart
+            </div>
+<h1 class="font-headline font-extrabold text-4xl leading-tight tracking-tight text-on-surface">
+                Get off the feed. <br/>
+<span class="text-primary">Get into real life.</span>
+</h1>
+<p class="text-on-surface-variant text-lg px-4 leading-relaxed">
+                Join curated squads and local activities. No doomscrolling, just doing.
+            </p>
+</header>
+<!-- Onboarding Bento Flow -->
+<div class="w-full max-w-md space-y-6">
+<!-- Interest Selection Section -->
+<section class="bg-surface-container-low rounded-lg p-6">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-headline font-bold text-xl">What moves you?</h2>
+<span class="text-xs font-semibold text-on-surface-variant opacity-60">Step 1/3</span>
+</div>
+<div class="flex flex-wrap gap-3">
+<!-- Interest Chips -->
+<button class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full flex items-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="sports_basketball">sports_basketball</span>
+<span class="text-sm font-semibold">Sports</span>
+</button>
+<button class="bg-surface-container-high text-on-surface px-5 py-2.5 rounded-full flex items-center gap-2 hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="forest">forest</span>
+<span class="text-sm font-semibold">Outdoors</span>
+</button>
+<button class="bg-surface-container-high text-on-surface px-5 py-2.5 rounded-full flex items-center gap-2 hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="palette">palette</span>
+<span class="text-sm font-semibold">Art</span>
+</button>
+<button class="bg-surface-container-high text-on-surface px-5 py-2.5 rounded-full flex items-center gap-2 hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="menu_book">menu_book</span>
+<span class="text-sm font-semibold">Study</span>
+</button>
+<button class="bg-surface-container-high text-on-surface px-5 py-2.5 rounded-full flex items-center gap-2 hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="volunteer_activism">volunteer_activism</span>
+<span class="text-sm font-semibold">Volunteering</span>
+</button>
+<button class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full flex items-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="fitness_center">fitness_center</span>
+<span class="text-sm font-semibold">Fitness</span>
+</button>
+<button class="bg-surface-container-high text-on-surface px-5 py-2.5 rounded-full flex items-center gap-2 hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="restaurant">restaurant</span>
+<span class="text-sm font-semibold">Food</span>
+</button>
+</div>
+</section>
+<!-- Community Join Section -->
+<section class="bg-surface-container-highest rounded-lg p-6 border border-outline-variant border-opacity-10">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline font-bold text-xl">Find your people</h2>
+<span class="text-xs font-semibold text-on-surface-variant opacity-60">Step 2/3</span>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="text-[10px] uppercase font-bold text-primary tracking-widest absolute -top-2 left-4 bg-surface-container-highest px-2">Access Method</label>
+<div class="flex items-center bg-surface-container-lowest rounded-xl p-1 shadow-sm">
+<input class="w-full bg-transparent border-none focus:ring-0 px-4 py-3 font-medium placeholder:text-on-surface-variant/40" placeholder="Email or invite code..." type="text"/>
+<button class="bg-primary text-on-primary p-3 rounded-lg shadow-md transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed px-1">
+                        Use your university or company email to unlock exclusive local squads instantly.
+                    </p>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="flex -space-x-3">
+<img class="w-10 h-10 rounded-full border-2 border-surface-container-highest object-cover" data-alt="close-up portrait of a smiling young man with curly hair in a vibrant outdoor city setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiZVmyfSMzgchwLlhgmwtyM684OK9bdcCfWQw4Z6rfMVkwYZE65lMRmWH0pdR8JVmHvI0_SsANhKgdHvaENkpIFkTRKrhNJt2E9qiXvbwlcgno2C4rg4WYOMuzI1LOtzCfCHZfQadU-5Lh7amg5TaKUQP7g3IwFdEiM7wWJcpiIDXUUaSxtpMSeKDM8OLNOwW4MxMjlkEtpvUsQTE5bB0CFzv1qSj6BlHDwQvYdf39Zn_oVWYbd6uAUz7hmGQadHFGVCBqwQMV1R0"/>
+<img class="w-10 h-10 rounded-full border-2 border-surface-container-highest object-cover" data-alt="professional woman in her late 20s smiling warmly with natural sunlight on her face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWU0pG8H1GlhXzDQOQqVF_Ip5exWsjhm5xuAsqaaJpZ-armGY2tbREWN1uWRs21clLwgS_bYNvo2iUg44Cym_K1-a2Zg_--zGNT2q_VGtxo6q97zbVfokVWCcAfREckawEFMW2fVEwkRnJO7wyCueZI8rBhmwd_KSyDWc0b9cegcpXEbmnO-08KlhU7xtpQIyS4vE7URu9iCGxUTc6414fQrVO2otyHDuVKc42o-OKMDbFQ5Kx-Js3uQaSW5THkdTlbKxL3bWuqHM"/>
+<img class="w-10 h-10 rounded-full border-2 border-surface-container-highest object-cover" data-alt="cheerful young man wearing glasses looking at the camera with a soft blurry park background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz-HSjO48i6AOyswISvSQmrNSxPJuKcNtcoi9h7NhMubW1XaYEUsIzQgGKe7be7QGl5yrMccGTly4eKu5hRN1aeFbaY2YJ-x8UB8_a61uOi00e_MQCLboHVivpTBR3iUnV6CqLt_zlRm5FmJbyBVzdyINE7MfhlINxPecYIXZI1mFmjY3V4oD7IBk6EQqCnkEQF__ScXrp374gpOa8fqei_KniLebqjQEWhPT9LYwYFC-GLe5d6oIgjm8Chbsj7W7ozx2q5kwL06Q"/>
+<div class="w-10 h-10 rounded-full border-2 border-surface-container-highest bg-tertiary-container flex items-center justify-center text-[10px] font-bold text-on-tertiary-container">
+                            +4k
+                        </div>
+</div>
+<span class="text-sm font-medium text-on-surface">Join 4,200+ local members</span>
+</div>
+</section>
+<!-- Permissions Section -->
+<section class="bg-surface-container-low rounded-lg p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline font-bold text-xl">Stay in the loop</h2>
+<span class="text-xs font-semibold text-on-surface-variant opacity-60">Step 3/3</span>
+</div>
+<div class="space-y-4">
+<!-- Permission Row: Location -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+</div>
+<div>
+<h3 class="font-bold text-sm">Nearby Discoveries</h3>
+<p class="text-xs text-on-surface-variant">Find squads in your block</p>
+</div>
+</div>
+<div class="w-12 h-6 bg-secondary rounded-full flex items-center px-1">
+<div class="w-4 h-4 bg-on-secondary rounded-full ml-auto"></div>
+</div>
+</div>
+<!-- Permission Row: Notifications -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<h3 class="font-bold text-sm">Squad Invites</h3>
+<p class="text-xs text-on-surface-variant">Don't miss a last-minute plan</p>
+</div>
+</div>
+<div class="w-12 h-6 bg-surface-container-high rounded-full flex items-center px-1">
+<div class="w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Footer CTA -->
+<footer class="fixed bottom-0 left-0 w-full p-6 bg-surface/80 backdrop-blur-xl flex flex-col items-center gap-4">
+<button class="w-full max-w-md py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-lg rounded-full shadow-lg shadow-primary/20 transition-all active:scale-95">
+                Ready to Dispart
+            </button>
+<button class="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">
+                Skip for now
+            </button>
+</footer>
+</main>
+<!-- Success Modal (Hidden by default, shown for conceptual design) -->
+<div class="hidden fixed inset-0 z-50 flex items-end justify-center">
+<div class="absolute inset-0 bg-surface-dim/40 backdrop-blur-md"></div>
+<div class="relative bg-surface rounded-t-xl w-full max-w-md p-8 shadow-2xl animate-slide-up">
+<div class="w-12 h-1 bg-outline-variant/30 rounded-full mx-auto mb-8"></div>
+<div class="text-center space-y-6">
+<div class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mx-auto text-secondary text-4xl">
+<span class="material-symbols-outlined text-5xl" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<h2 class="font-headline font-extrabold text-3xl">You're in!</h2>
+<p class="text-on-surface-variant leading-relaxed">
+                    We've matched you with 12 squads nearby based on your interest in <strong>Fitness</strong> and <strong>Sports</strong>.
+                </p>
+<button class="w-full py-4 bg-secondary text-on-secondary font-bold text-lg rounded-full shadow-lg transition-all active:scale-95">
+                    Show my Squads
+                </button>
+</div>
+</div>
+</div>
+</body></html>

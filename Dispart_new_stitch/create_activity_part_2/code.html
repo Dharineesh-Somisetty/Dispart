@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dispart - Activity Wizard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "surface-container-high": "#ffdad6",
+                        "on-surface": "#4e211e",
+                        "surface-bright": "#fff4f3",
+                        "surface": "#fff4f3",
+                        "primary-fixed": "#fe7e4f",
+                        "surface-container-low": "#ffedeb",
+                        "on-error": "#ffefee",
+                        "error": "#b31b25",
+                        "surface-variant": "#ffd3ce",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "on-secondary-container": "#005858",
+                        "outline": "#a36761",
+                        "on-secondary": "#bbfffe",
+                        "secondary": "#006666",
+                        "secondary-container": "#8dedec",
+                        "surface-dim": "#ffc7c1",
+                        "on-primary": "#ffefeb",
+                        "on-surface-variant": "#834d48",
+                        "surface-container-highest": "#ffd3ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-header {
+            background: rgba(255, 244, 243, 0.8);
+            backdrop-filter: blur(16px);
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #fff4f3;
+            color: #4e211e;
+        }
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-32">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#fff4f3]/80 dark:bg-[#1a0b0a]/80 backdrop-blur-lg">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#ffedeb] transition-colors">
+<span class="material-symbols-outlined text-[#a03a0f]">arrow_back</span>
+</button>
+<span class="text-2xl font-black text-[#FF7F50] tracking-tight">Dispart</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">4</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant">5</div>
+</div>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- Step 4: Preferences Section -->
+<section class="mb-12">
+<div class="mb-8">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase">Step 4 of 5</span>
+<h1 class="text-3xl font-extrabold text-on-surface mt-2 tracking-tight">Refine the Vibe</h1>
+<p class="text-on-surface-variant mt-2">Set the expectations so the right people find your activity.</p>
+</div>
+<!-- Skill Level Grid -->
+<div class="space-y-6">
+<div>
+<label class="text-sm font-bold text-on-surface ml-1 block mb-3">Skill level</label>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center p-4 rounded-lg bg-surface-container-highest ring-2 ring-primary text-primary transition-all">
+<span class="material-symbols-outlined mb-2" data-icon="star_outline">star_outline</span>
+<span class="text-xs font-bold">Beginner</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined mb-2" data-icon="star_half">star_half</span>
+<span class="text-xs font-bold">Int</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined mb-2" data-icon="stars">stars</span>
+<span class="text-xs font-bold">Any</span>
+</button>
+</div>
+</div>
+<!-- Vibe Selection - Bento Style -->
+<div>
+<label class="text-sm font-bold text-on-surface ml-1 block mb-3">Vibe</label>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center gap-4 p-5 rounded-lg bg-surface-container-low border border-transparent hover:border-outline-variant transition-all text-left">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="self_improvement">self_improvement</span>
+</div>
+<div>
+<span class="block font-bold text-on-surface">Chill</span>
+<span class="text-[10px] text-on-surface-variant leading-tight">Relaxed pace, focus on fun</span>
+</div>
+</button>
+<button class="flex items-center gap-4 p-5 rounded-lg bg-secondary text-on-secondary ring-4 ring-secondary/20 transition-all text-left">
+<div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+</div>
+<div>
+<span class="block font-bold">Talkative</span>
+<span class="text-[10px] opacity-80 leading-tight">Social first, activity second</span>
+</div>
+</button>
+<button class="col-span-2 flex items-center gap-4 p-5 rounded-lg bg-surface-container-low border border-transparent hover:border-outline-variant transition-all text-left">
+<div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="trophy">trophy</span>
+</div>
+<div class="flex-1">
+<span class="block font-bold text-on-surface">Comp</span>
+<span class="text-[10px] text-on-surface-variant leading-tight">Focused and challenging session</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Capacity Slider Custom UI -->
+<div class="p-6 rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<label class="text-sm font-bold text-on-surface">Capacity</label>
+<span class="px-3 py-1 bg-primary-container text-white rounded-full text-xs font-black">12 People</span>
+</div>
+<input class="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-primary" max="50" min="2" type="range" value="12"/>
+<div class="flex justify-between mt-2 px-1">
+<span class="text-[10px] font-bold text-on-surface-variant">2</span>
+<span class="text-[10px] font-bold text-on-surface-variant">50</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Step 5: Community Gating -->
+<section class="mb-12">
+<div class="mb-8">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase">Step 5 of 5</span>
+<h1 class="text-3xl font-extrabold text-on-surface mt-2 tracking-tight">Community Gating</h1>
+<p class="text-on-surface-variant mt-2">Who gets to see and join this activity?</p>
+</div>
+<div class="space-y-4">
+<div class="p-1 bg-surface-container-low rounded-lg flex flex-col gap-1">
+<button class="flex items-center gap-4 p-4 rounded-xl bg-white shadow-sm ring-1 ring-black/5 transition-all">
+<img class="w-12 h-12 rounded-lg object-cover" data-alt="Modern bright open plan office space with team members collaborating around a wooden table in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3pXzdjqBoSUvQVS-UybKpga34vwxRNFpIF9BBAq_bFIpQ4jJouRPChtzzYG-UKyPEL3LySAYD-S7IsWgq8tosTDsxfz0KLzjgX7alSDUITFbztu9vEggJmntaDoAWgc7Y7wu-absmH0rUmN52SCFzaSvHkttCqSfnJez2S5uHcH1gptUSYDFZVoeNCK5kp3d8R35EofxfNXxCwP6dT5Zb--jj9PkzlLLmblxAaOs07sPrYBOEcJ3TJiRLNLV4v8_to4C4YwI1KQ0"/>
+<div class="flex-1 text-left">
+<span class="block font-bold text-on-surface text-sm">Tech &amp; Tacos Squad</span>
+<span class="text-[10px] text-on-surface-variant">842 Active Members</span>
+</div>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-high transition-all opacity-60">
+<img class="w-12 h-12 rounded-lg object-cover" data-alt="Serene yoga studio with warm wood floors and large windows showing lush green garden landscape outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeIz_tBmOqrPtQBs-vf0AP7qjEL7vvr7aEDOIl-LvN2HxZJLoolDe0SuibWhcm43Qmr8wtB2_yj-2xq2g1hfmbKZVj_OCH6hrfEhvN4FUJChM_Dzbkka4piSWL20AkVuD_Hb0aGUIW9_Pcu-S5MzYte_KTbFBjp4O-3l74kU04X4Fm0Lf_BdinkOP3Mpzd7y_P1lkLhYOmjnoY2A7U8kPhAwpzspaWw1MJ7DDVJY4XRQ4_t82mMBqLYcvi5FXOR09qCBjPbcdEAJM"/>
+<div class="flex-1 text-left">
+<span class="block font-bold text-on-surface text-sm">Morning Flow Collective</span>
+<span class="text-[10px] text-on-surface-variant">156 Members</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="add_circle">add_circle</span>
+</button>
+</div>
+<!-- Visibility Toggle Card -->
+<div class="p-6 rounded-xl bg-surface-container-highest/50 border-2 border-dashed border-outline-variant">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-4">
+<h3 class="font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="visibility_off">visibility_off</span>
+                                community-only toggle
+                            </h3>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">
+                                Only members of the selected community will be able to see and request to join this activity. 
+                                It will not appear in the global Discover feed.
+                            </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer mt-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Final Summary Card -->
+<div class="p-6 rounded-lg bg-primary-container text-on-primary mb-8 overflow-hidden relative">
+<div class="relative z-10">
+<h4 class="text-xs font-black uppercase tracking-widest opacity-80">Final Preview</h4>
+<h3 class="text-xl font-extrabold mt-1">Beach Volleyball Social</h3>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold backdrop-blur-sm">Beginner</span>
+<span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold backdrop-blur-sm">Talkative</span>
+<span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold backdrop-blur-sm">12 Slots</span>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 rotate-12" data-icon="volleyball">sports_volleyball</span>
+</div>
+</main>
+<!-- Bottom Navigation / Publish Bar -->
+<div class="fixed bottom-0 left-0 w-full z-50">
+<!-- Floating Publish Button Area -->
+<div class="px-6 pb-28">
+<button class="w-full py-5 bg-primary text-on-primary rounded-lg font-black text-lg shadow-xl shadow-primary/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-transform">
+                Publish
+                <span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</button>
+</div>
+<!-- Shared BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fff4f3]/80 dark:bg-[#1a0b0a]/80 backdrop-blur-lg rounded-t-[3rem] shadow-[0_-8px_40px_rgba(78,33,30,0.06)]">
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Recommended</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Discover</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#ffd3ce] dark:bg-[#4e211e] text-[#a03a0f] dark:text-[#ffb399] rounded-[2rem] px-5 py-2 transition-transform active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Squads</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

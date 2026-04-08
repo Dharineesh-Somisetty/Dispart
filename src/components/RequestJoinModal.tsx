@@ -57,6 +57,20 @@ export default function RequestJoinModal({
           : insertError.message
       );
     } else {
+      const { data: group } = await supabase
+        .from("groups")
+        .select("event_id")
+        .eq("id", groupId)
+        .single();
+
+      if (group?.event_id) {
+        await supabase.from("event_interactions").insert({
+          user_id: user.id,
+          event_id: group.event_id,
+          type: "join_request",
+        });
+      }
+
       onSuccess();
     }
     setLoading(false);

@@ -1,23 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface ChatComposerProps {
   onSend: (message: string) => void;
+  onTyping?: () => void;
   disabled?: boolean;
 }
 
 export default function ChatComposer({
   onSend,
+  onTyping,
   disabled = false,
 }: ChatComposerProps) {
   const [text, setText] = useState("");
+  const lastTypingRef = useRef(0);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!text.trim() || disabled) return;
     onSend(text.trim());
     setText("");
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setText(e.target.value);
+    // Throttle typing indicator to once per 2 seconds
+    if (onTyping && Date.now() - lastTypingRef.current > 2000) {
+      lastTypingRef.current = Date.now();
+      onTyping();
+    }
   }
 
   return (
@@ -28,7 +40,7 @@ export default function ChatComposer({
       <input
         type="text"
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={handleChange}
         placeholder="Message the squad..."
         disabled={disabled}
         className="flex-1 px-4 py-2.5 rounded-full border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-coral-400 disabled:opacity-50"

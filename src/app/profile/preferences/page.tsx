@@ -12,25 +12,28 @@ const CATEGORIES = [
   "Food & Drink",
   "Outdoors",
   "Sports",
-  "Tech",
+  "Workshops",
   "Community",
   "Nightlife",
-  "Wellness",
+  "Fitness",
 ];
 
-const POPULAR_TAGS = [
-  "live-music",
+const POPULAR_HOBBIES = [
   "hiking",
+  "pottery",
+  "volleyball",
+  "cooking",
+  "yoga",
+  "photography",
+  "gardening",
+  "running",
+  "cycling",
+  "painting",
+  "climbing",
+  "dance",
+  "cricket",
+  "kayaking",
   "volunteer",
-  "networking",
-  "beginner",
-  "food",
-  "creative",
-  "wellness",
-  "nightlife",
-  "free",
-  "outdoor",
-  "workshop",
 ];
 
 const DISTANCES = [5, 10, 25, 50, 100];
@@ -41,13 +44,13 @@ export default function PreferencesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Editable state
-  const [modePreference, setModePreference] = useState<"ALL" | "WATCH" | "DO">(
-    "ALL"
-  );
   const [categories, setCategories] = useState<string[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
+  const [excludeCategories, setExcludeCategories] = useState<string[]>([]);
+  const [hobbyAllowlist, setHobbyAllowlist] = useState<string[]>([]);
+  const [hobbyBlocklist, setHobbyBlocklist] = useState<string[]>([]);
   const [maxDistance, setMaxDistance] = useState(10);
+  const [digestFrequency, setDigestFrequency] = useState<"off" | "daily" | "weekly">("off");
+  const [emailOptIn, setEmailOptIn] = useState(true);
 
   const supabase = createClient();
 
@@ -70,10 +73,13 @@ export default function PreferencesPage() {
       if (data) {
         const p = data as UserPreferences;
         setPrefs(p);
-        setModePreference(p.mode_preference);
-        setCategories(p.categories);
-        setTags(p.tags);
+        setCategories(p.include_categories || p.categories || []);
+        setExcludeCategories(p.exclude_categories || []);
+        setHobbyAllowlist(p.hobby_allowlist || p.tags || []);
+        setHobbyBlocklist(p.hobby_blocklist || []);
         setMaxDistance(p.max_distance_miles);
+        setDigestFrequency(p.digest_frequency || "off");
+        setEmailOptIn(p.email_opt_in ?? true);
       }
 
       setLoading(false);
@@ -86,12 +92,28 @@ export default function PreferencesPage() {
     setCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
+    setExcludeCategories((prev) => prev.filter((c) => c !== cat));
   }
 
-  function toggleTag(tag: string) {
-    setTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+  function toggleExclude(cat: string) {
+    setExcludeCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
+    setCategories((prev) => prev.filter((c) => c !== cat));
+  }
+
+  function toggleHobby(hobby: string) {
+    setHobbyAllowlist((prev) =>
+      prev.includes(hobby) ? prev.filter((h) => h !== hobby) : [...prev, hobby]
+    );
+    setHobbyBlocklist((prev) => prev.filter((h) => h !== hobby));
+  }
+
+  function toggleBlockedHobby(hobby: string) {
+    setHobbyBlocklist((prev) =>
+      prev.includes(hobby) ? prev.filter((h) => h !== hobby) : [...prev, hobby]
+    );
+    setHobbyAllowlist((prev) => prev.filter((h) => h !== hobby));
   }
 
   async function handleSave() {
@@ -108,10 +130,16 @@ export default function PreferencesPage() {
 
     const payload = {
       user_id: user.id,
-      mode_preference: modePreference,
-      categories,
-      tags,
       max_distance_miles: maxDistance,
+      include_categories: categories,
+      exclude_categories: excludeCategories,
+      hobby_allowlist: hobbyAllowlist,
+      hobby_blocklist: hobbyBlocklist,
+      digest_frequency: digestFrequency,
+      email_opt_in: emailOptIn,
+      sms_opt_in: false,
+      categories,
+      tags: hobbyAllowlist,
     };
 
     if (prefs) {
@@ -124,7 +152,7 @@ export default function PreferencesPage() {
     }
 
     setSaving(false);
-    router.push("/");
+    router.push("/profile");
   }
 
   if (loading) {
@@ -148,45 +176,21 @@ export default function PreferencesPage() {
       <Navbar />
       <main className="max-w-xl mx-auto w-full px-4 py-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">
-          Your Preferences
+          Recommendation Settings
         </h1>
         <p className="text-sm text-gray-500 mb-6">
-          Help us show you the most relevant events. These preferences improve
-          your recommendations.
+          Tell us what you enjoy so we can recommend the best activities for you.
         </p>
 
         <div className="space-y-6">
-          {/* Mode preference */}
+          {/* Favorite Categories */}
           <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-3">
-              Default Mode
+            <h2 className="font-semibold text-gray-900 text-sm mb-1">
+              Include Categories
             </h2>
-            <div className="flex gap-2">
-              {(["ALL", "WATCH", "DO"] as const).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setModePreference(m)}
-                  className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium border transition ${
-                    modePreference === m
-                      ? m === "WATCH"
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : m === "DO"
-                          ? "bg-teal-500 text-white border-teal-500"
-                          : "bg-coral-500 text-white border-coral-500"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {m === "ALL" ? "All" : m === "WATCH" ? "🎭 Watch" : "🎯 Do"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Categories */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-3">
-              Favorite Categories
-            </h2>
+            <p className="text-xs text-gray-400 mb-3">
+              Show me activities in these categories
+            </p>
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((cat) => (
                 <button
@@ -204,23 +208,75 @@ export default function PreferencesPage() {
             </div>
           </div>
 
-          {/* Tags */}
+          {/* Exclude Categories */}
           <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-3">
-              Interests
+            <h2 className="font-semibold text-gray-900 text-sm mb-1">
+              Mute Categories
             </h2>
+            <p className="text-xs text-gray-400 mb-3">
+              Hide activities from these categories
+            </p>
             <div className="flex flex-wrap gap-2">
-              {POPULAR_TAGS.map((tag) => (
+              {CATEGORIES.map((cat) => (
                 <button
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
+                  key={cat}
+                  onClick={() => toggleExclude(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                    tags.includes(tag)
+                    excludeCategories.includes(cat)
+                      ? "bg-gray-800 text-white border-gray-800"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Hobbies */}
+          <div className="bg-white rounded-2xl p-5">
+            <h2 className="font-semibold text-gray-900 text-sm mb-1">
+              Hobby Allowlist
+            </h2>
+            <p className="text-xs text-gray-400 mb-3">
+              Prioritize activities matching your hobbies
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {POPULAR_HOBBIES.map((hobby) => (
+                <button
+                  key={hobby}
+                  onClick={() => toggleHobby(hobby)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
+                    hobbyAllowlist.includes(hobby)
                       ? "bg-teal-500 text-white border-teal-500"
                       : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
                   }`}
                 >
-                  #{tag}
+                  {hobby}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-5">
+            <h2 className="font-semibold text-gray-900 text-sm mb-1">
+              Hobby Mute List
+            </h2>
+            <p className="text-xs text-gray-400 mb-3">
+              Hide activities centered around these hobbies
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {POPULAR_HOBBIES.map((hobby) => (
+                <button
+                  key={`${hobby}-blocked`}
+                  onClick={() => toggleBlockedHobby(hobby)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
+                    hobbyBlocklist.includes(hobby)
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {hobby}
                 </button>
               ))}
             </div>
@@ -248,7 +304,45 @@ export default function PreferencesPage() {
             </div>
           </div>
 
-          {/* Save */}
+          {/* Digest */}
+          <div className="bg-white rounded-2xl p-5">
+            <h2 className="font-semibold text-gray-900 text-sm mb-3">
+              Email Digest
+            </h2>
+            <div className="flex gap-2 mb-4">
+              {(["off", "daily", "weekly"] as const).map((freq) => (
+                <button
+                  key={freq}
+                  onClick={() => setDigestFrequency(freq)}
+                  className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition capitalize ${
+                    digestFrequency === freq
+                      ? "bg-coral-500 text-white border-coral-500"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {freq}
+                </button>
+              ))}
+            </div>
+
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={emailOptIn}
+                onChange={(e) => setEmailOptIn(e.target.checked)}
+                className="rounded border-gray-300 text-coral-500 focus:ring-coral-400"
+              />
+              <span className="text-sm text-gray-700">
+                Receive email notifications about recommended activities
+              </span>
+            </label>
+
+            <p className="mt-3 text-xs text-gray-400">
+              SMS is not enabled yet. We only store your email digest preference
+              for now.
+            </p>
+          </div>
+
           <button
             onClick={handleSave}
             disabled={saving}

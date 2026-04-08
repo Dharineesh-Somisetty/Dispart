@@ -5,6 +5,7 @@ interface GroupCardProps {
   group: Group;
   host?: User;
   memberCount?: number;
+  mutualCommunitiesCount?: number;
   showLink?: boolean;
 }
 
@@ -12,6 +13,7 @@ export default function GroupCard({
   group,
   host,
   memberCount = 0,
+  mutualCommunitiesCount = 0,
   showLink = true,
 }: GroupCardProps) {
   const spotsLeft = group.capacity - memberCount;
@@ -31,9 +33,15 @@ export default function GroupCard({
         </span>
       </div>
 
-      <p className="text-xs text-teal-600 font-medium mt-1 uppercase tracking-wide">
-        Verified Host
-      </p>
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <p className="text-xs text-teal-600 font-medium uppercase tracking-wide">
+          Host-led squad
+        </p>
+        <span className="text-[10px] text-gray-400">
+          {mutualCommunitiesCount} mutual communit
+          {mutualCommunitiesCount === 1 ? "y" : "ies"}
+        </span>
+      </div>
 
       {group.description && (
         <p className="text-sm text-gray-500 mt-2 line-clamp-2">

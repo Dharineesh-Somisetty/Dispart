@@ -121,7 +121,7 @@ export default function SharePreviewPage() {
             {preview.member_first_names &&
               preview.member_first_names.length > 0 && (
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500">
+                  <div className="w-10 h-10 rounded-xl bg-coral-50 flex items-center justify-center text-coral-500">
                     👥
                   </div>
                   <div>
@@ -139,10 +139,10 @@ export default function SharePreviewPage() {
           {/* Footer CTA */}
           <div className="border-t border-gray-100 p-6">
             <a
-              href={`/events/${preview.event_id}`}
+              href={`/activities/${preview.event_id}`}
               className="block w-full py-3 rounded-xl bg-coral-500 text-white font-semibold text-center text-sm hover:bg-coral-600 transition"
             >
-              View Event & Join a Squad
+              View Activity & Join a Squad
             </a>
             <p className="text-[10px] text-gray-400 text-center mt-2">
               Sign in or create an account to join

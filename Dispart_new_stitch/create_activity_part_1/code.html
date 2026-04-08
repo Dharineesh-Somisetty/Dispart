@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be_Vietnam_Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "inverse-surface": "#240303",
+                        "on-primary-container": "#491300",
+                        "surface-container-high": "#ffdad6",
+                        "on-surface": "#4e211e",
+                        "surface-bright": "#fff4f3",
+                        "on-tertiary": "#fff0e3",
+                        "surface": "#fff4f3",
+                        "primary-fixed": "#fe7e4f",
+                        "surface-container-low": "#ffedeb",
+                        "inverse-primary": "#fe7e4f",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "on-secondary-container": "#005858",
+                        "outline": "#a36761",
+                        "on-secondary": "#bbfffe",
+                        "secondary": "#006666",
+                        "tertiary-container": "#feb246",
+                        "on-surface-variant": "#834d48",
+                        "surface-container-highest": "#ffd3ce",
+                        "on-primary": "#ffefeb",
+                        "outline-variant": "#e09c95",
+                        "surface-dim": "#ffc7c1",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .step-active { background-color: #a03a0f; color: #ffefeb; }
+        .step-inactive { background-color: #ffd3ce; color: #834d48; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body min-h-screen pb-32">
+<!-- Top Navigation Anchor (Manual suppression logic applied for wizard focus) -->
+<header class="fixed top-0 w-full z-50 bg-[#fff4f3]/80 backdrop-blur-lg flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary">close</span>
+</button>
+<span class="font-headline font-black text-xl text-primary tracking-tight">Dispart</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">Draft Saved</span>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- Progress Indicator -->
+<div class="flex items-center justify-between mb-12 px-2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full step-active flex items-center justify-center font-headline font-bold shadow-sm">1</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-tighter text-primary">Identity</span>
+</div>
+<div class="h-[2px] flex-1 mx-4 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/3"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full step-inactive flex items-center justify-center font-headline font-bold">2</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-tighter opacity-40">Timing</span>
+</div>
+<div class="h-[2px] flex-1 mx-4 bg-surface-container-highest rounded-full"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full step-inactive flex items-center justify-center font-headline font-bold">3</div>
+<span class="font-label text-[10px] font-bold uppercase tracking-tighter opacity-40">Privacy</span>
+</div>
+</div>
+<!-- Wizard Steps Container (Showcasing Step 1 with previews of others) -->
+<div class="space-y-10">
+<!-- Step 1 Content -->
+<section class="space-y-8">
+<header>
+<h1 class="font-headline font-extrabold text-3xl tracking-tight text-on-surface leading-tight">Create your next<br/><span class="text-primary">Masterpiece Activity</span></h1>
+<p class="text-on-surface-variant mt-2 text-lg">Give your squad something to look forward to.</p>
+</header>
+<div class="space-y-6">
+<!-- Title Input -->
+<div class="space-y-2">
+<label class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Activity Title</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-5 text-lg font-headline font-semibold text-on-surface focus:ring-2 focus:ring-primary-container shadow-sm" placeholder="e.g. Sunset Rooftop Padel" type="text"/>
+</div>
+<!-- Category Chips -->
+<div class="space-y-3">
+<label class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Choose a Vibe</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-5 py-2.5 rounded-full bg-secondary text-on-secondary font-label font-semibold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">sports_tennis</span> Sports
+                            </button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-label font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">restaurant</span> Dining
+                            </button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-label font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">palette</span> Arts
+                            </button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-label font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">nightlife</span> Party
+                            </button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-label font-semibold text-sm flex items-center gap-2 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-sm">more_horiz</span> Other
+                            </button>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="font-label text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Description</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-lg p-5 text-base font-body text-on-surface focus:ring-2 focus:ring-primary-container shadow-sm" placeholder="What's the plan? Keep it breezy..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Step 2 Teaser (Timing) -->
+<section class="bg-surface-container-low rounded-lg p-8 opacity-50 pointer-events-none">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<h2 class="font-headline font-bold text-xl">Timing &amp; Duration</h2>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-12 bg-surface-container rounded-md"></div>
+<div class="h-12 bg-surface-container rounded-md"></div>
+</div>
+</section>
+<!-- Step 3 Teaser (Privacy) -->
+<section class="bg-surface-container-low rounded-lg p-8 opacity-50 pointer-events-none mb-12">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-primary">visibility_off</span>
+<h2 class="font-headline font-bold text-xl">Location Privacy</h2>
+</div>
+<div class="space-y-3">
+<div class="h-6 w-3/4 bg-surface-container rounded-full"></div>
+<div class="h-6 w-1/2 bg-surface-container rounded-full"></div>
+</div>
+</section>
+</div>
+</main>
+<!-- Navigation Action Bar -->
+<footer class="fixed bottom-0 left-0 w-full bg-[#fff4f3]/80 backdrop-blur-xl px-6 py-6 border-t border-outline-variant/10">
+<div class="max-w-2xl mx-auto flex items-center justify-between gap-4">
+<button class="px-8 h-14 rounded-full font-label font-bold text-primary hover:bg-surface-container-high transition-all active:scale-95">
+                Cancel
+            </button>
+<button class="flex-1 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-headline font-bold text-lg shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+                Next: Schedule
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Overlay Context (Privacy Logic Preview) -->
+<div class="hidden">
+<!-- Neighborhood Visibility Option -->
+<div class="p-6 bg-surface-container-lowest rounded-lg border border-outline-variant/15 flex items-start gap-4">
+<div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">map</span>
+</div>
+<div>
+<p class="font-headline font-bold text-on-surface">Neighborhood Level</p>
+<p class="text-sm text-on-surface-variant">Only show the general area (e.g., Chelsea, Manhattan) until they join.</p>
+</div>
+</div>
+<!-- Hidden Exact Visibility Option -->
+<div class="p-6 bg-surface-container-lowest rounded-lg border border-outline-variant/15 flex items-start gap-4">
+<div class="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary" data-weight="fill">lock</span>
+</div>
+<div>
+<p class="font-headline font-bold text-on-surface">Secret Location</p>
+<p class="text-sm text-on-surface-variant">Hide all map details. Only revealed once you accept their request.</p>
+</div>
+</div>
+</div>
+</body></html>

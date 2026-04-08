@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dispart - Activity Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be_Vietnam_Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "inverse-surface": "#240303",
+                        "on-primary-container": "#491300",
+                        "surface-container-high": "#ffdad6",
+                        "on-surface": "#4e211e",
+                        "surface-bright": "#fff4f3",
+                        "surface": "#fff4f3",
+                        "primary-fixed": "#fe7e4f",
+                        "surface-container-low": "#ffedeb",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "on-secondary-container": "#005858",
+                        "secondary": "#006666",
+                        "secondary-container": "#8dedec",
+                        "on-secondary": "#bbfffe",
+                        "tertiary-container": "#feb246",
+                        "on-surface-variant": "#834d48",
+                        "surface-container-highest": "#ffd3ce",
+                        "on-primary": "#ffefeb",
+                        "outline-variant": "#e09c95"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(255, 244, 243, 0.8);
+            backdrop-filter: blur(16px);
+        }
+        .text-glow {
+            text-shadow: 0 2px 10px rgba(160, 58, 15, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body antialiased">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#fff4f3]/80 dark:bg-[#1a0b0a]/80 backdrop-blur-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#FF7F50]" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="font-headline font-bold text-xl text-[#FF7F50] tracking-tight">Dispart</h1>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#FF7F50]" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="user profile avatar" data-alt="close up headshot of a smiling young man with clean aesthetic and warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkgT3iXrMqI-y9s9D8tWPLnIgk4eETu_8idDbbWw1Tf2vG4iQtneXhrRNxNTZtb75rhIU01qfKdpS9wT-oqcL2LIxtwwZcBhm3t1PfGL4-Sfg6MujCkRDHUGWirQLRkEmfNAqx7n3oVvKMoAvZQDd6o6VAV0SBxvhbzuWu9m6sFdyFFELnI0PDVY-py6iVH1zqb8gZB-NVjeED5nEbkby0yG_rUrmnoa-wmpw4_QfTOSIDTaiTiXN26u0wHE_mLZNBWY6RvyqmKHE"/>
+</div>
+</div>
+</header>
+<main class="pb-32 pt-16">
+<!-- Hero Section -->
+<section class="relative w-full h-[397px] overflow-hidden">
+<img alt="Activity Hero" class="w-full h-full object-cover" data-alt="cinematic shot of hikers on a vibrant sunrise ridge overlooking a valley with orange and teal sky tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz24Q_lW6CNKaI5D8sFCqdDbGolSNFh_CsiXbWctrzBXgi-wgoUSnhE20IRVFb-xAv1V0egsXGtuTcAkVXCKrR3AvCvEmPjBsbwpa6EpMM51_rgy7SMX03-UHhPBwmPgc3ckNA2FChD1UA4FaR98ag3GqyM8yuahN8HtMTrnAaxn0gzIv7r8XfqfFlks73HpuDRRKwdqdJb6uTxmx6kE6bdiTXxvX86li7UasBmH_sVXCr6oqyuaPzvRhF8h1vNXy_papgcVfmm38"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex gap-2 mb-3">
+<span class="px-3 py-1 bg-secondary text-on-secondary rounded-full text-[10px] font-bold uppercase tracking-wider">Social Hike</span>
+<span class="px-3 py-1 bg-surface-container-highest/80 backdrop-blur text-primary rounded-full text-[10px] font-bold uppercase tracking-wider">High Energy</span>
+</div>
+<h2 class="font-headline text-3xl font-extrabold text-on-surface leading-tight tracking-tight">Sunrise Ridge Expedition</h2>
+</div>
+</section>
+<!-- Quick Stats & Host -->
+<section class="px-6 -mt-4 relative z-10">
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_8px_30px_rgb(78,33,30,0.04)] flex flex-col gap-6">
+<!-- Host Preview -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="Host" data-alt="professional portrait of a friendly woman outdoors with warm sunset glow and soft focus nature background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-w2qBkPd-7AZuJycE30n0wdqxuG0P9zR00j4Ukzp80lGZyl3E1-KqDd3Tf3sUMp7AnKvC0ckkdXmfSpYNwpcujLGdiE8JM0k4ZcpOpM3g8Dqi_PUtJEapXwFmncMlx5Y8tR7yx6SPXcGp2gV5pkWDVKgH6b2vJCWlMeeLMqEq_siaLLtca-xB20iWFXBRJ4rcge7wbfdi7CpksPpJxVVCcjmpqjfFb0k7ZIv366ajSp8-mLVQ6fayM1Bm791BAzeusfHfbjN7lIY"/>
+</div>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Hosted By</p>
+<p class="font-headline font-bold text-on-surface">Elena Vance</p>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-container/20 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span class="text-xs font-bold text-tertiary">Verified Host</span>
+</div>
+</div>
+<!-- Info Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-2xl">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Time</p>
+<p class="text-sm font-semibold">Sat, 5:30 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-2xl">
+<span class="material-symbols-outlined text-primary" data-icon="distance">distance</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Distance</p>
+<p class="text-sm font-semibold">2.4 miles</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-2xl col-span-2">
+<span class="material-symbols-outlined text-primary" data-icon="explore">explore</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Neighborhood</p>
+<p class="text-sm font-semibold">Eagle Peak Highlands</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- What you'll do -->
+<section class="mt-10 px-6">
+<h3 class="font-headline text-xl font-extrabold text-on-surface mb-4">What you'll do</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6">
+                We'll start at the trailhead under starlight. It's a steady 40-minute incline to the summit where we'll brew fresh coffee and watch the valley wake up. Perfect for those who love a morning challenge and quiet conversation.
+            </p>
+<!-- Safety Note -->
+<div class="bg-[#ffdad6]/40 p-5 rounded-2xl border border-outline-variant/15 flex gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<p class="text-sm font-medium text-on-surface italic">
+                    Exact meetup details unlock after you're accepted.
+                </p>
+</div>
+</section>
+<!-- Squads Section -->
+<section class="mt-12">
+<div class="flex items-center justify-between px-6 mb-6">
+<h3 class="font-headline text-xl font-extrabold text-on-surface">Squads going</h3>
+<span class="text-xs font-bold text-primary uppercase tracking-widest">View All</span>
+</div>
+<!-- Asymmetric Squad Carousel -->
+<div class="flex gap-4 overflow-x-auto px-6 pb-4 no-scrollbar">
+<!-- Squad Card 1 -->
+<div class="min-w-[280px] bg-surface-container-lowest p-5 rounded-lg shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<h4 class="font-headline font-bold text-lg leading-tight">Early Bird Explorers</h4>
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="px-2 py-0.5 bg-secondary-container/30 text-secondary text-[10px] font-bold rounded-full">Chill Vibe</span>
+<span class="text-on-surface-variant text-[10px] font-medium">• 4/6 spots taken</span>
+</div>
+<div class="flex -space-x-2">
+<img alt="member" class="w-7 h-7 rounded-full border-2 border-white" data-alt="young man portrait with natural outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbff78YZf0g16h2kKFYyTFrSptyNq8pGodYJcyEhMtbrLifFdlv-lhfhLOcO5J6giy-9jXA9ZhlWtj7TBq1BXiHl9lGXy1NLHRmVPT5loPNJ41VR5MehZe7WbK-UJ9axpo-zWyPodkoQygHfyYJsmJYQ7rIMTkU5LLRo_xad3u7cHZ88MCDVN_7q0h0ErY6bLN7Pvh9HxFkBqI_OL1sSoS9K-ad90uBLQ3LbZ3mAh9ujm3ecWMHSBZo7oWPwfyBan2lWtjbY3p3ws"/>
+<img alt="member" class="w-7 h-7 rounded-full border-2 border-white" data-alt="vibrant portrait of a stylish young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0zjoV3x0H1q_41EmUXeJ9y3ueaiSP1MV_RlIcKdGdoHK9t6ml5PE4aukFoyrzNjAQUfFD3z9bGVGJZBSOHmFU-ZBjuDeFbx6vYynccou1s3TAHrbTslRavAreqFzq9t60zkRfv7PPZnE___cWGxKSU4wP7PEJM3guLgQ__lf_9eTvv5TbRjhusKrkPe-4Q9umjGDvMdOifqFhwvLNhHfmeDMTuBYhqFc9w3PRLkXUGda9qubnhT57B6mNIzuAFXVyspWhn8OLeX4"/>
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-[10px] font-bold flex items-center justify-center border-2 border-white">+2</div>
+</div>
+</div>
+<!-- Squad Card 2 -->
+<div class="min-w-[280px] bg-primary-container p-5 rounded-lg shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<h4 class="font-headline font-bold text-lg leading-tight text-white">Peak Bagging Pros</h4>
+<div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="px-2 py-0.5 bg-white/20 text-white text-[10px] font-bold rounded-full uppercase">Fast Pace</span>
+<span class="text-white/80 text-[10px] font-medium">• 2/8 spots taken</span>
+</div>
+<div class="flex -space-x-2">
+<img alt="member" class="w-7 h-7 rounded-full border-2 border-primary-container" data-alt="rugged outdoorsy man portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEP5klNZ-CWRZ6wC-uoxo6-yvUie8IeFqSF3lg675q_g_48zZZrgMNcdlNcK38yab4ev90nB0W90zgg-3QkBhbaYfSHokImNR4XqheFGx0AcWhvXjgUqcso4iXPLVpbInEgKi0L76R00oNre8tuLiyelWSyfMpVXVGEi-ArWBYjC-WYzeIclT_rmMj0YqrUEb_LSEnwqBYzmNbpRa-9A89yPTYt1hdi4rhatOXR5epm-W9qRrscd4ppxEHXT-oMj0vqPkNHL_6KBg"/>
+<div class="w-7 h-7 rounded-full bg-white/30 text-white text-[10px] font-bold flex items-center justify-center border-2 border-primary-container">+1</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Create Own Squad Section -->
+<section class="mt-8 px-6 mb-12">
+<div class="bg-surface-container p-6 rounded-xl flex items-center gap-4 group">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary group-active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface">No squad fits?</h4>
+<p class="text-sm text-on-surface-variant">Create a squad for this activity</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-primary" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+</main>
+<!-- Fixed Footer Actions -->
+<footer class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl px-6 py-6 border-t border-outline-variant/10 z-50 rounded-t-xl">
+<div class="flex gap-4">
+<button class="flex-1 bg-primary text-white py-4 rounded-full font-headline font-extrabold tracking-wide active:scale-95 transition-transform">
+                Request to join
+            </button>
+<button class="w-14 h-14 bg-surface-container-high flex items-center justify-center rounded-full text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</footer>
+<!-- Bottom Nav Shell (Suppressed for focused detail view) -->
+<!-- Navigation is suppressed per "Task-Focused" rule in Shell Visibility logic -->
+</body></html>

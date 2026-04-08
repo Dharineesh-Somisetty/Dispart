@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
-import type { JoinRequest, User, Group, Event } from "@/lib/types";
+import type { JoinRequest, User } from "@/lib/types";
 
 export default function HostRequestsPage() {
   const [requests, setRequests] = useState<JoinRequest[]>([]);
-  const [stats, setStats] = useState({ views: 0, squads: 0, tickets: 0 });
+  const [stats, setStats] = useState({ views: 0, squads: 0, members: 0 });
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -25,7 +25,6 @@ export default function HostRequestsPage() {
         return;
       }
 
-      // Get user profile
       const { data: profile } = await supabase
         .from("users")
         .select("*")
@@ -34,7 +33,6 @@ export default function HostRequestsPage() {
 
       if (profile) setUser(profile as User);
 
-      // Get all groups hosted by this user
       const { data: myGroups } = await supabase
         .from("groups")
         .select("id, event_id, events(*)")
@@ -42,10 +40,20 @@ export default function HostRequestsPage() {
 
       const groupIds = (myGroups || []).map((g) => g.id);
 
+      // Count total members across hosted groups
+      let totalMembers = 0;
+      if (groupIds.length > 0) {
+        const { count } = await supabase
+          .from("group_members")
+          .select("id", { count: "exact", head: true })
+          .in("group_id", groupIds);
+        totalMembers = count || 0;
+      }
+
       setStats({
-        views: Math.floor(Math.random() * 20000),
+        views: 0,
         squads: (myGroups || []).length,
-        tickets: Math.floor(Math.random() * 2000),
+        members: totalMembers,
       });
 
       if (groupIds.length === 0) {
@@ -53,7 +61,6 @@ export default function HostRequestsPage() {
         return;
       }
 
-      // Get pending requests for those groups
       const { data: requestsData } = await supabase
         .from("join_requests")
         .select("*, users(*), groups(*, events(*))")
@@ -81,7 +88,6 @@ export default function HostRequestsPage() {
 
     if (!error) {
       if (action === "accepted") {
-        // Add user as group member
         const request = requests.find((r) => r.id === requestId);
         if (request) {
           await supabase.from("group_members").insert({
@@ -90,7 +96,6 @@ export default function HostRequestsPage() {
             role: "member",
           });
 
-          // Send system message
           await supabase.from("messages").insert({
             group_id: request.group_id,
             sender_user_id: null,
@@ -125,7 +130,6 @@ export default function HostRequestsPage() {
     <>
       <Navbar />
       <main className="max-w-5xl mx-auto w-full px-4 py-6">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-1">
             <div className="w-10 h-10 rounded-full bg-coral-100 flex items-center justify-center text-coral-600 font-bold">
@@ -136,28 +140,16 @@ export default function HostRequestsPage() {
                 Welcome back, {user?.display_name || "Host"}
               </h1>
               <p className="text-sm text-gray-400">
-                Here&apos;s what&apos;s happening with your events today.
+                Here&apos;s what&apos;s happening with your activities.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl p-5 border border-gray-100">
             <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Total Views
-            </p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">
-              {stats.views.toLocaleString()}
-            </p>
-            <span className="text-xs text-green-500">
-              +12% from last week
-            </span>
-          </div>
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Squads Formed
+              Squads Hosted
             </p>
             <p className="text-2xl font-bold text-gray-900 mt-1">
               {stats.squads}
@@ -166,20 +158,28 @@ export default function HostRequestsPage() {
           </div>
           <div className="bg-white rounded-xl p-5 border border-gray-100">
             <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Tickets Clicked
+              Total Members
             </p>
             <p className="text-2xl font-bold text-gray-900 mt-1">
-              {stats.tickets.toLocaleString()}
+              {stats.members}
             </p>
-            <span className="text-xs text-gray-400">Outbound conversions</span>
+            <span className="text-xs text-gray-400">Across all squads</span>
+          </div>
+          <div className="bg-white rounded-xl p-5 border border-gray-100">
+            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+              Pending Requests
+            </p>
+            <p className="text-2xl font-bold text-gray-900 mt-1">
+              {requests.length}
+            </p>
+            <span className="text-xs text-gray-400">Awaiting review</span>
           </div>
         </div>
 
-        {/* Pending Requests */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-gray-900">
-              Pending Group Requests
+              Pending Squad Requests
             </h2>
             <span className="text-xs text-gray-400">
               {requests.length} total
@@ -190,7 +190,7 @@ export default function HostRequestsPage() {
             <div className="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-400">
               <p>No pending requests</p>
               <p className="text-sm mt-1">
-                When someone requests to join your group, it will show up here.
+                When someone requests to join your squad, it will show up here.
               </p>
             </div>
           ) : (
@@ -213,6 +213,11 @@ export default function HostRequestsPage() {
                           {req.groups?.events?.title} &middot;{" "}
                           {req.groups?.title}
                         </p>
+                        {req.request_type === "social" && (
+                          <span className="inline-block mt-1 text-[10px] bg-teal-50 text-teal-600 px-2 py-0.5 rounded-full font-medium">
+                            Social request
+                          </span>
+                        )}
                         <p className="text-sm text-gray-600 mt-2">
                           &ldquo;{req.answers_json.why}&rdquo;
                         </p>
@@ -247,7 +252,6 @@ export default function HostRequestsPage() {
           )}
         </div>
 
-        {/* Broadcast */}
         <div className="bg-white rounded-xl border border-gray-100 p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-coral-500">📢</span>
@@ -256,12 +260,13 @@ export default function HostRequestsPage() {
             </h3>
           </div>
           <p className="text-sm text-gray-500 mb-3">
-            Send an alert to all active squad spaces for your upcoming events.
+            Send an alert to all active squad spaces for your upcoming
+            activities.
           </p>
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder='e.g., "Hey everyone! The venue changed their bag policy, please read..."'
+              placeholder='e.g., "Hey everyone! The meetup spot changed, check the updated plan..."'
               className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
             />
             <button className="px-5 py-2.5 bg-coral-500 text-white font-medium text-sm rounded-lg hover:bg-coral-600 transition whitespace-nowrap">

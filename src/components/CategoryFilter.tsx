@@ -1,15 +1,16 @@
 "use client";
 
 const CATEGORIES = [
-  "All Events",
+  "All Activities",
   "Art & Creative",
-  "Nightlife",
   "Outdoors",
   "Food & Drink",
   "Workshops",
   "Fitness",
   "Music",
   "Sports",
+  "Community",
+  "Nightlife",
 ];
 
 interface CategoryFilterProps {

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dispart | My Squads &amp; Schedule</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "inverse-surface": "#240303",
+                        "on-primary-container": "#491300",
+                        "surface-container-high": "#ffdad6",
+                        "on-surface": "#4e211e",
+                        "surface-bright": "#fff4f3",
+                        "surface": "#fff4f3",
+                        "primary-fixed": "#fe7e4f",
+                        "surface-container-low": "#ffedeb",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "secondary": "#006666",
+                        "on-secondary": "#bbfffe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#ffd3ce",
+                        "on-primary": "#ffefeb",
+                        "outline-variant": "#e09c95",
+                        "on-surface-variant": "#834d48"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #fff4f3; color: #4e211e; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fff4f3]/80 backdrop-blur-lg flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a smiling young man in soft natural lighting, looking friendly and approachable" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm5d1eHVWIE4J-dNwCvwGY2AqsgqaVw7Yy771M9OSujy74Im-qqa1jM8f_CTiyMG2flSwbuDQOJsjhSAr3jY1NVBv9ekuqv2PYI-tueaq5GUypbJc8Fg-8OR46DXyC6AZTQ03tRv_CiW2jt2PX_JvP3C1OVALNd5mmcNs-XwHtjolyssW6OrBS72ByLJvSxMSyjv_mE87IACG-ocbe9GL47HoLCwFXF0BRi8V2FiEgDi2Bn74PVkTZBpmeEckcxfY8ApZV_SEyZxg"/>
+<span class="text-2xl font-black text-[#FF7F50] tracking-tight">Dispart</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-[#4e211e] hover:bg-[#ffedeb] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-20 px-6 max-w-2xl mx-auto">
+<!-- Page Title -->
+<div class="mb-8">
+<h1 class="text-3xl font-extrabold tracking-tight text-on-surface mb-2">My Squads</h1>
+<p class="text-on-surface-variant text-sm">Stay synchronized with your collective activities.</p>
+</div>
+<!-- Segmented Filter (Tabs) -->
+<div class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-6 py-2.5 rounded-full bg-secondary text-on-secondary font-semibold text-sm whitespace-nowrap">Upcoming</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface font-semibold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors">Past</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface font-semibold text-sm whitespace-nowrap hover:bg-surface-container-highest transition-colors">Hosting</button>
+</div>
+<!-- Schedule View / Timeline -->
+<div class="space-y-10">
+<!-- Section: Today -->
+<section>
+<div class="flex items-center gap-4 mb-6">
+<h2 class="text-xl font-bold">Today</h2>
+<div class="h-[1px] flex-grow bg-outline-variant opacity-20"></div>
+</div>
+<div class="space-y-4">
+<!-- Activity Card 1 -->
+<div class="group relative bg-surface-container-lowest rounded-lg p-5 transition-all duration-300 hover:bg-surface-bright border border-transparent hover:border-outline-variant/10">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase tracking-wider">Confirmed</span>
+<span class="text-xs font-medium text-on-surface-variant italic">Downtown</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Sunset Padel Squad</h3>
+<div class="flex items-center gap-3 text-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span> 18:30 - 20:00</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="group">group</span> 4/4 Joined</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-primary hover:bg-primary-container hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="calendar_add_on">calendar_add_on</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: This Week -->
+<section>
+<div class="flex items-center gap-4 mb-6">
+<h2 class="text-xl font-bold">This Week</h2>
+<div class="h-[1px] flex-grow bg-outline-variant opacity-20"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+<!-- Activity Card 2 -->
+<div class="bg-primary-container rounded-lg p-5 text-on-primary shadow-lg overflow-hidden relative group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-7xl" data-icon="star">star</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider">Pinned Plan</span>
+<span class="text-xs font-medium text-white/80 italic">West Village</span>
+</div>
+<h3 class="text-xl font-extrabold mb-1">Neighborhood BBQ &amp; Mix</h3>
+<p class="text-sm text-white/90 mb-4">Thursday, Oct 12 • 19:00</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="User 1" class="w-7 h-7 rounded-full border-2 border-primary-container object-cover" data-alt="Portrait of a young woman with a warm smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfNNjFhZ3W_mDj_cqfa97Uv1NSqQ1qn6087pLBlsmEGuxLtFEfHX7dbkiElOguVJ1M-G86PvJ0H1ySWKDGfUVrOHejfRHh74MGe4mV9UJUjEXmRSMDsmuaqv6ko78OXX62Mf_qwCp6pbLW0qZN3Lcu4t9md1YpbNAXOcPMr7WWA8MF6r0uj7gY0KrHFC51PZcHm4mPXmiD329WhZrRO8loUSZ1_6P51Fgvt3_gnuFBtVV_2vpQJ2nPz3Osz7JpBAhvUfmY0iJ0dRk"/>
+<img alt="User 2" class="w-7 h-7 rounded-full border-2 border-primary-container object-cover" data-alt="Portrait of a man in casual attire outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj5ZOAjmFulN9T-xlUOkeAVyORp_LZhpnlG9kDT-UOL2G9lIjFqnSazZzMRZgYIQe4NGQJZJVZDfvJXTP_zDScO4jF9rYGOEKGtEfNCpn3zp0onWSmvn-3_StYxNilc3xBAQsaGf0ww9U1Zf7ieOp8zDdYNWSM-eoawMIgVtvML_PgjqYqR0LXo9pMrRwqkH1n7tgC8e50w2kpMx4yBOxEr4tuCKTTsMU2ngzPO7Dx7fhYr_o3I9B7RnQr-Mma2W7NDHSC8H4vxDE"/>
+<div class="w-7 h-7 rounded-full bg-white/30 border-2 border-primary-container flex items-center justify-center text-[10px] font-bold">+12</div>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-white text-primary rounded-full text-xs font-bold shadow-sm hover:bg-on-primary hover:text-primary-dim transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="event">event</span>
+                                    Add to calendar
+                                </button>
+</div>
+</div>
+</div>
+<!-- Activity Card 3 -->
+<div class="bg-surface-container-lowest rounded-lg p-5 border border-transparent hover:border-outline-variant/10">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface text-[10px] font-bold uppercase tracking-wider">Pending</span>
+<span class="text-xs font-medium text-on-surface-variant italic">Green Heights</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Morning Trail Run</h3>
+<div class="flex items-center gap-3 text-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="event_note">event_note</span> Saturday, 08:00</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="group">group</span> 2/6 Joined</span>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: This Month -->
+<section>
+<div class="flex items-center gap-4 mb-6">
+<h2 class="text-xl font-bold">This Month</h2>
+<div class="h-[1px] flex-grow bg-outline-variant opacity-20"></div>
+</div>
+<div class="bg-surface-container-low rounded-lg overflow-hidden flex items-stretch">
+<div class="w-2 bg-tertiary-fixed"></div>
+<div class="p-5 flex-grow">
+<div class="flex justify-between items-center mb-3">
+<div>
+<h3 class="font-bold text-on-surface">Dispart Workshop: Urban Design</h3>
+<p class="text-xs text-on-surface-variant">Oct 28 • 14:00 • Studio 4</p>
+</div>
+<span class="px-3 py-1 bg-surface-container-highest rounded-full text-[10px] font-bold text-tertiary">HOSTING</span>
+</div>
+<div class="flex items-center justify-between">
+<p class="text-xs text-on-surface-variant font-medium">8 Participants registered</p>
+<button class="text-primary text-xs font-bold flex items-center gap-1">Manage Squad <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fff4f3]/80 backdrop-blur-lg rounded-t-[3rem] shadow-[0_-8px_40px_rgba(78,33,30,0.06)] z-50">
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Recommended</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Discover</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="add_circle">add_circle</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#ffd3ce] text-[#a03a0f] rounded-[2rem] px-5 py-2 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Squads</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Profile</span>
+</a>
+</nav>
+</body></html>

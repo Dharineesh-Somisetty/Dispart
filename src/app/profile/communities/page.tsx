@@ -15,11 +15,13 @@ export default function CommunitiesPage() {
   const [communities, setCommunities] = useState<CommunityWithMembership[]>([]);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState("");
-  const [inviteCommunityId, setInviteCommunityId] = useState<string | null>(null);
+  const [inviteCommunityId, setInviteCommunityId] = useState<string | null>(
+    null
+  );
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const supabase = createClient();
 
@@ -30,7 +32,6 @@ export default function CommunitiesPage() {
       } = await supabase.auth.getUser();
       if (!user) return;
       setUserId(user.id);
-      setUserEmail(user.email || null);
 
       const { data: allCommunities } = await supabase
         .from("communities")
@@ -62,17 +63,37 @@ export default function CommunitiesPage() {
   async function handleJoin(community: CommunityWithMembership) {
     if (!userId) return;
     setError("");
+    setSuccessMessage("");
     setActionLoading(community.id);
 
     if (community.type === "domain") {
-      const emailDomain = userEmail?.split("@")[1];
-      if (emailDomain !== community.domain) {
+      // Use the secure RPC function to verify domain
+      const { data: canJoin, error: rpcError } = await supabase.rpc(
+        "can_join_domain_community",
+        { p_community_id: community.id }
+      );
+
+      if (rpcError) {
+        setError("Failed to verify domain. Please try again.");
+        setActionLoading(null);
+        return;
+      }
+
+      if (!canJoin) {
+        const domains =
+          community.allowed_email_domains.length > 0
+            ? community.allowed_email_domains.join(", ")
+            : community.domain || "unknown";
         setError(
-          `Your email domain (${emailDomain}) doesn't match ${community.domain}`
+          `Your email domain doesn't match the required domain(s): ${domains}`
         );
         setActionLoading(null);
         return;
       }
+
+      await joinCommunity(community.id);
+      setSuccessMessage(`Joined ${community.name} — verified by domain`);
+      return;
     }
 
     if (community.type === "invite") {
@@ -80,8 +101,6 @@ export default function CommunitiesPage() {
       setActionLoading(null);
       return;
     }
-
-    await joinCommunity(community.id);
   }
 
   async function joinCommunity(communityId: string) {
@@ -105,9 +124,36 @@ export default function CommunitiesPage() {
 
   async function handleInviteSubmit() {
     if (!inviteCommunityId || !inviteCode.trim()) return;
+    setError("");
+    setSuccessMessage("");
     setActionLoading(inviteCommunityId);
-    // In dev, accept any non-empty code
+
+    // Verify invite code using the secure RPC function
+    const { data: isValid, error: rpcError } = await supabase.rpc(
+      "verify_invite_code",
+      {
+        p_community_id: inviteCommunityId,
+        p_code: inviteCode.trim(),
+      }
+    );
+
+    if (rpcError) {
+      setError("Failed to verify invite code. Please try again.");
+      setActionLoading(null);
+      return;
+    }
+
+    if (!isValid) {
+      setError("Invalid invite code. Please check and try again.");
+      setActionLoading(null);
+      return;
+    }
+
+    const community = communities.find((c) => c.id === inviteCommunityId);
     await joinCommunity(inviteCommunityId);
+    setSuccessMessage(
+      `Joined ${community?.name || "community"} — invite code verified`
+    );
     setInviteCommunityId(null);
     setInviteCode("");
   }
@@ -115,6 +161,7 @@ export default function CommunitiesPage() {
   async function handleLeave(communityId: string) {
     if (!userId) return;
     setActionLoading(communityId);
+    setSuccessMessage("");
 
     const { error: deleteError } = await supabase
       .from("community_memberships")
@@ -151,6 +198,25 @@ export default function CommunitiesPage() {
           </div>
         )}
 
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-50 text-green-700 text-sm rounded-xl flex items-center gap-2">
+            <svg
+              className="w-4 h-4 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {successMessage}
+          </div>
+        )}
+
         {loading ? (
           <div className="space-y-4">
             {[1, 2].map((i) => (
@@ -159,6 +225,13 @@ export default function CommunitiesPage() {
                 className="h-24 bg-white rounded-xl animate-pulse"
               />
             ))}
+          </div>
+        ) : communities.length === 0 ? (
+          <div className="text-center py-16 text-gray-400">
+            <p className="text-lg">No communities available</p>
+            <p className="text-sm mt-1">
+              Communities will appear here when they are created.
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -173,11 +246,26 @@ export default function CommunitiesPage() {
                       {community.name}
                     </h3>
                     <CommunityBadge community={community} />
+                    {community.is_member && (
+                      <span className="text-[10px] bg-green-50 text-green-600 px-2 py-0.5 rounded-full font-medium">
+                        {community.type === "domain"
+                          ? "Verified by domain"
+                          : "Verified by invite"}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-gray-500">
                     {community.type === "domain"
-                      ? `Requires @${community.domain} email`
+                      ? community.allowed_email_domains.length > 0
+                        ? `Requires @${community.allowed_email_domains.join(" or @")} email`
+                        : `Requires @${community.domain} email`
                       : "Invite-only community"}
+                    {community.type === "invite" &&
+                      community.invite_code_hint && (
+                        <span className="text-gray-400 ml-1">
+                          (hint: {community.invite_code_hint})
+                        </span>
+                      )}
                   </p>
                   {community.is_member && community.role && (
                     <p className="text-xs text-teal-600 font-medium mt-1 capitalize">
@@ -215,19 +303,39 @@ export default function CommunitiesPage() {
       {inviteCommunityId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl w-full max-w-sm mx-4 p-6 shadow-xl">
-            <h3 className="font-semibold text-lg mb-3">Enter Invite Code</h3>
+            <h3 className="font-semibold text-lg mb-1">Enter Invite Code</h3>
+            <p className="text-xs text-gray-500 mb-4">
+              {communities.find((c) => c.id === inviteCommunityId)
+                ?.invite_code_hint && (
+                <>
+                  Hint:{" "}
+                  {
+                    communities.find((c) => c.id === inviteCommunityId)
+                      ?.invite_code_hint
+                  }
+                </>
+              )}
+            </p>
+            {error && (
+              <div className="mb-3 p-2 bg-red-50 text-red-600 text-xs rounded-lg">
+                {error}
+              </div>
+            )}
             <input
               type="text"
               value={inviteCode}
               onChange={(e) => setInviteCode(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleInviteSubmit()}
               placeholder="Paste invite code..."
               className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400 mb-4"
+              autoFocus
             />
             <div className="flex gap-2">
               <button
                 onClick={() => {
                   setInviteCommunityId(null);
                   setInviteCode("");
+                  setError("");
                 }}
                 className="flex-1 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50"
               >
@@ -235,10 +343,12 @@ export default function CommunitiesPage() {
               </button>
               <button
                 onClick={handleInviteSubmit}
-                disabled={!inviteCode.trim()}
+                disabled={
+                  !inviteCode.trim() || actionLoading === inviteCommunityId
+                }
                 className="flex-1 py-2 text-sm text-white bg-coral-500 rounded-lg hover:bg-coral-600 disabled:opacity-50"
               >
-                Join
+                {actionLoading === inviteCommunityId ? "Verifying..." : "Join"}
               </button>
             </div>
           </div>

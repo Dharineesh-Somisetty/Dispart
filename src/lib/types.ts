@@ -6,31 +6,12 @@ export interface User {
   created_at: string;
 }
 
-export interface Community {
-  id: string;
-  name: string;
-  type: "domain" | "invite";
-  domain: string | null;
-  created_at: string;
-}
-
-export interface Organizer {
-  id: string;
-  name: string;
-  type: "company" | "musician" | "venue" | "nonprofit" | "community" | "individual";
-  verified: boolean;
-  website_url: string | null;
-  logo_url: string | null;
-  created_by_user_id: string | null;
-  created_at: string;
-}
-
 export interface Event {
   id: string;
   creator_user_id: string;
   title: string;
   description: string;
-  mode: "WATCH" | "DO";
+  mode: "DO";
   category: string;
   start_time: string;
   end_time: string | null;
@@ -39,18 +20,10 @@ export interface Event {
   lat: number | null;
   lng: number | null;
   proximity_public_text: string;
-  ticket_url: string | null;
   image_url: string | null;
   tags: string[];
-  price_min: number | null;
-  is_ticketed: boolean;
   created_at: string;
-  // Stage 3
-  organizer_id: string | null;
-  source: "community" | "organizer" | "import";
-  external_url: string | null;
-  price_display: string | null;
-  age_restriction: string | null;
+  source: "community";
   status: "active" | "cancelled" | "completed";
   updated_at: string;
 }
@@ -70,7 +43,6 @@ export interface Group {
   meetup_exact_location_encrypted: string | null;
   status: "active" | "cancelled";
   created_at: string;
-  // Stage 3
   allow_social_after_full: boolean;
   social_only_capacity: number;
   waitlist_enabled: boolean;
@@ -136,16 +108,22 @@ export interface EventInteraction {
   id: string;
   user_id: string;
   event_id: string;
-  type: "view" | "save" | "dismiss" | "share" | "ticket_click";
+  type: "view" | "save" | "dismiss" | "join_request" | "check_in";
   created_at: string;
 }
 
 export interface UserPreferences {
   user_id: string;
-  mode_preference: "ALL" | "WATCH" | "DO";
-  categories: string[];
-  tags: string[];
   max_distance_miles: number;
+  include_categories: string[];
+  exclude_categories: string[];
+  hobby_allowlist: string[];
+  hobby_blocklist: string[];
+  digest_frequency: "off" | "daily" | "weekly";
+  email_opt_in: boolean;
+  sms_opt_in: boolean;
+  categories?: string[];
+  tags?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -166,5 +144,38 @@ export interface Block {
   id: string;
   blocker_user_id: string;
   blocked_user_id: string;
+  created_at: string;
+}
+
+export interface Community {
+  id: string;
+  name: string;
+  type: "domain" | "invite";
+  domain: string | null;
+  allowed_email_domains: string[];
+  invite_code_hint: string | null;
+  created_at: string;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type:
+    | "request_received"
+    | "request_accepted"
+    | "request_declined"
+    | "group_message"
+    | "event_update"
+    | "share_revoked";
+  payload: Record<string, unknown>;
+  read_at: string | null;
+  created_at: string;
+}
+
+export interface UserConnection {
+  id: string;
+  user_a_id: string;
+  user_b_id: string;
+  status: "pending" | "accepted" | "declined";
   created_at: string;
 }

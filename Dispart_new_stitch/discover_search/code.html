@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#805100",
+                        "tertiary-fixed": "#feb246",
+                        "on-background": "#4e211e",
+                        "background": "#fff4f3",
+                        "surface-container": "#ffe2de",
+                        "surface-container-low": "#ffedeb",
+                        "surface-container-highest": "#ffd3ce",
+                        "on-surface": "#4e211e",
+                        "on-surface-variant": "#834d48",
+                        "primary": "#a03a0f",
+                        "primary-container": "#fe7e4f",
+                        "on-primary": "#ffefeb",
+                        "secondary": "#006666",
+                        "on-secondary": "#bbfffe",
+                        "outline-variant": "#e09c95",
+                        "surface-bright": "#fff4f3",
+                        "surface-dim": "#ffc7c1",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fff4f3]/80 backdrop-blur-lg flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close up portrait of a friendly man with a warm smile in soft natural outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6Q2wwdtl_kS80yoYScBh3gM3sdj1M14NeM0wHYkDUrXxQdiV4ejKia5JCeANhr8XMtrudmJnJYCpPAfF9iyFeH_tbTXdgv64eQGoaeE00kfW-ic5XJVWHTVjxGGydEkKGe9i9wd80Jj8oILVoiTqLxfQEYW5DQ3dlBbm_a13LIaXuVI-hKvfv__lj_dC8I41KUIvnwIhQErCl6aqoK_sOph8ZRyNtbl2KvpS7aMeC16Zj-HN2Z9dDSLRLdaHjV9XrfRKnxh9ZgFM"/>
+</div>
+<span class="text-2xl font-black text-[#FF7F50] tracking-tight font-headline">Dispart</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-[#ffedeb] transition-colors text-[#4e211e] active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-20 px-6 max-w-2xl mx-auto">
+<!-- Search Header Section -->
+<section class="mb-8">
+<h1 class="font-headline font-bold text-4xl mb-6 text-on-surface tracking-tight">Discover</h1>
+<!-- Smart Search Bar -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-5 flex items-center pointer-events-none text-primary">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg py-5 pl-14 pr-6 text-lg focus:ring-2 focus:ring-primary/20 shadow-[0_8px_30px_rgb(78,33,30,0.04)] placeholder:text-on-surface-variant/50 transition-all" placeholder="Find cricket, hiking, sketching..." type="text"/>
+</div>
+<!-- Suggested Search Chips -->
+<div class="flex flex-wrap gap-2 mt-6">
+<button class="px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full text-sm font-medium hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">
+                    Pickup cricket
+                </button>
+<button class="px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full text-sm font-medium hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">
+                    Beginner hikes
+                </button>
+<button class="px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full text-sm font-medium hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">
+                    Study group tonight
+                </button>
+<button class="px-5 py-2.5 bg-surface-container-high text-on-surface rounded-full text-sm font-medium hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">
+                    Volunteer this weekend
+                </button>
+</div>
+</section>
+<!-- Dynamic Filters -->
+<section class="mb-8 overflow-x-auto no-scrollbar flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-full text-sm font-semibold flex-shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+                Filters
+            </button>
+<div class="h-6 w-[1px] bg-outline-variant/30 flex-shrink-0"></div>
+<button class="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">Today</button>
+<button class="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">Within 5 miles</button>
+<button class="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">Free</button>
+<button class="px-4 py-2 bg-surface-container-low text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">Beginner friendly</button>
+</section>
+<!-- Results: Bento Grid Style Activity Feed -->
+<div class="grid grid-cols-1 gap-6 pb-12">
+<!-- ActivityCard 1: Featured Asymmetric -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group active:scale-[0.98] transition-all">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="dynamic shot of a cricket match on a lush green field at sunset with lens flare and warm atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvJGFpZYlaVjAvpMlmcxiGZVXUxfIMRxAAncO-UN_t4KC_MFp2RK_Rb11puURlauTbvrXXIAkXVa8fXg5nDd5boPC7WUh42FNhf5W849Mxca4qgzniwpkFeUIAKB9Lbez-nUR3GpELvo8AHN5UkIF5A0OlCALaMFLU8fcaGWuQZb9Vtjomk0bj1ODhnCreHztnVVzlJ2Zywcg_JLsYLTkZhSlvJV6QX6UUk6VjXr4GMn7hKMAt0yo0t8Hu1EEeM7iTFCdUD77i99o"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="local_fire_department">local_fire_department</span>
+                        TRENDING
+                    </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline font-bold text-2xl text-on-surface">Evening Pickup Cricket</h3>
+<span class="text-secondary font-bold">$0</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm mb-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                            Central Park South
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                            6:30 PM Today
+                        </div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait headshot of user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk0nlShctHxFuLpQn1ILcf1p59FnshrRgMFNhwAg8Htf7XcUqpP4rY8aHUIem4QpfLYQL-zGmD92k3qMWI2IWhN6Nl8Ey2wb7xT7OemApy3LLpdBlmruofxHJj3L9VVlKyj6aqTXOwmHH87lLFv7kwHsZLe-yJR1EgKd0T5538K_UwJIz_GngveCQNU-9IacPW86KpxPQchXgvvCYHbTFiqDm2u-4z5EO7ZvrRDfMmYKNWPbRbRr2WAxd5w32nXswbo_AWFuRpVYI"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait headshot of user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4aLyD-WlcoNutdEU-FJFlnE45BYJWsgVq0CStDOBK7ijapMC8p1AUWuh_6s5U6eXfAxmoXNGb3U8rMGly5jmMIBqug-a6hoCOJc2cDGUHmLsfXtWqj8qhRPs4HKssEV7MP3uxi6Ef9-N6p_s9L4AOrfaB3FFsUjn7BngWoCxkg9FPSL606MzjMr891YlJzufo8Sefx7LuyLl4AlQayiMBvz_g7f422S2zeoCEDyQx2VtzG0sZsTWEovjFNKKghmmuN9MFuMNoc58"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait headshot of user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN078fRBItiCh9LQixjmgCUGVzQuiq8ou4owIzONsrlUhkwac9bH6llDYfD8B2L21yyhVU2Ep2cnU0VqEaHxttn5zW32GxeRTNK-Tn6bA_GNxAtQtrffeZM5RuFuBTF4ZfYGCiEsVZ-FnZwQysv-UJvloXdSeCO1T1Y_S5eNj0ZCuFJgn9AGZVuoHaydsoWx-yjVUoojXTNDSKEcz25JtS2iQQukonQbLYJMUgsAAteZ1u0dGTw8H7R7Z_q9MRFxM8AOEz3qNx8k8"/>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-white flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+12</div>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-bold text-sm hover:bg-primary-dim transition-colors">Join Match</button>
+</div>
+</div>
+</div>
+<!-- PinnedPlanCard Style Result -->
+<div class="bg-primary-container p-6 rounded-lg text-on-primary">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined" data-icon="push_pin">push_pin</span>
+<span class="text-xs font-bold tracking-widest uppercase">Sponsored Squad</span>
+</div>
+<div class="flex gap-4">
+<div class="flex-1">
+<h3 class="font-headline font-bold text-xl mb-1">Sketching in the Botanic Garden</h3>
+<p class="text-on-primary/80 text-sm mb-4">A relaxed session for all skill levels. Bring your own charcoal or pencils.</p>
+<div class="flex items-center gap-3">
+<div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">Sat, 11:00 AM</div>
+<div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">8 Spots left</div>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="close up of hand sketching with charcoal on textured paper in soft sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOlFim8FXpHXbfDfWmTZWXCCMGw-n4FBqbdhgJll5sALXDEn9Hqq-Tj3BDsayT-bBesRCITzx15kldIa5Wv5mUTRT5RXUgSGk96dYB_U6_6-8Muo__dhMGTJ4Gh1tOdaXw-LjgOfZa6PbraV4IkQB4e55yJopY9-f5TNRKXwlqJz8Z4rYKCrR5F2qS5mOxM7VhrUGssFxzM_Otpnk_TWtMfEADtU6zi5K3FiQTpmh_aMke7fJusgRycCSqVb8Lwo2f-_rQu7fjes"/>
+</div>
+</div>
+</div>
+<!-- SquadCard Result -->
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center gap-5 group active:scale-[0.98] transition-all">
+<div class="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border border-outline-variant/10">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="hiking">hiking</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-tertiary bg-tertiary-container/30 px-2 py-0.5 rounded uppercase tracking-wider">Top Rated</span>
+<h3 class="font-headline font-bold text-lg text-on-surface">Alpine Explorers</h3>
+</div>
+<p class="text-on-surface-variant text-sm line-clamp-1 mb-2">Weekly beginner-to-intermediate hikes across the tri-state area.</p>
+<div class="flex items-center gap-4">
+<span class="text-xs font-semibold text-on-surface/60 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="group">group</span>
+                            2.4k members
+                        </span>
+<span class="text-xs font-semibold text-on-secondary bg-secondary px-2 py-1 rounded-full">JOIN SQUAD</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#fff4f3]/80 backdrop-blur-lg rounded-t-[3rem] shadow-[0_-8px_40px_rgba(78,33,30,0.06)] flex justify-around items-center px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Recommended</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#ffd3ce] dark:bg-[#4e211e] text-[#a03a0f] dark:text-[#ffb399] rounded-[2rem] px-5 py-2 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Discover</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="add_circle">add_circle</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Create</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group">group</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Squads</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4e211e] dark:text-[#ffd3ce] opacity-60 px-5 py-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-['Be_Vietnam_Pro'] text-[10px] font-semibold tracking-wide uppercase">Profile</span>
+</a>
+</nav>
+</body></html>

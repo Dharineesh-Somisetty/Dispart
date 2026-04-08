@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import type { User as AuthUser } from "@supabase/supabase-js";
+import NotificationBell from "./NotificationBell";
 
 export default function Navbar() {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -45,19 +46,19 @@ export default function Navbar() {
             Host
           </Link>
           <Link
-            href="/submit"
-            className="text-gray-600 hover:text-gray-900 transition"
+            href="/create"
+            className="text-gray-600 hover:text-gray-900 transition font-medium"
           >
-            Submit
+            + Create
           </Link>
 
           {user ? (
             <div className="flex items-center gap-2 ml-2">
               <Link
-                href="/profile/communities"
+                href="/profile"
                 className="text-gray-600 hover:text-gray-900 transition text-xs"
               >
-                Communities
+                Profile
               </Link>
               <Link
                 href="/profile/preferences"
@@ -65,6 +66,7 @@ export default function Navbar() {
               >
                 Preferences
               </Link>
+              <NotificationBell />
               <button
                 onClick={handleSignOut}
                 className="w-8 h-8 rounded-full bg-coral-100 text-coral-600 font-semibold text-xs flex items-center justify-center hover:bg-coral-200 transition"

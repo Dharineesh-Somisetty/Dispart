@@ -11,7 +11,7 @@ interface SearchBarProps {
 export default function SearchBar({
   value,
   onChange,
-  placeholder = "Search events, venues, tags...",
+  placeholder = "Search activities, venues, hobbies...",
 }: SearchBarProps) {
   const [focused, setFocused] = useState(false);
 

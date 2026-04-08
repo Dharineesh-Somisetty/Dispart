@@ -207,7 +207,7 @@ export default function AdminReportsPage() {
                         {report.reported_user.display_name}
                       </span>
                     ) : report.event_id ? (
-                      <span className="text-gray-500">an event</span>
+                      <span className="text-gray-500">an activity</span>
                     ) : report.group_id ? (
                       <span className="text-gray-500">a group</span>
                     ) : (
