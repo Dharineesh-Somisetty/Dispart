@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
-import GroupCard from "@/components/GroupCard";
-import RequestJoinModal from "@/components/RequestJoinModal";
-import LockedCTA from "@/components/LockedCTA";
+import { createClient } from "@/lib/supabase/client";
 import CommunityBadge from "@/components/CommunityBadge";
+import GroupCard from "@/components/GroupCard";
+import LockedCTA from "@/components/LockedCTA";
 import ReportModal from "@/components/ReportModal";
-import type { Event, Group, User, Community } from "@/lib/types";
+import RequestJoinModal from "@/components/RequestJoinModal";
+import type { Community, Event, Group, User } from "@/lib/types";
 
 type ActivityGroupPreviewRow = Group & {
   host_display_name: string;
@@ -24,6 +24,7 @@ export default function ActivityDetailPage() {
   const params = useParams();
   const router = useRouter();
   const eventId = params.id as string;
+  const supabase = createClient();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [groups, setGroups] = useState<
@@ -40,8 +41,6 @@ export default function ActivityDetailPage() {
   );
   const [showReport, setShowReport] = useState(false);
 
-  const supabase = createClient();
-
   useEffect(() => {
     async function load() {
       const {
@@ -55,7 +54,7 @@ export default function ActivityDetailPage() {
           .eq("user_id", user.id);
 
         setUserCommunityIds(
-          new Set((memberships || []).map((m) => m.community_id))
+          new Set((memberships || []).map((membership) => membership.community_id))
         );
 
         await supabase.from("event_interactions").insert({
@@ -76,16 +75,16 @@ export default function ActivityDetailPage() {
         return;
       }
 
-      setEvent(eventData as unknown as Event);
+      setEvent(eventData as Event);
 
-      const { data: groupsData } = await supabase
+      const { data: groupData } = await supabase
         .from("activity_group_previews")
         .select("*")
         .eq("event_id", eventId)
         .eq("status", "active");
 
-      const mapped = (groupsData || []).map((g) => {
-        const row = g as ActivityGroupPreviewRow;
+      const mapped = (groupData || []).map((raw) => {
+        const row = raw as ActivityGroupPreviewRow;
 
         return {
           ...row,
@@ -125,11 +124,11 @@ export default function ActivityDetailPage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-6xl mx-auto p-4">
-          <div className="animate-pulse space-y-4">
-            <div className="h-64 bg-gray-200 rounded-2xl" />
-            <div className="h-8 bg-gray-200 rounded w-2/3" />
-            <div className="h-4 bg-gray-200 rounded w-1/2" />
+        <div className="mx-auto max-w-6xl px-4 py-6">
+          <div className="space-y-5">
+            <div className="h-[26rem] rounded-[36px] skeleton" />
+            <div className="h-10 w-2/3 rounded-full skeleton" />
+            <div className="h-5 w-1/2 rounded-full skeleton" />
           </div>
         </div>
       </>
@@ -140,7 +139,7 @@ export default function ActivityDetailPage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-6xl mx-auto p-4 text-center py-20 text-gray-400">
+        <div className="mx-auto max-w-6xl px-4 py-24 text-center text-coral-900/55">
           Activity not found
         </div>
       </>
@@ -153,219 +152,246 @@ export default function ActivityDetailPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-6xl mx-auto w-full px-4 py-6">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-14 pt-6">
         <button
           onClick={() => router.push("/")}
-          className="text-sm text-gray-500 hover:text-gray-700 mb-4 flex items-center gap-1"
+          className="mb-5 flex w-fit items-center gap-2 rounded-full bg-coral-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-coral-600 hover:bg-coral-150"
         >
-          <span>&larr;</span> Back to Discover
+          <span>&larr;</span>
+          Back to discover
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Left: Activity details */}
-          <div className="lg:col-span-3">
-            <div className="relative aspect-video bg-gray-200 rounded-2xl overflow-hidden mb-6">
-              {event.image_url ? (
-                <Image
-                  src={event.image_url}
-                  alt={event.title}
-                  fill
-                  sizes="(min-width: 1024px) 60vw, 100vw"
-                  className="object-cover"
+        <section className="relative overflow-hidden rounded-[38px]">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#fff4f3] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-coral-900/15 to-teal-700/10" />
+          <div className="relative h-[26rem] overflow-hidden rounded-[38px] md:h-[32rem]">
+            {event.image_url ? (
+              <Image
+                src={event.image_url}
+                alt={event.title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#ffd3ce_0%,#fff4f3_46%,#dff8f7_100%)] text-7xl">
+                🎯
+              </div>
+            )}
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+            <div className="mb-3 flex flex-wrap gap-2">
+              <span className="rounded-full bg-teal-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-teal-200">
+                {event.category}
+              </span>
+              <span className="rounded-full bg-white/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-coral-600 backdrop-blur-sm">
+                {groups.length} squads going
+              </span>
+            </div>
+            <h1 className="display-font max-w-3xl text-4xl font-extrabold leading-[1.02] tracking-tight text-coral-900 md:text-5xl">
+              {event.title}
+            </h1>
+          </div>
+        </section>
+
+        <section className="-mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.95fr)]">
+          <div className="space-y-6">
+            <div className="surface-card rounded-[34px] px-6 py-6 md:px-7">
+              <div className="grid gap-4 md:grid-cols-3">
+                <InfoTile
+                  label="Time"
+                  value={startDate.toLocaleString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
                 />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-coral-200 to-teal-200 flex items-center justify-center">
-                  <span className="text-6xl">🎯</span>
+                <InfoTile
+                  label="Distance"
+                  value={
+                    event.proximity_public_text ||
+                    event.area_label ||
+                    "Neighborhood only"
+                  }
+                />
+                <InfoTile
+                  label="Ends"
+                  value={
+                    endDate
+                      ? endDate.toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })
+                      : "Flexible"
+                  }
+                />
+              </div>
+
+              <div className="mt-6 rounded-[28px] bg-coral-100 px-5 py-5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/45">
+                  What you&apos;ll do
+                </p>
+                <p className="mt-3 text-base leading-7 text-coral-900/72">
+                  {event.description}
+                </p>
+              </div>
+
+              {event.tags && event.tags.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {event.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-coral-900/65 shadow-[0_10px_18px_rgb(78,33,30,0.04)]"
+                    >
+                      {tag.replace(/-/g, " ")}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
 
-            <div className="flex items-start justify-between gap-4 mb-2">
-              <h1 className="text-2xl font-bold text-gray-900">
-                {event.title}
-              </h1>
-              <span className="shrink-0 px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700">
-                🔴{" "}
-                {startDate.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                })}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
-              <span>
-                🕐{" "}
-                {startDate.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                })}
-                {endDate &&
-                  ` - ${endDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`}
-              </span>
-              <span>📍 {event.venue_name || event.area_label}</span>
-            </div>
-
-            {event.tags && event.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mb-6">
-                {event.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-full"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+            <div className="rounded-[32px] bg-coral-200/55 px-6 py-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/75 text-xl">
+                  🔒
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/45">
+                    Privacy first
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-coral-900/72">
+                    {event.proximity_public_text
+                      ? `${event.proximity_public_text}.`
+                      : "Neighborhood-level location only."} Exact meetup details
+                    unlock after a host accepts you into a squad.
+                  </p>
+                </div>
               </div>
-            )}
-
-            <div className="mb-6">
-              <h2 className="font-semibold text-gray-900 mb-2">
-                About this Activity
-              </h2>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {event.description}
-              </p>
             </div>
+          </div>
 
-            {/* Proximity info */}
-            {event.proximity_public_text && (
-              <div className="mb-6 p-3 bg-teal-50 rounded-xl text-sm text-teal-700">
-                📍 {event.proximity_public_text} — exact meetup shared after acceptance
+          <aside className="space-y-4">
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/45">
+                  Squad options
+                </p>
+                <h2 className="display-font mt-2 text-3xl font-extrabold text-coral-900">
+                  Squads going
+                </h2>
               </div>
-            )}
-
-            <div className="mt-6 pt-4 border-t border-gray-100">
               <button
                 onClick={() => setShowReport(true)}
-                className="text-xs text-gray-400 hover:text-red-500 transition"
+                className="rounded-full bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-coral-900/55 shadow-[0_10px_20px_rgb(78,33,30,0.05)] hover:text-red-500"
               >
-                Report this activity
+                Report
               </button>
             </div>
-          </div>
 
-          {/* Right: Squads sidebar */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-gray-900">Squads Going</h2>
-              <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                {groups.length} Squad{groups.length !== 1 ? "s" : ""}
-              </span>
-            </div>
+            {groups.map((group) => {
+              const isCommunityMember = userCommunityIds.has(group.community_id);
+              const isFull = group.member_count >= group.capacity;
+              const canSocial = isFull && group.allow_social_after_full;
+              const canWaitlist = isFull && group.waitlist_enabled;
 
-            <div className="space-y-3">
-              {groups.map((group) => {
-                const isCommunityMember = userCommunityIds.has(
-                  group.community_id
-                );
-                const isFull = group.member_count >= group.capacity;
-                const canSocial = isFull && group.allow_social_after_full;
-                const canWaitlist = isFull && group.waitlist_enabled;
+              return (
+                <div key={group.id} className="space-y-2">
+                  {group.community && (
+                    <CommunityBadge community={group.community} size="md" />
+                  )}
 
-                return (
-                  <div key={group.id}>
-                    {group.community && (
-                      <div className="mb-1">
-                        <CommunityBadge community={group.community} />
-                      </div>
-                    )}
-                    <GroupCard
-                      group={group}
-                      host={group.host}
-                      memberCount={group.member_count}
-                      mutualCommunitiesCount={
-                        userCommunityIds.has(group.community_id) ? 1 : 0
-                      }
-                    />
+                  <GroupCard
+                    group={group}
+                    host={group.host}
+                    memberCount={group.member_count}
+                    mutualCommunitiesCount={
+                      userCommunityIds.has(group.community_id) ? 1 : 0
+                    }
+                  />
 
-                    {isFull && (
-                      <div className="mt-1 flex items-center gap-2">
-                        <span className="text-xs text-gray-400 font-medium">
-                          Full
+                  {isFull && (
+                    <div className="flex flex-wrap items-center gap-2 px-1">
+                      <span className="rounded-full bg-coral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-coral-600">
+                        Full
+                      </span>
+                      {canSocial && (
+                        <span className="rounded-full bg-teal-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-teal-700">
+                          Social spots
                         </span>
-                        {canSocial && (
-                          <span className="text-[10px] text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">
-                            Social spots available
-                          </span>
-                        )}
-                        {canWaitlist && !canSocial && (
-                          <span className="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-                            Waitlist open
-                          </span>
-                        )}
-                      </div>
-                    )}
+                      )}
+                      {canWaitlist && !canSocial && (
+                        <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700">
+                          Waitlist open
+                        </span>
+                      )}
+                    </div>
+                  )}
 
-                    {isCommunityMember ? (
-                      <div className="mt-2 flex gap-2">
-                        {!isFull && (
-                          <button
-                            onClick={() => {
-                              setJoinGroupId(group.id);
-                              setJoinGroupTitle(group.title);
-                              setJoinRequestType("participant");
-                            }}
-                            className="flex-1 py-2 text-sm text-coral-500 font-medium hover:bg-coral-50 rounded-lg transition"
-                          >
-                            Request to Join
-                          </button>
-                        )}
-                        {isFull && canWaitlist && (
-                          <button
-                            onClick={() => {
-                              setJoinGroupId(group.id);
-                              setJoinGroupTitle(group.title);
-                              setJoinRequestType("participant");
-                            }}
-                            className="flex-1 py-2 text-sm text-amber-600 font-medium hover:bg-amber-50 rounded-lg transition"
-                          >
-                            Join Waitlist
-                          </button>
-                        )}
-                        {canSocial && (
-                          <button
-                            onClick={() => {
-                              setJoinGroupId(group.id);
-                              setJoinGroupTitle(group.title);
-                              setJoinRequestType("social");
-                            }}
-                            className="flex-1 py-2 text-sm text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition"
-                          >
-                            Join to Socialize
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="mt-2">
-                        <LockedCTA
-                          communityName={
-                            group.community?.name || "the community"
-                          }
-                          onJoinCommunity={() =>
-                            router.push("/profile/communities")
-                          }
+                  {isCommunityMember ? (
+                    <div className="flex gap-2">
+                      {!isFull && (
+                        <ActionButton
+                          label="Request to join"
+                          onClick={() => {
+                            setJoinGroupId(group.id);
+                            setJoinGroupTitle(group.title);
+                            setJoinRequestType("participant");
+                          }}
                         />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                      )}
 
-            <div className="mt-6 text-center p-6 border-2 border-dashed border-gray-200 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-coral-100 text-coral-500 flex items-center justify-center mx-auto mb-2 text-xl">
+                      {isFull && canWaitlist && (
+                        <ActionButton
+                          label="Join waitlist"
+                          variant="soft"
+                          onClick={() => {
+                            setJoinGroupId(group.id);
+                            setJoinGroupTitle(group.title);
+                            setJoinRequestType("participant");
+                          }}
+                        />
+                      )}
+
+                      {canSocial && (
+                        <ActionButton
+                          label="Join to socialize"
+                          variant="teal"
+                          onClick={() => {
+                            setJoinGroupId(group.id);
+                            setJoinGroupTitle(group.title);
+                            setJoinRequestType("social");
+                          }}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <LockedCTA
+                      communityName={group.community?.name || "the community"}
+                      onJoinCommunity={() => router.push("/profile/communities")}
+                    />
+                  )}
+                </div>
+              );
+            })}
+
+            <div className="surface-low rounded-[30px] px-6 py-6 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl text-coral-600">
                 +
               </div>
-              <p className="font-medium text-gray-700 text-sm">
-                Don&apos;t see your vibe?
+              <p className="display-font mt-4 text-xl font-bold text-coral-900">
+                No squad fits?
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Start a new squad and invite others.
+              <p className="mt-2 text-sm leading-6 text-coral-900/62">
+                Create a new crew once custom squad creation is wired into this
+                activity flow.
               </p>
             </div>
-          </div>
-        </div>
+          </aside>
+        </section>
       </main>
 
       {joinGroupId && (
@@ -393,5 +419,44 @@ export default function ActivityDetailPage() {
         />
       )}
     </>
+  );
+}
+
+function InfoTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[24px] bg-coral-50 px-4 py-4">
+      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-coral-900/45">
+        {label}
+      </p>
+      <p className="mt-2 display-font text-lg font-bold text-coral-900">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+function ActionButton({
+  label,
+  onClick,
+  variant = "gradient",
+}: {
+  label: string;
+  onClick: () => void;
+  variant?: "gradient" | "teal" | "soft";
+}) {
+  const className =
+    variant === "teal"
+      ? "bg-teal-600 text-teal-200 shadow-[0_12px_28px_rgb(0,102,102,0.18)]"
+      : variant === "soft"
+        ? "bg-white text-coral-600 shadow-[0_10px_24px_rgb(78,33,30,0.06)]"
+        : "gradient-cta text-white shadow-[0_12px_28px_rgb(160,58,15,0.18)]";
+
+  return (
+    <button
+      onClick={onClick}
+      className={`flex-1 rounded-full px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] hover:-translate-y-0.5 ${className}`}
+    >
+      {label}
+    </button>
   );
 }

@@ -30,6 +30,7 @@ interface EventCardProps {
   event: Event;
   groupCount?: number;
   saved?: boolean;
+  priority?: boolean;
   onSave?: (eventId: string) => void;
   onDismiss?: (eventId: string) => void;
 }
@@ -38,6 +39,7 @@ export default function EventCard({
   event,
   groupCount = 0,
   saved = false,
+  priority = false,
   onSave,
   onDismiss,
 }: EventCardProps) {
@@ -86,38 +88,36 @@ export default function EventCard({
 
   return (
     <Link href={`/activities/${event.id}`} className="block group">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-        {/* Image */}
-        <div className="relative aspect-[4/3] bg-gray-200 overflow-hidden">
+      <div className="surface-card overflow-hidden rounded-[32px] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_26px_44px_rgb(78,33,30,0.1)]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-coral-150">
           {event.image_url ? (
             <Image
               src={event.image_url}
               alt={event.title}
               fill
+              priority={priority}
               sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-coral-100 to-teal-100 flex items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-coral-250 via-coral-100 to-teal-100">
               <span className="text-4xl">🎯</span>
             </div>
           )}
 
-          {/* Date badge */}
-          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1 bg-teal-500/90 text-white">
+          <div className="absolute left-4 top-4 rounded-full bg-teal-600 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-teal-200 shadow-[0_12px_30px_rgb(0,102,102,0.22)]">
             <span>🔴</span>
             {formatDate(event.start_time)}
           </div>
 
-          {/* Save / Dismiss buttons */}
-          <div className="absolute top-3 right-3 flex gap-1.5">
+          <div className="absolute right-4 top-4 flex flex-col gap-2">
             <button
               onClick={handleSave}
               title={isSaved ? "Saved" : "Save"}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
+              className={`flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition ${
                 isSaved
-                  ? "bg-coral-500 text-white"
-                  : "bg-white/90 text-gray-500 hover:text-coral-500"
+                  ? "bg-coral-600 text-white"
+                  : "bg-white/85 text-coral-600 hover:bg-white"
               }`}
             >
               <svg className="w-4 h-4" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
@@ -127,25 +127,30 @@ export default function EventCard({
             <button
               onClick={handleDismiss}
               title="Not interested"
-              className="w-8 h-8 rounded-full bg-white/90 text-gray-400 hover:text-gray-600 flex items-center justify-center transition"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/85 text-coral-900/55 backdrop-blur-md hover:bg-white hover:text-coral-600"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
+
+          <div className="absolute bottom-4 left-4">
+            <span className="rounded-full bg-coral-250/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-coral-600 backdrop-blur-md">
+              {groupCount} squads going
+            </span>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-4">
-          <span className="text-[10px] font-medium text-teal-600 uppercase tracking-wider">
+        <div className="space-y-3 px-5 py-5">
+          <span className="display-font text-[11px] font-bold uppercase tracking-[0.2em] text-coral-600">
             {event.category}
           </span>
 
-          <h3 className="font-semibold text-gray-900 leading-snug line-clamp-2 mt-0.5">
+          <h3 className="display-font text-2xl font-extrabold leading-tight text-coral-900">
             {event.title}
           </h3>
-          <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+          <p className="flex items-center gap-1 text-sm font-medium text-coral-900/65">
             <svg
               className="w-3.5 h-3.5"
               fill="none"
@@ -168,19 +173,15 @@ export default function EventCard({
             {event.venue_name || event.area_label}
           </p>
 
-          <div className="mt-3 flex items-center justify-between">
-            <span className="text-xs font-medium text-teal-600">
-              {groupCount} squad{groupCount !== 1 ? "s" : ""} going
-            </span>
-
-            <div className="flex -space-x-2">
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white"
-                />
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {(event.tags || []).slice(0, 2).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-coral-100 px-3 py-1 text-[11px] font-bold text-coral-900/70"
+              >
+                {tag.replace(/-/g, " ")}
+              </span>
+            ))}
           </div>
         </div>
       </div>

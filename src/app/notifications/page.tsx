@@ -143,78 +143,97 @@ export default function NotificationsPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-2xl mx-auto w-full px-4 py-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-            {unreadCount > 0 && (
-              <p className="text-xs text-gray-500 mt-0.5">
-                {unreadCount} unread
+      <main className="mx-auto w-full max-w-4xl px-4 py-6">
+        <section className="surface-card rounded-[34px] p-6 sm:p-8">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-500/70">
+                Inbox
               </p>
+              <h1 className="display-font mt-3 text-4xl font-extrabold text-[#4e211e]">
+                Notifications
+              </h1>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-[#7f5c59]">
+                Requests, squad messages, and activity updates all land here so
+                you can stay on top of what&apos;s moving.
+              </p>
+              {unreadCount > 0 && (
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">
+                  {unreadCount} unread
+                </p>
+              )}
+            </div>
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllRead}
+                className="surface-low rounded-full px-5 py-3 text-sm font-semibold text-coral-600 transition hover:bg-coral-50"
+              >
+                Mark all read
+              </button>
             )}
           </div>
-          {unreadCount > 0 && (
-            <button
-              onClick={markAllRead}
-              className="text-xs text-coral-500 hover:text-coral-600 font-medium transition"
-            >
-              Mark all read
-            </button>
-          )}
-        </div>
 
-        {loading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-16 bg-white rounded-xl animate-pulse"
-              />
-            ))}
-          </div>
-        ) : notifications.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
-            <div className="text-4xl mb-3">🔔</div>
-            <p className="text-lg">No notifications yet</p>
-            <p className="text-sm mt-1">
-              You&apos;ll be notified about squad requests, messages, and
-              updates.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {notifications.map((n) => (
-              <button
-                key={n.id}
-                onClick={() => handleClick(n)}
-                className={`w-full text-left p-4 rounded-xl border transition hover:shadow-sm ${
-                  n.read_at
-                    ? "bg-white border-gray-100"
-                    : "bg-coral-50 border-coral-100"
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-lg shrink-0 mt-0.5">
-                    {getNotificationIcon(n.type)}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className={`text-sm ${n.read_at ? "text-gray-600" : "text-gray-900 font-medium"}`}
-                    >
-                      {getNotificationMessage(n)}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {timeAgo(n.created_at)}
-                    </p>
+          {loading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-24 animate-pulse rounded-[24px] bg-white/70"
+                />
+              ))}
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="py-20 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-coral-100 text-3xl">
+                🔔
+              </div>
+              <p className="display-font mt-5 text-3xl font-bold text-[#4e211e]">
+                No notifications yet
+              </p>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#7f5c59]">
+                You&apos;ll see join requests, chat updates, and activity
+                changes here as soon as they happen.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {notifications.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => handleClick(n)}
+                  className={`w-full rounded-[26px] p-5 text-left transition ${
+                    n.read_at
+                      ? "surface-low hover:-translate-y-0.5"
+                      : "bg-[linear-gradient(135deg,rgba(255,117,89,0.12),rgba(255,255,255,0.96))] shadow-[0_18px_38px_rgba(160,58,15,0.1)] hover:-translate-y-0.5"
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <span className="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/75 text-xl">
+                      {getNotificationIcon(n.type)}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={`text-sm leading-6 ${
+                          n.read_at
+                            ? "text-[#6c4d49]"
+                            : "font-semibold text-[#4e211e]"
+                        }`}
+                      >
+                        {getNotificationMessage(n)}
+                      </p>
+                      <p className="mt-2 text-xs font-medium uppercase tracking-[0.18em] text-[#9b7c77]">
+                        {timeAgo(n.created_at)}
+                      </p>
+                    </div>
+                    {!n.read_at && (
+                      <div className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-coral-500" />
+                    )}
                   </div>
-                  {!n.read_at && (
-                    <div className="w-2 h-2 rounded-full bg-coral-500 shrink-0 mt-2" />
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
       </main>
     </>
   );

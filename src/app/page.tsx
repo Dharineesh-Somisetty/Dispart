@@ -29,11 +29,11 @@ const DISTANCE_OPTIONS = [
 ];
 
 const SEARCH_CHIPS = [
+  "Volunteer",
   "Beginner Friendly",
   "Outdoors",
-  "Volunteer",
-  "Music",
-  "Fitness",
+  "Late Night",
+  "Creative",
 ];
 
 const PAGE_SIZE = 18;
@@ -61,7 +61,7 @@ export default function HomePage() {
 
   const [category, setCategory] = useState("All Activities");
   const [search, setSearch] = useState("");
-  const [timeFilter, setTimeFilter] = useState<string[]>([]);
+  const [timeFilter, setTimeFilter] = useState<string[]>(["today"]);
   const [skillFilter, setSkillFilter] = useState<string[]>([]);
   const [distanceFilter, setDistanceFilter] = useState("10");
   const [events, setEvents] = useState<EventWithMeta[]>([]);
@@ -218,69 +218,86 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6">
-        <section className="relative overflow-hidden rounded-[32px] bg-white px-6 py-8 shadow-sm ring-1 ring-black/5">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-coral-100 via-white to-teal-100" />
-          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-coral-500">
-                Recommended
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-14 pt-6">
+        <section className="relative overflow-hidden rounded-[36px] px-6 py-8 md:px-8 md:py-10">
+          <div className="absolute inset-0 rounded-[36px] bg-[linear-gradient(135deg,#ffe2de_0%,#fff4f3_45%,#dff8f7_100%)]" />
+          <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-coral-300/35 blur-3xl" />
+          <div className="absolute -bottom-16 left-8 h-48 w-48 rounded-full bg-teal-300/30 blur-3xl" />
+
+          <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+            <div>
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-coral-600">
+                Recommended For You
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-gray-900">
-                Find an activity that feels easy to say yes to.
+              <h1 className="display-font max-w-3xl text-4xl font-extrabold leading-[1.02] tracking-tight text-coral-900 md:text-5xl">
+                A curated playground for things you actually want to do.
               </h1>
-              <p className="mt-3 text-sm leading-6 text-gray-500">
-                We’re ranking activities around your categories, hobbies, and
-                distance preferences so your next squad invite feels personal.
+              <p className="mt-4 max-w-2xl text-base leading-7 text-coral-900/68">
+                Discover activity plans with the polish of a magazine spread and
+                the social ease of a group chat. Join a squad, keep exact meetup
+                details private, and show up together.
               </p>
             </div>
 
-            <div className="rounded-[24px] bg-gray-50 px-4 py-4 ring-1 ring-black/5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
+            <div className="surface-card rounded-[30px] bg-white/70 p-5 backdrop-blur-sm">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
                 Feed tuned to
               </p>
-              <p className="mt-2 text-sm font-medium text-gray-900">
+              <p className="mt-3 display-font text-2xl font-bold text-coral-900">
                 {preferences.include_categories.length > 0
                   ? preferences.include_categories.slice(0, 2).join(" • ")
-                  : "Your latest activity signals"}
+                  : "Your latest signals"}
               </p>
-              <p className="mt-1 text-xs text-gray-500">
-                Within {effectiveDistance} miles where we have distance data
+              <p className="mt-2 text-sm leading-6 text-coral-900/62">
+                Within {effectiveDistance} miles, filtered by your category and
+                hobby preferences.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="mt-6 grid gap-4 rounded-[28px] bg-white px-5 py-5 shadow-sm ring-1 ring-black/5 lg:grid-cols-[minmax(0,1fr)_220px]">
-          <SearchBar value={search} onChange={setSearch} />
-          <div className="flex items-center gap-2 rounded-2xl bg-gray-50 px-3 py-2">
-            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">
-              Distance
-            </span>
-            <select
-              aria-label="Distance filter"
-              value={distanceFilter}
-              onChange={(event) => setDistanceFilter(event.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 outline-none transition focus:ring-2 focus:ring-coral-300"
-            >
-              {DISTANCE_OPTIONS.map((option) => (
-                <option key={option.key} value={option.key}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+        <section className="surface-low ambient-shadow mt-6 rounded-[34px] p-4 md:p-6">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
+            <SearchBar value={search} onChange={setSearch} />
+
+            <div className="rounded-[26px] bg-coral-50 px-4 py-4">
+              <div className="flex items-center justify-between gap-3">
+                <label
+                  htmlFor="distance-filter"
+                  className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/55"
+                >
+                  Distance
+                </label>
+                <span className="display-font text-lg font-bold text-coral-600">
+                  {effectiveDistance} mi
+                </span>
+              </div>
+              <select
+                id="distance-filter"
+                aria-label="Distance filter"
+                value={distanceFilter}
+                onChange={(event) => setDistanceFilter(event.target.value)}
+                className="mt-3 w-full rounded-full bg-white px-4 py-3 text-sm font-semibold text-coral-900 outline-none"
+              >
+                {DISTANCE_OPTIONS.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 lg:col-span-2">
+          <div className="mt-5 flex flex-wrap gap-2">
             {SEARCH_CHIPS.map((chip) => (
               <button
                 key={chip}
                 type="button"
                 onClick={() => setSearch(chip)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] ${
                   search.toLowerCase() === chip.toLowerCase()
-                    ? "border-coral-500 bg-coral-500 text-white"
-                    : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300"
+                    ? "bg-coral-600 text-white shadow-[0_10px_24px_rgb(160,58,15,0.16)]"
+                    : "bg-white/80 text-coral-900/65 hover:bg-white"
                 }`}
               >
                 {chip}
@@ -288,13 +305,16 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="mt-6">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
+              Categories
+            </p>
             <CategoryFilter selected={category} onChange={setCategory} />
           </div>
 
-          <div className="flex flex-col gap-3 lg:col-span-2 lg:flex-row lg:items-center lg:justify-between">
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
                 Time
               </p>
               <FilterChips
@@ -307,7 +327,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
                 Skill level
               </p>
               <FilterChips
@@ -323,71 +343,85 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mt-6">
+        <section className="mt-8">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
+                Curated feed
+              </p>
+              <h2 className="display-font mt-2 text-3xl font-extrabold text-coral-900">
+                Recommended activities
+              </h2>
+            </div>
+            <p className="max-w-sm text-right text-sm leading-6 text-coral-900/58">
+              Sorted by category fit, hobby overlap, and what feels timely right
+              now.
+            </p>
+          </div>
+
           {loading ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="rounded-[24px] bg-white shadow-sm ring-1 ring-black/5">
-                  <div className="aspect-[4/3] skeleton rounded-t-[24px]" />
-                  <div className="space-y-3 px-4 py-4">
-                    <div className="h-3 w-24 rounded-full skeleton" />
-                    <div className="h-5 w-2/3 rounded-full skeleton" />
-                    <div className="h-4 w-1/2 rounded-full skeleton" />
+                <div
+                  key={item}
+                  className={`overflow-hidden rounded-[32px] ${item % 3 === 1 ? "xl:translate-y-6" : ""}`}
+                >
+                  <div className="surface-card rounded-[32px]">
+                    <div className="aspect-[4/3] skeleton" />
+                    <div className="space-y-3 px-5 py-5">
+                      <div className="h-3 w-24 rounded-full skeleton" />
+                      <div className="h-7 w-2/3 rounded-full skeleton" />
+                      <div className="h-4 w-1/2 rounded-full skeleton" />
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : events.length === 0 ? (
-            <div className="rounded-[28px] bg-white px-6 py-16 text-center shadow-sm ring-1 ring-black/5">
-              <p className="text-4xl">🎯</p>
-              <h2 className="mt-4 text-xl font-semibold text-gray-900">
-                Nothing matches this filter set yet
-              </h2>
-              <p className="mt-2 text-sm text-gray-500">
-                Try widening your time window, unmuting a hobby, or increasing
-                your distance radius.
+            <div className="surface-card rounded-[34px] px-6 py-16 text-center">
+              <p className="text-5xl">🎯</p>
+              <h3 className="display-font mt-5 text-3xl font-extrabold text-coral-900">
+                Nothing matches this mix yet
+              </h3>
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-coral-900/58">
+                Try widening the radius, switching the time horizon, or turning
+                off a mute list for a broader set of invitations.
               </p>
             </div>
           ) : (
             <>
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Recommended activities
-                  </h2>
-                  <p className="text-sm text-gray-500">
-                    Sorted by your category and hobby matches first, then by time.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {events.map((event) => (
-                  <EventCard
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {events.map((event, index) => (
+                  <div
                     key={event.id}
-                    event={event}
-                    groupCount={event.group_count}
-                    saved={savedEventIds.has(event.id)}
-                    onSave={(eventId) =>
-                      setSavedEventIds((current) => new Set(current).add(eventId))
-                    }
-                    onDismiss={(eventId) =>
-                      setDismissedEventIds(
-                        (current) => new Set(current).add(eventId)
-                      )
-                    }
-                  />
+                    className={index % 3 === 1 ? "xl:translate-y-6" : ""}
+                  >
+                    <EventCard
+                      event={event}
+                      groupCount={event.group_count}
+                      priority={index < 2}
+                      saved={savedEventIds.has(event.id)}
+                      onSave={(eventId) =>
+                        setSavedEventIds((current) => new Set(current).add(eventId))
+                      }
+                      onDismiss={(eventId) =>
+                        setDismissedEventIds(
+                          (current) => new Set(current).add(eventId)
+                        )
+                      }
+                    />
+                  </div>
                 ))}
               </div>
 
               {hasMore && (
-                <div className="mt-8 flex justify-center">
+                <div className="mt-10 flex justify-center">
                   <button
                     type="button"
                     onClick={loadMore}
-                    className="rounded-2xl border border-coral-200 px-5 py-3 text-sm font-semibold text-coral-600 transition hover:bg-coral-50 focus:outline-none focus:ring-2 focus:ring-coral-300"
+                    className="gradient-cta rounded-full px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_14px_28px_rgb(160,58,15,0.2)] hover:-translate-y-0.5"
                   >
-                    Load more activities
+                    Load more
                   </button>
                 </div>
               )}
@@ -572,7 +606,9 @@ function haversineMiles(
       Math.sin(dLng / 2) *
       Math.sin(dLng / 2);
 
-  return Math.round(earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+  return Math.round(
+    earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  );
 }
 
 function normalizeTag(value: string) {

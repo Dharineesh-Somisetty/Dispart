@@ -40,7 +40,6 @@ export default function HostRequestsPage() {
 
       const groupIds = (myGroups || []).map((g) => g.id);
 
-      // Count total members across hosted groups
       let totalMembers = 0;
       if (groupIds.length > 0) {
         const { count } = await supabase
@@ -114,11 +113,11 @@ export default function HostRequestsPage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-5xl mx-auto p-6 animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="grid grid-cols-3 gap-4">
+        <div className="mx-auto max-w-6xl space-y-4 px-4 py-6 animate-pulse">
+          <div className="h-10 w-1/3 rounded-full bg-white/70" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded-xl" />
+              <div key={i} className="h-28 rounded-[24px] bg-white/70" />
             ))}
           </div>
         </div>
@@ -129,151 +128,176 @@ export default function HostRequestsPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-5xl mx-auto w-full px-4 py-6">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-full bg-coral-100 flex items-center justify-center text-coral-600 font-bold">
-              {user?.display_name?.[0]?.toUpperCase() || "H"}
+      <main className="mx-auto w-full max-w-6xl px-4 py-6">
+        <section className="surface-card rounded-[34px] p-6 sm:p-8">
+          <div className="mb-8 flex flex-wrap items-start justify-between gap-5">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-coral-100 text-lg font-bold text-coral-700">
+                {user?.display_name?.[0]?.toUpperCase() || "H"}
+              </div>
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-500/70">
+                  Host Queue
+                </p>
+                <h1 className="display-font mt-2 text-4xl font-extrabold text-[#4e211e]">
+                  Welcome back, {user?.display_name || "Host"}
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#7f5c59]">
+                  Review who wants in, keep groups feeling safe, and stay on
+                  top of your upcoming activity spaces.
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">
-                Welcome back, {user?.display_name || "Host"}
-              </h1>
-              <p className="text-sm text-gray-400">
-                Here&apos;s what&apos;s happening with your activities.
+
+            <div className="rounded-[24px] bg-[linear-gradient(135deg,rgba(41,167,166,0.12),rgba(255,255,255,0.95))] px-5 py-4 text-sm text-[#4f6664]">
+              {requests.length > 0
+                ? `${requests.length} request${requests.length === 1 ? "" : "s"} waiting for your review`
+                : "Your queue is clear right now"}
+            </div>
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="surface-low rounded-[26px] p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#9b7c77]">
+                Squads Hosted
               </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Squads Hosted
-            </p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">
-              {stats.squads}
-            </p>
-            <span className="text-xs text-gray-400">Active groups</span>
-          </div>
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Total Members
-            </p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">
-              {stats.members}
-            </p>
-            <span className="text-xs text-gray-400">Across all squads</span>
-          </div>
-          <div className="bg-white rounded-xl p-5 border border-gray-100">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              Pending Requests
-            </p>
-            <p className="text-2xl font-bold text-gray-900 mt-1">
-              {requests.length}
-            </p>
-            <span className="text-xs text-gray-400">Awaiting review</span>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900">
-              Pending Squad Requests
-            </h2>
-            <span className="text-xs text-gray-400">
-              {requests.length} total
-            </span>
-          </div>
-
-          {requests.length === 0 ? (
-            <div className="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-400">
-              <p>No pending requests</p>
-              <p className="text-sm mt-1">
-                When someone requests to join your squad, it will show up here.
+              <p className="mt-2 text-3xl font-bold text-[#4e211e]">
+                {stats.squads}
               </p>
+              <span className="mt-1 block text-sm text-[#7f5c59]">
+                Active groups
+              </span>
             </div>
-          ) : (
-            <div className="space-y-3">
-              {requests.map((req) => (
-                <div
-                  key={req.id}
-                  className="bg-white rounded-xl border border-gray-100 p-5"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-semibold text-gray-600">
-                        {req.users?.display_name?.[0]?.toUpperCase() || "?"}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {req.users?.display_name || "Unknown"}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {req.groups?.events?.title} &middot;{" "}
-                          {req.groups?.title}
-                        </p>
-                        {req.request_type === "social" && (
-                          <span className="inline-block mt-1 text-[10px] bg-teal-50 text-teal-600 px-2 py-0.5 rounded-full font-medium">
-                            Social request
-                          </span>
-                        )}
-                        <p className="text-sm text-gray-600 mt-2">
-                          &ldquo;{req.answers_json.why}&rdquo;
-                        </p>
-                        {req.answers_json.vibe_today && (
-                          <span className="inline-block mt-1 text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full">
-                            {req.answers_json.vibe_today}
-                          </span>
-                        )}
-                      </div>
-                    </div>
 
-                    <div className="flex gap-2 shrink-0 ml-4">
-                      <button
-                        onClick={() => handleAction(req.id, "declined")}
-                        disabled={actionLoading === req.id}
-                        className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition disabled:opacity-50"
-                      >
-                        Decline
-                      </button>
-                      <button
-                        onClick={() => handleAction(req.id, "accepted")}
-                        disabled={actionLoading === req.id}
-                        className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 transition disabled:opacity-50"
-                      >
-                        Accept
-                      </button>
+            <div className="surface-low rounded-[26px] p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#9b7c77]">
+                Total Members
+              </p>
+              <p className="mt-2 text-3xl font-bold text-[#4e211e]">
+                {stats.members}
+              </p>
+              <span className="mt-1 block text-sm text-[#7f5c59]">
+                Across all squads
+              </span>
+            </div>
+
+            <div className="rounded-[26px] bg-[linear-gradient(135deg,rgba(255,117,89,0.14),rgba(255,255,255,0.95))] p-5 shadow-[0_18px_38px_rgba(160,58,15,0.1)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#9b7c77]">
+                Pending Requests
+              </p>
+              <p className="mt-2 text-3xl font-bold text-[#4e211e]">
+                {requests.length}
+              </p>
+              <span className="mt-1 block text-sm text-[#7f5c59]">
+                Awaiting review
+              </span>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="display-font text-2xl font-bold text-[#4e211e]">
+                Pending Squad Requests
+              </h2>
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9b7c77]">
+                {requests.length} total
+              </span>
+            </div>
+
+            {requests.length === 0 ? (
+              <div className="surface-low rounded-[30px] p-10 text-center">
+                <p className="display-font text-3xl font-bold text-[#4e211e]">
+                  No pending requests
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#7f5c59]">
+                  When someone asks to join one of your squads, it will show up
+                  here for review.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {requests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="rounded-[28px] bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,246,242,0.95))] p-5 shadow-[0_20px_42px_rgba(120,72,52,0.08)]"
+                  >
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-coral-100 text-sm font-semibold text-coral-700">
+                          {req.users?.display_name?.[0]?.toUpperCase() || "?"}
+                        </div>
+                        <div>
+                          <p className="text-base font-semibold text-[#4e211e]">
+                            {req.users?.display_name || "Unknown"}
+                          </p>
+                          <p className="mt-1 text-sm text-[#7f5c59]">
+                            {req.groups?.events?.title} &middot;{" "}
+                            {req.groups?.title}
+                          </p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {req.request_type === "social" && (
+                              <span className="rounded-full bg-teal-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal-700">
+                                Social request
+                              </span>
+                            )}
+                            {req.answers_json.vibe_today && (
+                              <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8f726d]">
+                                {req.answers_json.vibe_today}
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6c4d49]">
+                            &ldquo;{req.answers_json.why}&rdquo;
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex shrink-0 gap-2 lg:ml-4">
+                        <button
+                          onClick={() => handleAction(req.id, "declined")}
+                          disabled={actionLoading === req.id}
+                          className="rounded-full bg-white/80 px-5 py-3 text-sm font-semibold text-[#6c4d49] transition hover:bg-white disabled:opacity-50"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          onClick={() => handleAction(req.id, "accepted")}
+                          disabled={actionLoading === req.id}
+                          className="gradient-cta rounded-full px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgb(160,58,15,0.18)] transition disabled:opacity-50"
+                        >
+                          Accept
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-coral-500">📢</span>
-            <h3 className="font-semibold text-gray-900">
-              Broadcast Announcement
-            </h3>
+          <div className="surface-low rounded-[30px] p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-coral-500">📢</span>
+              <h3 className="text-lg font-semibold text-[#4e211e]">
+                Broadcast Announcement
+              </h3>
+            </div>
+            <p className="mb-4 text-sm leading-6 text-[#7f5c59]">
+              Send an alert to all active squad spaces for your upcoming
+              activities.
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input
+                type="text"
+                placeholder='e.g., "Hey everyone! The meetup spot changed, check the updated plan..."'
+                className="flex-1 rounded-full border border-coral-100 bg-white/90 px-5 py-3 text-sm text-[#4e211e] placeholder:text-[#a78a83]"
+              />
+              <button className="gradient-cta whitespace-nowrap rounded-full px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgb(160,58,15,0.18)]">
+                Send to all squads →
+              </button>
+            </div>
           </div>
-          <p className="text-sm text-gray-500 mb-3">
-            Send an alert to all active squad spaces for your upcoming
-            activities.
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder='e.g., "Hey everyone! The meetup spot changed, check the updated plan..."'
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-            />
-            <button className="px-5 py-2.5 bg-coral-500 text-white font-medium text-sm rounded-lg hover:bg-coral-600 transition whitespace-nowrap">
-              Send to all squads &rarr;
-            </button>
-          </div>
-        </div>
+        </section>
       </main>
     </>
   );

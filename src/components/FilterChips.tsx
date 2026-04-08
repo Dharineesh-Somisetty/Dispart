@@ -27,10 +27,10 @@ export default function FilterChips({
           <button
             key={f.key}
             onClick={() => toggle(f.key)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${
+            className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] transition ${
               active
-                ? "bg-coral-500 text-white border-coral-500"
-                : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                ? "bg-teal-600 text-teal-200 shadow-[0_10px_24px_rgb(0,102,102,0.14)]"
+                : "bg-coral-200 text-coral-900/70 hover:bg-coral-250"
             }`}
           >
             {f.label}

@@ -20,56 +20,59 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
-      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 h-14">
-        <Link href="/" className="text-xl font-bold text-coral-500">
+    <header className="sticky top-0 z-50">
+      <div className="glass-nav mx-auto mt-3 flex h-16 w-[min(1120px,calc(100%-1rem))] items-center justify-between rounded-[28px] px-4 ambient-shadow">
+        <Link
+          href="/"
+          className="display-font text-2xl font-extrabold tracking-tight text-coral-500"
+        >
           Dispart
         </Link>
 
-        <nav className="flex items-center gap-4 text-sm">
+        <nav className="flex items-center gap-2 text-sm">
           <Link
             href="/"
-            className="text-gray-600 hover:text-gray-900 transition"
+            className="rounded-full px-3 py-2 text-sm font-semibold text-coral-900/70 hover:bg-coral-100 hover:text-coral-600"
           >
-            Discover
+            Recommended
           </Link>
           <Link
             href="/schedule"
-            className="text-gray-600 hover:text-gray-900 transition"
+            className="rounded-full px-3 py-2 text-sm font-semibold text-coral-900/70 hover:bg-coral-100 hover:text-coral-600"
           >
             Schedule
           </Link>
           <Link
             href="/host/requests"
-            className="text-gray-600 hover:text-gray-900 transition"
+            className="rounded-full px-3 py-2 text-sm font-semibold text-coral-900/70 hover:bg-coral-100 hover:text-coral-600"
           >
             Host
           </Link>
           <Link
             href="/create"
-            className="text-gray-600 hover:text-gray-900 transition font-medium"
+            className="gradient-cta rounded-full px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_rgb(160,58,15,0.18)] hover:-translate-y-0.5"
           >
-            + Create
+            Create
           </Link>
 
           {user ? (
-            <div className="flex items-center gap-2 ml-2">
+            <div className="ml-1 flex items-center gap-2">
               <Link
                 href="/profile"
-                className="text-gray-600 hover:text-gray-900 transition text-xs"
+                className="hidden rounded-full px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-coral-900/55 hover:bg-coral-100 hover:text-coral-600 md:inline-flex"
               >
                 Profile
               </Link>
               <Link
                 href="/profile/preferences"
-                className="text-gray-600 hover:text-gray-900 transition text-xs"
+                className="hidden rounded-full px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-coral-900/55 hover:bg-coral-100 hover:text-coral-600 lg:inline-flex"
               >
                 Preferences
               </Link>
               <NotificationBell />
               <button
                 onClick={handleSignOut}
-                className="w-8 h-8 rounded-full bg-coral-100 text-coral-600 font-semibold text-xs flex items-center justify-center hover:bg-coral-200 transition"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-coral-250 text-xs font-bold text-coral-600 hover:bg-coral-300"
               >
                 {user.email?.[0]?.toUpperCase() || "U"}
               </button>
@@ -77,7 +80,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="ml-2 px-3 py-1.5 rounded-lg bg-coral-500 text-white text-xs font-medium hover:bg-coral-600 transition"
+              className="ml-2 rounded-full bg-coral-250 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-coral-600 hover:bg-coral-300"
             >
               Sign In
             </Link>

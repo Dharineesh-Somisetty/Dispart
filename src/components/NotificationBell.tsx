@@ -50,7 +50,7 @@ export default function NotificationBell() {
   return (
     <Link
       href="/notifications"
-      className="relative text-gray-600 hover:text-gray-900 transition"
+      className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-coral-600 hover:bg-coral-100"
       title="Notifications"
     >
       <svg
@@ -67,7 +67,7 @@ export default function NotificationBell() {
         />
       </svg>
       {unreadCount > 0 && (
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-coral-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-coral-600 px-1 text-[10px] font-bold text-white">
           {unreadCount > 9 ? "9+" : unreadCount}
         </span>
       )}

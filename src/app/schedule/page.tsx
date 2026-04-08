@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
-import type { Group, Event } from "@/lib/types";
+import { createClient } from "@/lib/supabase/client";
+import type { Event, Group } from "@/lib/types";
 
 interface ScheduleItem {
   group: Group;
@@ -12,10 +13,10 @@ interface ScheduleItem {
 }
 
 function getSection(startTime: string): string {
-  const d = new Date(startTime);
+  const date = new Date(startTime);
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const eventDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const eventDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
   const diffDays = Math.floor(
     (eventDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
@@ -36,17 +37,20 @@ function getSection(startTime: string): string {
 }
 
 export default function SchedulePage() {
+  const supabase = createClient();
   const [items, setItems] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const supabase = createClient();
-
   useEffect(() => {
-    async function load() {
+    async function loadSchedule() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const cutoff = new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString();
 
@@ -55,39 +59,40 @@ export default function SchedulePage() {
         .select("role, groups(*, events(*))")
         .eq("user_id", user.id);
 
-      const schedule: ScheduleItem[] = [];
+      const nextItems: ScheduleItem[] = [];
 
-      for (const m of memberships || []) {
-        const g = (m as Record<string, unknown>).groups as Group & {
+      for (const membership of memberships || []) {
+        const group = (membership as Record<string, unknown>).groups as Group & {
           events: Event;
         };
-        if (!g || !g.events) continue;
-        if (g.status !== "active") continue;
-        if (g.events.start_time < cutoff) continue;
 
-        schedule.push({
-          group: g,
-          event: g.events,
-          role: m.role as "host" | "member",
+        if (!group || !group.events) continue;
+        if (group.status !== "active") continue;
+        if (group.events.start_time < cutoff) continue;
+
+        nextItems.push({
+          group,
+          event: group.events,
+          role: membership.role as "host" | "member",
         });
       }
 
-      schedule.sort(
-        (a, b) =>
-          new Date(a.event.start_time).getTime() -
-          new Date(b.event.start_time).getTime()
+      nextItems.sort(
+        (left, right) =>
+          new Date(left.event.start_time).getTime() -
+          new Date(right.event.start_time).getTime()
       );
 
-      setItems(schedule);
+      setItems(nextItems);
       setLoading(false);
     }
 
-    load();
+    loadSchedule();
   }, [supabase]);
 
   const sections = ["Today", "This Week", "This Weekend", "Later"];
   const grouped = new Map<string, ScheduleItem[]>();
-  for (const s of sections) grouped.set(s, []);
+  for (const section of sections) grouped.set(section, []);
   for (const item of items) {
     const section = getSection(item.event.start_time);
     grouped.get(section)?.push(item);
@@ -96,103 +101,112 @@ export default function SchedulePage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-2xl mx-auto w-full px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">My Schedule</h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Your upcoming squads and plans
-        </p>
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 pb-14 pt-6">
+        <section className="surface-card rounded-[34px] px-6 py-8">
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-600">
+            My squads
+          </p>
+          <h1 className="display-font mt-3 text-4xl font-extrabold leading-tight text-coral-900">
+            Your schedule, styled like a social itinerary.
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-coral-900/62">
+            Keep your upcoming activity plans, check-in moments, and squad links
+            in one clean timeline.
+          </p>
+        </section>
 
         {loading ? (
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-28 bg-white rounded-xl animate-pulse"
-              />
+          <div className="mt-6 space-y-4">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="h-32 rounded-[28px] skeleton" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-4xl mb-3">📅</p>
-            <p className="text-lg">No upcoming plans</p>
-            <p className="text-sm mt-1">
-              Join a squad from the Discover page to get started
+          <div className="surface-card mt-6 rounded-[34px] px-6 py-16 text-center">
+            <p className="text-5xl">📅</p>
+            <h2 className="display-font mt-5 text-3xl font-extrabold text-coral-900">
+              No upcoming plans yet
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-coral-900/58">
+              Join a squad from the recommended feed and your next plan will
+              land here.
             </p>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="mt-8 space-y-10">
             {sections.map((section) => {
               const sectionItems = grouped.get(section) || [];
               if (sectionItems.length === 0) return null;
 
               return (
-                <div key={section}>
-                  <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                    {section}
-                  </h2>
-                  <div className="space-y-3">
+                <section key={section}>
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="rounded-full bg-coral-200 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-coral-600">
+                      {section}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-4">
                     {sectionItems.map((item) => {
-                      const d = new Date(item.event.start_time);
+                      const date = new Date(item.event.start_time);
+
                       return (
-                        <a
+                        <Link
                           key={item.group.id}
                           href={`/groups/${item.group.id}`}
-                          className="block bg-white rounded-xl border border-gray-100 p-4 hover:shadow-sm transition"
+                          className="surface-card rounded-[30px] px-5 py-5 transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(78,33,30,0.08)]"
                         >
-                          <div className="flex items-start gap-4">
-                            {/* Date badge */}
-                            <div className="shrink-0 w-12 h-12 rounded-xl bg-coral-50 flex flex-col items-center justify-center">
-                              <span className="text-[10px] font-medium text-coral-500 uppercase">
-                                {d.toLocaleDateString("en-US", {
+                          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                            <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-[24px] bg-coral-100">
+                              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-coral-600">
+                                {date.toLocaleDateString("en-US", {
                                   month: "short",
                                 })}
                               </span>
-                              <span className="text-lg font-bold text-coral-600 leading-none">
-                                {d.getDate()}
+                              <span className="display-font text-2xl font-extrabold text-coral-900">
+                                {date.getDate()}
                               </span>
                             </div>
 
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-0.5">
-                                <h3 className="font-semibold text-gray-900 text-sm truncate">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="display-font text-2xl font-bold text-coral-900">
                                   {item.event.title}
                                 </h3>
                                 {item.role === "host" && (
-                                  <span className="text-[10px] px-1.5 py-0.5 bg-teal-50 text-teal-600 font-medium rounded-full">
+                                  <span className="rounded-full bg-teal-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-teal-700">
                                     Host
                                   </span>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-500 truncate">
-                                {item.group.title} &middot;{" "}
-                                {d.toLocaleTimeString("en-US", {
+                              <p className="mt-2 text-sm font-semibold text-coral-900/68">
+                                {item.group.title} •{" "}
+                                {date.toLocaleTimeString("en-US", {
                                   hour: "numeric",
                                   minute: "2-digit",
                                 })}
                               </p>
-                              <p className="text-xs text-gray-400 mt-0.5">
-                                📍 {item.group.meetup_area_label || item.event.area_label}
+                              <p className="mt-1 text-sm text-coral-900/55">
+                                {item.group.meetup_area_label || item.event.area_label}
                               </p>
                             </div>
 
-                            {/* ICS download */}
                             <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
                                 window.location.href = `/api/ics/${item.group.id}`;
                               }}
-                              className="shrink-0 w-9 h-9 rounded-lg bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-600 transition"
-                              title="Add to Calendar"
+                              className="rounded-full bg-coral-50 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-coral-600 hover:bg-coral-100"
                             >
-                              📅
+                              Add to calendar
                             </button>
                           </div>
-                        </a>
+                        </Link>
                       );
                     })}
                   </div>
-                </div>
+                </section>
               );
             })}
           </div>

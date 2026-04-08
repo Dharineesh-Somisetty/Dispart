@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
+import { createClient } from "@/lib/supabase/client";
 import type { Community } from "@/lib/types";
 
 const CATEGORIES = [
@@ -20,50 +21,44 @@ const CATEGORIES = [
 ];
 
 const STEPS = [
-  { key: "details", label: "Details" },
-  { key: "time", label: "Time" },
-  { key: "location", label: "Location" },
+  { key: "details", label: "Identity" },
+  { key: "time", label: "Timing" },
+  { key: "location", label: "Privacy" },
   { key: "squad", label: "Squad" },
   { key: "publish", label: "Publish" },
 ];
 
 export default function CreateActivityPage() {
   const router = useRouter();
+  const supabase = createClient();
+
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [communities, setCommunities] = useState<Community[]>([]);
 
-  // Step 1: Details
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Other");
   const [imageUrl, setImageUrl] = useState("");
   const [tags, setTags] = useState("");
-
-  // Step 2: Time
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
-  // Step 3: Location
   const [venueName, setVenueName] = useState("");
   const [areaLabel, setAreaLabel] = useState("");
   const [meetupAreaLabel, setMeetupAreaLabel] = useState("");
-
-  // Step 4: Squad settings
   const [capacity, setCapacity] = useState(6);
   const [approvalRequired, setApprovalRequired] = useState(true);
   const [communityId, setCommunityId] = useState("");
   const [squadTitle, setSquadTitle] = useState("");
   const [squadDescription, setSquadDescription] = useState("");
 
-  const supabase = createClient();
-
   useEffect(() => {
-    async function load() {
+    async function loadCommunities() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       if (!user) return;
 
       const { data: memberships } = await supabase
@@ -71,27 +66,29 @@ export default function CreateActivityPage() {
         .select("community_id, communities(*)")
         .eq("user_id", user.id);
 
-      const comms = (memberships || [])
-        .map((m) => (m as Record<string, unknown>).communities as Community)
+      const items = (memberships || [])
+        .map((membership) => (membership as Record<string, unknown>).communities as Community)
         .filter(Boolean);
 
-      setCommunities(comms);
-      if (comms.length > 0) setCommunityId(comms[0].id);
+      setCommunities(items);
+      if (items.length > 0) {
+        setCommunityId(items[0].id);
+      }
     }
 
-    load();
+    loadCommunities();
   }, [supabase]);
 
-  function canAdvance(): boolean {
+  function canAdvance() {
     switch (step) {
       case 0:
-        return !!title && !!description && !!category;
+        return Boolean(title && description && category);
       case 1:
-        return !!startTime;
+        return Boolean(startTime);
       case 2:
-        return !!venueName;
+        return Boolean(venueName);
       case 3:
-        return capacity > 0 && !!communityId;
+        return Boolean(capacity > 0 && communityId);
       default:
         return true;
     }
@@ -104,6 +101,7 @@ export default function CreateActivityPage() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     if (!user) {
       setError("You must be logged in");
       setLoading(false);
@@ -112,10 +110,9 @@ export default function CreateActivityPage() {
 
     const parsedTags = tags
       .split(",")
-      .map((t) => t.trim().toLowerCase().replace(/\s+/g, "-"))
+      .map((tag) => tag.trim().toLowerCase().replace(/\s+/g, "-"))
       .filter(Boolean);
 
-    // Create activity (event)
     const { data: eventData, error: eventError } = await supabase
       .from("events")
       .insert({
@@ -143,8 +140,7 @@ export default function CreateActivityPage() {
       return;
     }
 
-    // Create initial squad (group)
-    const { error: groupError } = await supabase
+    const { data: groupData, error: groupError } = await supabase
       .from("groups")
       .insert({
         event_id: eventData.id,
@@ -166,21 +162,11 @@ export default function CreateActivityPage() {
       return;
     }
 
-    // Auto-join host as group member
-    const { data: groupData } = await supabase
-      .from("groups")
-      .select("id")
-      .eq("event_id", eventData.id)
-      .eq("host_user_id", user.id)
-      .single();
-
-    if (groupData) {
-      await supabase.from("group_members").insert({
-        group_id: groupData.id,
-        user_id: user.id,
-        role: "host",
-      });
-    }
+    await supabase.from("group_members").insert({
+      group_id: groupData.id,
+      user_id: user.id,
+      role: "host",
+    });
 
     router.push(`/activities/${eventData.id}`);
   }
@@ -188,368 +174,432 @@ export default function CreateActivityPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-2xl mx-auto w-full px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">
-          Create an Activity
-        </h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Host something fun — set the details, pick a spot, and let people join
-          your squad.
-        </p>
-
-        {/* Step indicator */}
-        <div className="flex items-center gap-1 mb-8">
-          {STEPS.map((s, i) => (
-            <div key={s.key} className="flex items-center gap-1 flex-1">
-              <button
-                onClick={() => i < step && setStep(i)}
-                className={`w-full h-1.5 rounded-full transition ${
-                  i <= step ? "bg-coral-500" : "bg-gray-200"
-                }`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="text-xs text-gray-400 uppercase tracking-wider mb-4 font-medium">
-          Step {step + 1}: {STEPS[step].label}
-        </div>
-
-        {/* Step 1: Details */}
-        {step === 0 && (
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Activity Title *
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="What are you doing?"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description *
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400 resize-none"
-                placeholder="Tell people what to expect, what to bring, who it's for..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category *
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {CATEGORIES.map((c) => (
-                  <button
-                    type="button"
-                    key={c}
-                    onClick={() => setCategory(c)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
-                      category === c
-                        ? "bg-coral-500 text-white border-coral-500"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Cover Image URL
-              </label>
-              <input
-                type="url"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="https://..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tags (comma-separated)
-              </label>
-              <input
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="beginner-friendly, volunteer, outdoor"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Time */}
-        {step === 1 && (
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Start Time *
-              </label>
-              <input
-                type="datetime-local"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                End Time
-              </label>
-              <input
-                type="datetime-local"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Location */}
-        {step === 2 && (
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Venue / Spot Name *
-              </label>
-              <input
-                type="text"
-                value={venueName}
-                onChange={(e) => setVenueName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="e.g., Greenlake Park, The Mud Room"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Area / Neighborhood
-              </label>
-              <input
-                type="text"
-                value={areaLabel}
-                onChange={(e) => setAreaLabel(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="e.g., Capitol Hill, Fremont"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Squad Meetup Area
-              </label>
-              <input
-                type="text"
-                value={meetupAreaLabel}
-                onChange={(e) => setMeetupAreaLabel(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder="e.g., Front entrance, Parking lot B"
-              />
-              <p className="text-xs text-gray-400 mt-1">
-                Exact location is shared only after accepting members
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Squad settings */}
-        {step === 3 && (
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Community *
-              </label>
-              {communities.length === 0 ? (
-                <div className="p-3 bg-amber-50 rounded-xl text-sm text-amber-700">
-                  You need to join a community first.{" "}
-                  <a
-                    href="/profile/communities"
-                    className="underline font-medium"
-                  >
-                    Join one now
-                  </a>
-                </div>
-              ) : (
-                <select
-                  value={communityId}
-                  onChange={(e) => setCommunityId(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                >
-                  {communities.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Squad Capacity *
-              </label>
-              <div className="flex gap-2">
-                {[3, 4, 6, 8, 10, 15].map((n) => (
-                  <button
-                    type="button"
-                    key={n}
-                    onClick={() => setCapacity(n)}
-                    className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition ${
-                      capacity === n
-                        ? "bg-teal-500 text-white border-teal-500"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    {n}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={approvalRequired}
-                onChange={(e) => setApprovalRequired(e.target.checked)}
-                className="rounded border-gray-300 text-teal-500 focus:ring-teal-400"
-              />
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 pb-28 pt-6">
+        <section className="relative overflow-hidden rounded-[36px] px-6 py-8 md:px-8">
+          <div className="absolute inset-0 rounded-[36px] bg-[linear-gradient(135deg,#ffe2de_0%,#fff4f3_45%,#dff8f7_100%)]" />
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-coral-300/30 blur-3xl" />
+          <div className="relative">
+            <div className="mb-8 flex items-center justify-between gap-3">
               <div>
-                <span className="text-sm font-medium text-gray-700">
-                  Approval required
-                </span>
-                <p className="text-xs text-gray-400">
-                  Review requests before people join your squad
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-600">
+                  Create activity
+                </p>
+                <h1 className="display-font mt-3 text-4xl font-extrabold leading-tight text-coral-900">
+                  Build your next masterpiece activity.
+                </h1>
+                <p className="mt-3 max-w-xl text-base leading-7 text-coral-900/68">
+                  Shape the vibe, set the privacy line, and give your future
+                  squad something worth showing up for.
                 </p>
               </div>
-            </label>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Squad Name
-              </label>
-              <input
-                type="text"
-                value={squadTitle}
-                onChange={(e) => setSquadTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400"
-                placeholder={`e.g., ${title || "Activity"} Crew`}
-              />
+              <div className="hidden rounded-full bg-white/80 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-coral-900/55 shadow-[0_10px_24px_rgb(78,33,30,0.05)] md:block">
+                Draft saved locally
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Squad Description
-              </label>
-              <textarea
-                value={squadDescription}
-                onChange={(e) => setSquadDescription(e.target.value)}
-                rows={2}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-coral-400 resize-none"
-                placeholder="Describe the vibe of your squad..."
-              />
+            <div className="flex items-start justify-between gap-3">
+              {STEPS.map((item, index) => (
+                <div key={item.key} className="flex min-w-0 flex-1 items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => index < step && setStep(index)}
+                      className={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold ${
+                        index <= step
+                          ? "bg-coral-600 text-white shadow-[0_10px_24px_rgb(160,58,15,0.18)]"
+                          : "bg-coral-250 text-coral-900/55"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-coral-900/48">
+                      {item.label}
+                    </span>
+                  </div>
+                  {index < STEPS.length - 1 && (
+                    <div className="mt-[-1.5rem] h-[2px] flex-1 rounded-full bg-coral-250" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-        )}
+        </section>
 
-        {/* Step 5: Review & Publish */}
-        {step === 4 && (
-          <div className="bg-white rounded-2xl p-6 space-y-4">
-            <h2 className="font-semibold text-gray-900">Review your activity</h2>
+        <section className="surface-card mt-6 rounded-[34px] px-6 py-6 md:px-8">
+          {step === 0 && (
+            <div className="space-y-6">
+              <SectionIntro
+                label="Step one"
+                title="Define the vibe"
+                description="Lead with the title, energy, and framing people need to know whether this is their kind of plan."
+              />
 
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Title</span>
-                <span className="font-medium text-gray-900">{title}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Category</span>
-                <span className="font-medium text-gray-900">{category}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">When</span>
-                <span className="font-medium text-gray-900">
-                  {startTime
-                    ? new Date(startTime).toLocaleString("en-US", {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })
-                    : "—"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Where</span>
-                <span className="font-medium text-gray-900">{venueName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Squad size</span>
-                <span className="font-medium text-gray-900">
-                  {capacity} people
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Approval</span>
-                <span className="font-medium text-gray-900">
-                  {approvalRequired ? "Required" : "Auto-accept"}
-                </span>
-              </div>
+              <Field label="Activity title">
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                  className={inputClassName}
+                  placeholder="Sunset rooftop padel"
+                />
+              </Field>
+
+              <Field label="Choose a vibe">
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setCategory(item)}
+                      className={`rounded-full px-5 py-2.5 text-sm font-semibold ${
+                        category === item
+                          ? "bg-teal-600 text-teal-200"
+                          : "bg-coral-100 text-coral-900/72 hover:bg-coral-200"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </Field>
+
+              <Field label="Description">
+                <textarea
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  rows={5}
+                  className={`${inputClassName} min-h-36 resize-none`}
+                  placeholder="What’s the plan? Keep it breezy, warm, and clear."
+                />
+              </Field>
+
+              <Field label="Cover image URL">
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(event) => setImageUrl(event.target.value)}
+                  className={inputClassName}
+                  placeholder="https://..."
+                />
+              </Field>
+
+              <Field label="Tags">
+                <input
+                  type="text"
+                  value={tags}
+                  onChange={(event) => setTags(event.target.value)}
+                  className={inputClassName}
+                  placeholder="beginner-friendly, chill, creative"
+                />
+              </Field>
             </div>
-
-            {error && (
-              <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">
-                {error}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Navigation buttons */}
-        <div className="flex gap-3 mt-6">
-          {step > 0 && (
-            <button
-              onClick={() => setStep(step - 1)}
-              className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-50 transition"
-            >
-              Back
-            </button>
           )}
+
+          {step === 1 && (
+            <div className="space-y-6">
+              <SectionIntro
+                label="Step two"
+                title="Choose the timing"
+                description="A clear start time makes it easy to join. Add an end time if the plan has a firm close."
+              />
+
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Start time">
+                  <input
+                    type="datetime-local"
+                    value={startTime}
+                    onChange={(event) => setStartTime(event.target.value)}
+                    className={inputClassName}
+                  />
+                </Field>
+
+                <Field label="End time">
+                  <input
+                    type="datetime-local"
+                    value={endTime}
+                    onChange={(event) => setEndTime(event.target.value)}
+                    className={inputClassName}
+                  />
+                </Field>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-6">
+              <SectionIntro
+                label="Step three"
+                title="Set the privacy line"
+                description="Keep the public listing broad and warm. Save the exact meetup details for accepted members."
+              />
+
+              <Field label="Venue or spot name">
+                <input
+                  type="text"
+                  value={venueName}
+                  onChange={(event) => setVenueName(event.target.value)}
+                  className={inputClassName}
+                  placeholder="The Mud Room"
+                />
+              </Field>
+
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Neighborhood">
+                  <input
+                    type="text"
+                    value={areaLabel}
+                    onChange={(event) => setAreaLabel(event.target.value)}
+                    className={inputClassName}
+                    placeholder="Capitol Hill"
+                  />
+                </Field>
+
+                <Field label="Meetup area">
+                  <input
+                    type="text"
+                    value={meetupAreaLabel}
+                    onChange={(event) => setMeetupAreaLabel(event.target.value)}
+                    className={inputClassName}
+                    placeholder="Front entrance, lobby, trailhead"
+                  />
+                </Field>
+              </div>
+
+              <div className="rounded-[28px] bg-coral-100 px-5 py-5 text-sm leading-6 text-coral-900/68">
+                Exact meetup details stay hidden until you accept someone into
+                the squad.
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-6">
+              <SectionIntro
+                label="Step four"
+                title="Shape the squad"
+                description="Choose your community, set the capacity, and decide whether requests need approval."
+              />
+
+              <Field label="Community">
+                {communities.length === 0 ? (
+                  <div className="rounded-[26px] bg-coral-100 px-5 py-5 text-sm leading-6 text-coral-900/68">
+                    You need a verified community before you can host.{" "}
+                    <Link
+                      href="/profile/communities"
+                      className="font-semibold text-teal-700 underline"
+                    >
+                      Join one now
+                    </Link>
+                    .
+                  </div>
+                ) : (
+                  <select
+                    value={communityId}
+                    onChange={(event) => setCommunityId(event.target.value)}
+                    className={inputClassName}
+                  >
+                    {communities.map((community) => (
+                      <option key={community.id} value={community.id}>
+                        {community.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </Field>
+
+              <Field label="Squad capacity">
+                <div className="flex flex-wrap gap-2">
+                  {[3, 4, 6, 8, 10, 15].map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setCapacity(value)}
+                      className={`rounded-full px-5 py-2.5 text-sm font-semibold ${
+                        capacity === value
+                          ? "bg-teal-600 text-teal-200"
+                          : "bg-coral-100 text-coral-900/72 hover:bg-coral-200"
+                      }`}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
+              </Field>
+
+              <label className="flex items-start gap-4 rounded-[28px] bg-coral-50 px-5 py-5">
+                <input
+                  type="checkbox"
+                  checked={approvalRequired}
+                  onChange={(event) => setApprovalRequired(event.target.checked)}
+                  className="mt-1 rounded border-none text-teal-600"
+                />
+                <div>
+                  <p className="display-font text-xl font-bold text-coral-900">
+                    Approval required
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-coral-900/64">
+                    Keep the exact meetup hidden and review each request before
+                    people join your squad.
+                  </p>
+                </div>
+              </label>
+
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Squad name">
+                  <input
+                    type="text"
+                    value={squadTitle}
+                    onChange={(event) => setSquadTitle(event.target.value)}
+                    className={inputClassName}
+                    placeholder={`${title || "Activity"} Crew`}
+                  />
+                </Field>
+
+                <Field label="Squad description">
+                  <textarea
+                    value={squadDescription}
+                    onChange={(event) => setSquadDescription(event.target.value)}
+                    rows={4}
+                    className={`${inputClassName} resize-none`}
+                    placeholder="Describe the mood of your crew."
+                  />
+                </Field>
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="space-y-6">
+              <SectionIntro
+                label="Final step"
+                title="Review the publish card"
+                description="One last look before this goes live in the recommended feed."
+              />
+
+              <div className="rounded-[30px] bg-coral-50 px-6 py-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <SummaryRow label="Title" value={title || "Untitled"} />
+                  <SummaryRow label="Category" value={category} />
+                  <SummaryRow
+                    label="When"
+                    value={
+                      startTime
+                        ? new Date(startTime).toLocaleString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })
+                        : "TBD"
+                    }
+                  />
+                  <SummaryRow label="Venue" value={venueName || "TBD"} />
+                  <SummaryRow
+                    label="Squad size"
+                    value={`${capacity} people`}
+                  />
+                  <SummaryRow
+                    label="Approval"
+                    value={approvalRequired ? "Required" : "Auto-accept"}
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="rounded-[26px] bg-red-50 px-5 py-4 text-sm text-red-600">
+                  {error}
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+
+        <footer className="glass-nav fixed bottom-4 left-1/2 z-40 flex w-[min(860px,calc(100%-1rem))] -translate-x-1/2 items-center justify-between gap-3 rounded-[28px] px-4 py-4 ambient-shadow">
+          <button
+            type="button"
+            onClick={() => (step > 0 ? setStep(step - 1) : router.push("/"))}
+            className="rounded-full px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-coral-600 hover:bg-coral-100"
+          >
+            {step > 0 ? "Back" : "Cancel"}
+          </button>
 
           {step < STEPS.length - 1 ? (
             <button
+              type="button"
               onClick={() => setStep(step + 1)}
               disabled={!canAdvance()}
-              className="flex-1 py-3 rounded-xl bg-coral-500 text-white font-semibold hover:bg-coral-600 transition disabled:opacity-50"
+              className="gradient-cta rounded-full px-7 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_14px_30px_rgb(160,58,15,0.18)] disabled:opacity-50"
             >
               Next: {STEPS[step + 1].label}
             </button>
           ) : (
             <button
+              type="button"
               onClick={handlePublish}
               disabled={loading}
-              className="flex-1 py-3 rounded-xl bg-coral-500 text-white font-semibold hover:bg-coral-600 transition disabled:opacity-50"
+              className="gradient-cta rounded-full px-7 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_14px_30px_rgb(160,58,15,0.18)] disabled:opacity-50"
             >
-              {loading ? "Publishing..." : "Publish Activity"}
+              {loading ? "Publishing..." : "Publish activity"}
             </button>
           )}
-        </div>
+        </footer>
       </main>
     </>
   );
 }
+
+function SectionIntro({
+  label,
+  title,
+  description,
+}: {
+  label: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <header>
+      <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/45">
+        {label}
+      </p>
+      <h2 className="display-font mt-3 text-3xl font-extrabold text-coral-900">
+        {title}
+      </h2>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-coral-900/64">
+        {description}
+      </p>
+    </header>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/45">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[24px] bg-white px-4 py-4">
+      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-coral-900/45">
+        {label}
+      </p>
+      <p className="mt-2 text-sm font-semibold text-coral-900">{value}</p>
+    </div>
+  );
+}
+
+const inputClassName =
+  "w-full rounded-[26px] bg-coral-100 px-5 py-4 text-sm text-coral-900 placeholder:text-coral-900/45 outline-none";

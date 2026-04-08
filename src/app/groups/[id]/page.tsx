@@ -389,12 +389,10 @@ export default function GroupSpacePage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-6xl mx-auto p-4">
-          <div className="flex gap-4 h-[calc(100vh-56px)]">
-            <div className="w-56 bg-white rounded-2xl animate-pulse" />
-            <div className="flex-1 bg-gray-50 rounded-2xl animate-pulse" />
-            <div className="w-64 bg-white rounded-2xl animate-pulse" />
-          </div>
+        <div className="mx-auto flex w-full max-w-7xl gap-4 px-4 py-4">
+          <div className="hidden h-[calc(100vh-96px)] w-72 animate-pulse rounded-[30px] bg-white/70 lg:block" />
+          <div className="h-[calc(100vh-96px)] flex-1 animate-pulse rounded-[34px] bg-white/60" />
+          <div className="hidden h-[calc(100vh-96px)] w-80 animate-pulse rounded-[30px] bg-white/70 xl:block" />
         </div>
       </>
     );
@@ -404,8 +402,19 @@ export default function GroupSpacePage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-6xl mx-auto p-4 text-center py-20 text-gray-400">
-          Group not found or you don&apos;t have access
+        <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center justify-center px-4 py-12">
+          <div className="surface-card w-full rounded-[32px] p-10 text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-coral-500/70">
+              Squad Space
+            </p>
+            <h1 className="display-font mt-3 text-3xl font-extrabold text-[#4e211e]">
+              This squad isn&apos;t available right now
+            </h1>
+            <p className="mx-auto mt-3 max-w-md text-sm text-[#7f5c59]">
+              It may have been removed, cancelled, or you may no longer have
+              access to the space.
+            </p>
+          </div>
         </div>
       </>
     );
@@ -421,20 +430,25 @@ export default function GroupSpacePage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-lg mx-auto p-4 text-center py-20">
-          <div className="text-4xl mb-4">🔒</div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            Members Only
-          </h1>
-          <p className="text-sm text-gray-500 mb-6">
-            You need to be accepted into this squad to view the group space.
-          </p>
-          <button
-            onClick={() => router.push(`/activities/${event.id}`)}
-            className="px-6 py-2.5 bg-coral-500 text-white rounded-xl font-medium text-sm hover:bg-coral-600 transition"
-          >
-            Back to Activity
-          </button>
+        <div className="mx-auto flex min-h-[72vh] max-w-2xl items-center justify-center px-4 py-12">
+          <div className="surface-card w-full rounded-[32px] p-10 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-coral-100 text-3xl">
+              🔒
+            </div>
+            <h1 className="display-font mt-5 text-3xl font-extrabold text-[#4e211e]">
+              Members only
+            </h1>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#7f5c59]">
+              You&apos;ll see the full squad plan, member list, and live chat as
+              soon as your request is accepted.
+            </p>
+            <button
+              onClick={() => router.push(`/activities/${event.id}`)}
+              className="gradient-cta mt-8 rounded-full px-7 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgb(160,58,15,0.18)]"
+            >
+              Back to Activity
+            </button>
+          </div>
         </div>
       </>
     );
@@ -443,53 +457,63 @@ export default function GroupSpacePage() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto w-full flex flex-col lg:flex-row h-[calc(100vh-56px)]">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row">
         {/* Left sidebar: Members */}
-        <aside className="w-full lg:w-56 border-r border-gray-100 bg-white p-4 shrink-0 overflow-y-auto">
-          <h2 className="font-bold text-gray-900">{group.title}</h2>
-          <p className="text-xs text-gray-400 mb-4">
-            {members.length} Members
-          </p>
+        <aside className="surface-card h-fit w-full shrink-0 rounded-[30px] p-5 lg:sticky lg:top-[88px] lg:w-72 lg:max-h-[calc(100vh-112px)] lg:overflow-y-auto">
+          <div className="mb-5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-500/70">
+              Squad Space
+            </p>
+            <h2 className="display-font mt-2 text-2xl font-extrabold text-[#4e211e]">
+              {group.title}
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#7f5c59]">
+              {members.length} people are in this room with you right now.
+            </p>
+          </div>
 
           <div className="space-y-3">
             {members.map((m) => {
               const isSocial = memberRequestTypes[m.user_id] === "social";
               return (
-                <div key={m.id} className="flex items-center gap-2">
+                <div
+                  key={m.id}
+                  className="surface-low flex items-center gap-3 rounded-[24px] px-3 py-3"
+                >
                   <a
                     href={`/profiles/${m.user_id}`}
-                    className="w-8 h-8 rounded-full bg-coral-100 flex items-center justify-center text-xs font-semibold text-coral-600 hover:ring-2 hover:ring-coral-300 transition shrink-0"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-coral-100 text-sm font-semibold text-coral-700 transition hover:ring-2 hover:ring-coral-300"
                   >
                     {m.users?.display_name?.[0]?.toUpperCase() || "?"}
                   </a>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                       <a
                         href={`/profiles/${m.user_id}`}
-                        className="text-sm font-medium text-gray-900 truncate block hover:text-coral-500 transition"
+                        className="block truncate text-sm font-semibold text-[#4e211e] transition hover:text-coral-500"
                       >
                         {m.users?.display_name || "User"}
                       </a>
                       {isSocial && (
-                        <span className="text-[9px] bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                        <span className="shrink-0 rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-700">
                           Social
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="mt-1 flex items-center gap-2">
                       {m.role === "host" && (
-                        <span className="text-[10px] text-teal-600 font-medium uppercase">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-teal-700">
                           Host
                         </span>
                       )}
                       {m.checkin_status !== "none" && (
                         <span
-                          className={`text-[10px] font-medium ${
+                          className={`text-[11px] font-medium ${
                             m.checkin_status === "arrived"
-                              ? "text-green-600"
+                              ? "text-green-700"
                               : m.checkin_status === "otw"
-                                ? "text-amber-600"
-                                : "text-gray-400"
+                                ? "text-amber-700"
+                                : "text-[#8f726d]"
                           }`}
                         >
                           {m.checkin_status === "otw"
@@ -502,7 +526,7 @@ export default function GroupSpacePage() {
                     </div>
                   </div>
                   {m.user_id !== currentUserId && (
-                    <div className="shrink-0 flex gap-1">
+                    <div className="flex shrink-0 gap-1">
                       <button
                         onClick={() =>
                           setShowReport({
@@ -511,7 +535,7 @@ export default function GroupSpacePage() {
                             userName: m.users?.display_name,
                           })
                         }
-                        className="text-gray-300 hover:text-red-400 transition"
+                        className="rounded-full p-2 text-[#ae8b83] transition hover:bg-white/70 hover:text-red-500"
                         title="Report"
                       >
                         <svg
@@ -537,14 +561,14 @@ export default function GroupSpacePage() {
 
           {/* Block buttons for members */}
           {members.filter((m) => m.user_id !== currentUserId).length > 0 && (
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
+            <div className="mt-5 border-t border-white/70 pt-4">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ae8b83]">
                 Safety
               </p>
               {members
                 .filter((m) => m.user_id !== currentUserId)
                 .map((m) => (
-                  <div key={m.id} className="mb-1">
+                  <div key={m.id} className="mb-2">
                     <BlockButton
                       targetUserId={m.user_id}
                       targetName={m.users?.display_name || "User"}
@@ -558,10 +582,10 @@ export default function GroupSpacePage() {
           )}
 
           {/* Report group */}
-          <div className="mt-4 pt-3 border-t border-gray-100">
+          <div className="mt-5 border-t border-white/70 pt-4">
             <button
               onClick={() => setShowReport({ type: "group" })}
-              className="text-xs text-gray-400 hover:text-red-500 transition"
+              className="text-sm font-medium text-[#8f726d] transition hover:text-red-500"
             >
               Report this group
             </button>
@@ -569,11 +593,11 @@ export default function GroupSpacePage() {
 
           {/* Host settings */}
           {isHost && (
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
+            <div className="mt-5 border-t border-white/70 pt-4">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ae8b83]">
                 Group Settings
               </p>
-              <label className="flex items-center gap-2 text-xs text-gray-600 mb-2 cursor-pointer">
+              <label className="surface-low mb-2 flex cursor-pointer items-center gap-2 rounded-[18px] px-3 py-3 text-sm text-[#6c4d49]">
                 <input
                   type="checkbox"
                   checked={group.waitlist_enabled}
@@ -583,11 +607,11 @@ export default function GroupSpacePage() {
                       e.target.checked
                     )
                   }
-                  className="rounded border-gray-300 text-teal-500 focus:ring-teal-400"
+                  className="rounded border-coral-200 text-teal-500 focus:ring-teal-400"
                 />
                 Waitlist when full
               </label>
-              <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+              <label className="surface-low flex cursor-pointer items-center gap-2 rounded-[18px] px-3 py-3 text-sm text-[#6c4d49]">
                 <input
                   type="checkbox"
                   checked={group.allow_social_after_full}
@@ -597,7 +621,7 @@ export default function GroupSpacePage() {
                       e.target.checked
                     )
                   }
-                  className="rounded border-gray-300 text-teal-500 focus:ring-teal-400"
+                  className="rounded border-coral-200 text-teal-500 focus:ring-teal-400"
                 />
                 Social mode when full
               </label>
@@ -606,34 +630,34 @@ export default function GroupSpacePage() {
 
           {/* Host: waitlisted requests */}
           {isHost && waitlistedRequests.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
+            <div className="mt-5 border-t border-white/70 pt-4">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ae8b83]">
                 Waitlist ({waitlistedRequests.length})
               </p>
               {waitlistedRequests.map((r) => (
                 <div
                   key={r.id}
-                  className="text-xs text-gray-600 mb-1 flex items-center gap-1"
+                  className="surface-low mb-2 flex items-center gap-1 rounded-[18px] px-3 py-2 text-sm text-[#6c4d49]"
                 >
                   <span>{r.users?.display_name || "User"}</span>
-                  <span className="text-gray-300">- pending</span>
+                  <span className="text-[#ae8b83]">pending</span>
                 </div>
               ))}
             </div>
           )}
 
           {isHost && socialRequests.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
+            <div className="mt-5 border-t border-white/70 pt-4">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ae8b83]">
                 Social Requests ({socialRequests.length})
               </p>
               {socialRequests.map((r) => (
                 <div
                   key={r.id}
-                  className="text-xs text-gray-600 mb-1 flex items-center gap-1"
+                  className="surface-low mb-2 flex items-center gap-1 rounded-[18px] px-3 py-2 text-sm text-[#6c4d49]"
                 >
                   <span>{r.users?.display_name || "User"}</span>
-                  <span className="text-teal-500">social</span>
+                  <span className="text-teal-700">social</span>
                 </div>
               ))}
             </div>
@@ -641,25 +665,41 @@ export default function GroupSpacePage() {
         </aside>
 
         {/* Center: Chat */}
-        <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
+        <div className="surface-card flex min-w-0 flex-1 flex-col overflow-hidden rounded-[34px]">
           {/* Pinned plan */}
-          <div className="p-4 border-b border-gray-100">
+          <div className="border-b border-white/70 px-4 pb-4 pt-4 sm:px-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-500/70">
+                  Live Plan
+                </p>
+                <h3 className="mt-2 text-lg font-semibold text-[#4e211e]">
+                  Use the room to coordinate arrival, updates, and backup plans.
+                </h3>
+              </div>
+              <div className="rounded-full bg-white/75 px-4 py-2 text-xs font-medium text-[#7f5c59]">
+                {typingUsers.size > 0
+                  ? `${Array.from(typingUsers).join(", ")} ${typingUsers.size === 1 ? "is" : "are"} typing...`
+                  : "Realtime chat is on"}
+              </div>
+            </div>
+
             <PinnedPlanCard group={group} event={event} />
 
             {/* Share plan button */}
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-4 flex items-center gap-2">
               {shareToken ? (
                 <>
                   <button
                     onClick={copyShareLink}
-                    className="flex-1 py-2 text-xs font-medium text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition"
+                    className="surface-low flex-1 rounded-full px-4 py-3 text-sm font-semibold text-teal-700 transition hover:bg-teal-50"
                   >
                     {shareCopied ? "Copied!" : "Copy Share Link"}
                   </button>
                   {isHost && (
                     <button
                       onClick={handleRevokeShareLink}
-                      className="py-2 px-3 text-xs font-medium text-red-500 bg-red-50 rounded-lg hover:bg-red-100 transition"
+                      className="rounded-full bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100"
                     >
                       Revoke
                     </button>
@@ -669,7 +709,7 @@ export default function GroupSpacePage() {
                 <button
                   onClick={handleCreateShareLink}
                   disabled={shareLoading}
-                  className="flex-1 py-2 text-xs font-medium text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition disabled:opacity-50"
+                  className="surface-low flex-1 rounded-full px-4 py-3 text-sm font-semibold text-teal-700 transition hover:bg-teal-50 disabled:opacity-50"
                 >
                   {shareLoading ? "Creating..." : "Share Plan"}
                 </button>
@@ -681,7 +721,7 @@ export default function GroupSpacePage() {
           <div
             ref={messagesContainerRef}
             onScroll={handleScroll}
-            className="flex-1 overflow-y-auto p-4 space-y-4"
+            className="flex-1 space-y-4 overflow-y-auto bg-[linear-gradient(180deg,rgba(255,249,246,0.55),rgba(252,245,242,0.88))] p-4 sm:p-5"
           >
             {/* Load older button */}
             {hasOlderMessages && (
@@ -689,7 +729,7 @@ export default function GroupSpacePage() {
                 <button
                   onClick={loadOlderMessages}
                   disabled={loadingOlder}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition disabled:opacity-50"
+                  className="rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-[#8f726d] transition hover:text-[#4e211e] disabled:opacity-50"
                 >
                   {loadingOlder ? "Loading..." : "Load older messages"}
                 </button>
@@ -697,9 +737,11 @@ export default function GroupSpacePage() {
             )}
 
             {messages.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
-                <p className="text-sm">No messages yet</p>
-                <p className="text-xs mt-1">
+              <div className="py-16 text-center text-[#8f726d]">
+                <p className="display-font text-2xl font-bold text-[#4e211e]">
+                  No messages yet
+                </p>
+                <p className="mt-2 text-sm">
                   Start the conversation with your squad!
                 </p>
               </div>
@@ -727,7 +769,7 @@ export default function GroupSpacePage() {
                 >
                   <div className={`max-w-[70%] ${isOwn ? "order-2" : ""}`}>
                     {!isOwn && (
-                      <p className="text-xs text-gray-400 mb-0.5 ml-1">
+                      <p className="mb-1 ml-1 text-xs text-[#9b7c77]">
                         {msg.users?.display_name || "User"} &middot;{" "}
                         {new Date(msg.created_at).toLocaleTimeString("en-US", {
                           hour: "numeric",
@@ -736,16 +778,16 @@ export default function GroupSpacePage() {
                       </p>
                     )}
                     <div
-                      className={`px-4 py-2.5 rounded-2xl text-sm ${
+                      className={`rounded-[24px] px-4 py-3 text-sm shadow-[0_14px_30px_rgba(120,72,52,0.08)] ${
                         isOwn
-                          ? "bg-coral-500 text-white rounded-br-sm"
-                          : "bg-white text-gray-800 rounded-bl-sm shadow-sm"
+                          ? "bg-coral-500 text-white rounded-br-[10px]"
+                          : "bg-white/92 text-[#4e211e] rounded-bl-[10px]"
                       }`}
                     >
                       {msg.body}
                     </div>
                     {isOwn && (
-                      <p className="text-xs text-gray-400 mt-0.5 mr-1 text-right">
+                      <p className="mt-1 mr-1 text-right text-xs text-[#9b7c77]">
                         {new Date(msg.created_at).toLocaleTimeString("en-US", {
                           hour: "numeric",
                           minute: "2-digit",
@@ -759,22 +801,14 @@ export default function GroupSpacePage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Typing indicator */}
-          {typingUsers.size > 0 && (
-            <div className="px-4 pb-1 text-xs text-gray-400 animate-pulse">
-              {Array.from(typingUsers).join(", ")}{" "}
-              {typingUsers.size === 1 ? "is" : "are"} typing...
-            </div>
-          )}
-
           {/* Composer */}
           <ChatComposer onSend={handleSend} onTyping={handleTyping} />
         </div>
 
         {/* Right sidebar: Event info + Check-in */}
-        <aside className="w-full lg:w-64 border-l border-gray-100 bg-white p-4 shrink-0 overflow-y-auto">
-          <div className="rounded-xl overflow-hidden mb-4">
-            <div className="relative aspect-video bg-gray-200">
+        <aside className="surface-card h-fit w-full shrink-0 rounded-[30px] p-4 lg:sticky lg:top-[88px] lg:w-80 lg:max-h-[calc(100vh-112px)] lg:overflow-y-auto">
+          <div className="mb-4 overflow-hidden rounded-[28px]">
+            <div className="relative aspect-[4/3] bg-gray-200">
               {event.image_url ? (
                 <Image
                   src={event.image_url}
@@ -784,51 +818,51 @@ export default function GroupSpacePage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-coral-100 to-teal-100 flex items-center justify-center text-3xl">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-coral-100 to-teal-100 text-3xl">
                   🎯
                 </div>
               )}
             </div>
-            <div className="pt-3">
-              <span className="text-[10px] font-medium text-teal-600 uppercase tracking-wider">
+            <div className="px-1 pt-4">
+              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-teal-700">
                 {event.category}
               </span>
-              <h3 className="font-semibold text-sm text-gray-900 mt-0.5">
+              <h3 className="display-font mt-2 text-2xl font-extrabold text-[#4e211e]">
                 {event.title}
               </h3>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="mt-3 text-sm text-[#7f5c59]">
                 {new Date(event.start_time).toLocaleDateString("en-US", {
                   weekday: "long",
                   month: "short",
                   day: "numeric",
                 })}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm text-[#7f5c59]">
                 📍 {event.venue_name || event.area_label}
               </p>
             </div>
           </div>
 
           {group.meetup_exact_location_encrypted && (
-            <div className="mb-4 p-3 bg-teal-50 rounded-xl">
-              <p className="text-[10px] font-semibold text-teal-700 uppercase mb-1">
+            <div className="mb-4 rounded-[24px] bg-teal-50 px-4 py-4">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-teal-700">
                 Exact Meetup
               </p>
-              <p className="text-sm text-gray-800">
+              <p className="text-sm leading-6 text-[#245a59]">
                 {group.meetup_exact_location_encrypted}
               </p>
             </div>
           )}
 
-          <div className="mb-4 p-3 bg-gray-50 rounded-xl">
-            <p className="text-[10px] text-gray-400">
+          <div className="mb-4 rounded-[24px] bg-white/70 px-4 py-4">
+            <p className="text-sm leading-6 text-[#8f726d]">
               📍 Exact location shared only after host accepts you.
             </p>
           </div>
 
           {currentMember && (
             <div>
-              <p className="text-xs text-gray-400 mb-2 text-center">
+              <p className="mb-3 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[#ae8b83]">
                 Arriving soon?
               </p>
               <button
@@ -841,12 +875,12 @@ export default function GroupSpacePage() {
                         : "otw"
                   )
                 }
-                className={`w-full py-4 rounded-2xl font-bold text-lg transition ${
+                className={`w-full rounded-[26px] py-4 text-lg font-bold transition ${
                   currentMember.checkin_status === "arrived"
                     ? "bg-green-100 text-green-700"
                     : currentMember.checkin_status === "otw"
                       ? "bg-amber-100 text-amber-700"
-                      : "bg-teal-400 text-white hover:bg-teal-500"
+                      : "bg-teal-500 text-white hover:bg-teal-600"
                 }`}
               >
                 {currentMember.checkin_status === "arrived"

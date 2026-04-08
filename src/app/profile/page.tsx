@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
+    async function loadProfile() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -97,107 +97,115 @@ export default function ProfilePage() {
       setLoading(false);
     }
 
-    load();
+    loadProfile();
   }, [supabase]);
 
   const links = [
     {
       href: "/profile/communities",
       title: "Communities",
-      description: "Manage where you’re verified and which squads you can unlock.",
+      description: "Manage where you’re verified and which squad spaces you can unlock.",
+      accent: "bg-coral-250 text-coral-600",
     },
     {
       href: "/profile/preferences",
-      title: "Recommendation Settings",
-      description: "Tune categories, hobbies, distance, and digest frequency.",
+      title: "Discovery Engine",
+      description: "Tune categories, hobbies, distance, and digest rhythm.",
+      accent: "bg-teal-100 text-teal-700",
     },
     {
       href: "/schedule",
       title: "My Schedule",
-      description: "See your upcoming activities, check-in plans, and calendar links.",
+      description: "See your upcoming activity plans and calendar-ready links.",
+      accent: "bg-white text-coral-900/65",
     },
     {
       href: "/notifications",
       title: "Notifications",
-      description: "Stay on top of requests, messages, and activity updates.",
+      description: "Track requests, messages, and activity updates in one stream.",
+      accent: "bg-coral-100 text-coral-600",
     },
   ];
 
   return (
     <>
       <Navbar />
-      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-6">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 pb-14 pt-6">
         {loading ? (
-          <div className="space-y-4">
-            <div className="h-28 rounded-3xl bg-white shadow-sm skeleton" />
+          <div className="space-y-5">
+            <div className="h-48 rounded-[36px] skeleton" />
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="h-28 rounded-2xl bg-white skeleton" />
+                <div key={item} className="h-28 rounded-[28px] skeleton" />
               ))}
             </div>
           </div>
         ) : (
           <>
-            <section className="rounded-[28px] bg-white px-6 py-6 shadow-sm ring-1 ring-black/5">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-coral-100 text-2xl font-semibold text-coral-600">
+            <section className="surface-card overflow-hidden rounded-[38px] px-6 py-8 md:px-8">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <div className="flex items-start gap-5">
+                  <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[28px] bg-coral-250 text-4xl font-bold text-coral-600">
                     {profile?.display_name?.[0]?.toUpperCase() || "D"}
                   </div>
                   <div>
-                    <h1 className="text-2xl font-semibold text-gray-900">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-600">
+                      Profile
+                    </p>
+                    <h1 className="display-font mt-3 text-4xl font-extrabold leading-tight text-coral-900">
                       {profile?.display_name || "Your profile"}
                     </h1>
-                    <p className="mt-1 max-w-xl text-sm text-gray-500">
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-coral-900/64">
                       {profile?.bio ||
-                        "Keep your communities, recommendations, and plans in one place."}
+                        "Keep your communities, discovery controls, and squad plans in one vivid home base."}
                     </p>
                   </div>
                 </div>
 
-                <Link
-                  href="/create"
-                  className="inline-flex items-center justify-center rounded-2xl bg-coral-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-coral-600 focus:outline-none focus:ring-2 focus:ring-coral-300"
-                >
-                  Host an activity
-                </Link>
+                <div className="rounded-[30px] bg-coral-50 px-5 py-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-coral-900/45">
+                    Quick action
+                  </p>
+                  <Link
+                    href="/create"
+                    className="gradient-cta mt-4 inline-flex rounded-full px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_14px_28px_rgb(160,58,15,0.18)]"
+                  >
+                    Host an activity
+                  </Link>
+                </div>
               </div>
             </section>
 
             <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard label="Communities" value={stats?.communities ?? 0} />
-              <StatCard
-                label="Upcoming"
-                value={stats?.upcomingActivities ?? 0}
-              />
-              <StatCard
-                label="Host requests"
-                value={stats?.pendingRequests ?? 0}
-              />
-              <StatCard
-                label="Unread alerts"
-                value={stats?.unreadNotifications ?? 0}
-              />
+              <StatCard label="Upcoming" value={stats?.upcomingActivities ?? 0} />
+              <StatCard label="Host requests" value={stats?.pendingRequests ?? 0} />
+              <StatCard label="Unread alerts" value={stats?.unreadNotifications ?? 0} />
             </section>
 
-            <section className="mt-6 grid gap-4 lg:grid-cols-2">
+            <section className="mt-8 grid gap-4 lg:grid-cols-2">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-[24px] bg-white px-5 py-5 shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-coral-300"
+                  className="surface-card rounded-[32px] px-6 py-6 transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgb(78,33,30,0.08)]"
                 >
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h2 className="text-base font-semibold text-gray-900">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-900/42">
+                        Open
+                      </p>
+                      <h2 className="display-font mt-3 text-3xl font-extrabold text-coral-900">
                         {link.title}
                       </h2>
-                      <p className="mt-1 text-sm leading-6 text-gray-500">
+                      <p className="mt-3 text-sm leading-6 text-coral-900/62">
                         {link.description}
                       </p>
                     </div>
-                    <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700">
-                      Open
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] ${link.accent}`}
+                    >
+                      View
                     </span>
                   </div>
                 </Link>
@@ -212,11 +220,13 @@ export default function ProfilePage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-[24px] bg-white px-5 py-5 shadow-sm ring-1 ring-black/5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
+    <div className="surface-card rounded-[28px] px-5 py-5">
+      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-coral-900/42">
         {label}
       </p>
-      <p className="mt-3 text-3xl font-semibold text-gray-900">{value}</p>
+      <p className="display-font mt-3 text-4xl font-extrabold text-coral-900">
+        {value}
+      </p>
     </div>
   );
 }

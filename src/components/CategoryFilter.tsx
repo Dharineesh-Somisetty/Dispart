@@ -23,15 +23,15 @@ export default function CategoryFilter({
   onChange,
 }: CategoryFilterProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+    <div className="flex gap-3 overflow-x-auto pb-1">
       {CATEGORIES.map((cat) => (
         <button
           key={cat}
           onClick={() => onChange(cat)}
-          className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium border transition ${
+          className={`display-font whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition ${
             selected === cat
-              ? "bg-gray-900 text-white border-gray-900"
-              : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+              ? "bg-teal-600 text-teal-200 shadow-[0_10px_24px_rgb(0,102,102,0.16)]"
+              : "bg-coral-200 text-coral-900 hover:bg-coral-250"
           }`}
         >
           {cat}

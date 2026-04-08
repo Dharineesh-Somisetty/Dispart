@@ -13,7 +13,7 @@ export default function LockedCTA({
     <div className="relative">
       <button
         disabled
-        className="w-full py-2 text-sm text-gray-400 font-medium bg-gray-50 rounded-lg cursor-not-allowed flex items-center justify-center gap-1.5"
+        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-coral-100 px-4 py-3 text-sm font-semibold text-coral-900/45"
       >
         <svg
           className="w-3.5 h-3.5"
@@ -30,17 +30,17 @@ export default function LockedCTA({
         </svg>
         Request to Join
       </button>
-      <p className="text-[10px] text-gray-400 text-center mt-1">
+      <p className="mt-2 text-center text-[11px] text-coral-900/55">
         Join{" "}
         {onJoinCommunity ? (
           <button
             onClick={onJoinCommunity}
-            className="text-teal-600 font-medium hover:underline"
+            className="font-semibold text-teal-700 hover:underline"
           >
             {communityName}
           </button>
         ) : (
-          <span className="text-teal-600 font-medium">{communityName}</span>
+          <span className="font-semibold text-teal-700">{communityName}</span>
         )}{" "}
         to request
       </p>

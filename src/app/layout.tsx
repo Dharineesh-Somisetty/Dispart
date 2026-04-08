@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 
-const inter = Inter({
-  variable: "--font-inter",
+const beVietnam = Be_Vietnam_Pro({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -19,8 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html
+      lang="en"
+      className={`${beVietnam.variable} ${plusJakarta.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col text-warm">
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

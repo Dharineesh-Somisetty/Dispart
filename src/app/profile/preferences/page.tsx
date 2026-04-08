@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
+import { createClient } from "@/lib/supabase/client";
 import type { UserPreferences } from "@/lib/types";
 
 const CATEGORIES = [
@@ -40,6 +40,7 @@ const DISTANCES = [5, 10, 25, 50, 100];
 
 export default function PreferencesPage() {
   const router = useRouter();
+  const supabase = createClient();
   const [prefs, setPrefs] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -49,16 +50,17 @@ export default function PreferencesPage() {
   const [hobbyAllowlist, setHobbyAllowlist] = useState<string[]>([]);
   const [hobbyBlocklist, setHobbyBlocklist] = useState<string[]>([]);
   const [maxDistance, setMaxDistance] = useState(10);
-  const [digestFrequency, setDigestFrequency] = useState<"off" | "daily" | "weekly">("off");
+  const [digestFrequency, setDigestFrequency] = useState<
+    "off" | "daily" | "weekly"
+  >("off");
   const [emailOptIn, setEmailOptIn] = useState(true);
 
-  const supabase = createClient();
-
   useEffect(() => {
-    async function load() {
+    async function loadPreferences() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       if (!user) {
         setLoading(false);
         return;
@@ -71,58 +73,68 @@ export default function PreferencesPage() {
         .single();
 
       if (data) {
-        const p = data as UserPreferences;
-        setPrefs(p);
-        setCategories(p.include_categories || p.categories || []);
-        setExcludeCategories(p.exclude_categories || []);
-        setHobbyAllowlist(p.hobby_allowlist || p.tags || []);
-        setHobbyBlocklist(p.hobby_blocklist || []);
-        setMaxDistance(p.max_distance_miles);
-        setDigestFrequency(p.digest_frequency || "off");
-        setEmailOptIn(p.email_opt_in ?? true);
+        const value = data as UserPreferences;
+        setPrefs(value);
+        setCategories(value.include_categories || value.categories || []);
+        setExcludeCategories(value.exclude_categories || []);
+        setHobbyAllowlist(value.hobby_allowlist || value.tags || []);
+        setHobbyBlocklist(value.hobby_blocklist || []);
+        setMaxDistance(value.max_distance_miles);
+        setDigestFrequency(value.digest_frequency || "off");
+        setEmailOptIn(value.email_opt_in ?? true);
       }
 
       setLoading(false);
     }
 
-    load();
+    loadPreferences();
   }, [supabase]);
 
-  function toggleCategory(cat: string) {
-    setCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+  function toggleCategory(category: string) {
+    setCategories((current) =>
+      current.includes(category)
+        ? current.filter((item) => item !== category)
+        : [...current, category]
     );
-    setExcludeCategories((prev) => prev.filter((c) => c !== cat));
+    setExcludeCategories((current) =>
+      current.filter((item) => item !== category)
+    );
   }
 
-  function toggleExclude(cat: string) {
-    setExcludeCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+  function toggleExcludeCategory(category: string) {
+    setExcludeCategories((current) =>
+      current.includes(category)
+        ? current.filter((item) => item !== category)
+        : [...current, category]
     );
-    setCategories((prev) => prev.filter((c) => c !== cat));
+    setCategories((current) => current.filter((item) => item !== category));
   }
 
   function toggleHobby(hobby: string) {
-    setHobbyAllowlist((prev) =>
-      prev.includes(hobby) ? prev.filter((h) => h !== hobby) : [...prev, hobby]
+    setHobbyAllowlist((current) =>
+      current.includes(hobby)
+        ? current.filter((item) => item !== hobby)
+        : [...current, hobby]
     );
-    setHobbyBlocklist((prev) => prev.filter((h) => h !== hobby));
+    setHobbyBlocklist((current) => current.filter((item) => item !== hobby));
   }
 
   function toggleBlockedHobby(hobby: string) {
-    setHobbyBlocklist((prev) =>
-      prev.includes(hobby) ? prev.filter((h) => h !== hobby) : [...prev, hobby]
+    setHobbyBlocklist((current) =>
+      current.includes(hobby)
+        ? current.filter((item) => item !== hobby)
+        : [...current, hobby]
     );
-    setHobbyAllowlist((prev) => prev.filter((h) => h !== hobby));
+    setHobbyAllowlist((current) => current.filter((item) => item !== hobby));
   }
 
   async function handleSave() {
     setSaving(true);
 
-    const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     if (!user) {
       setSaving(false);
       return;
@@ -143,10 +155,7 @@ export default function PreferencesPage() {
     };
 
     if (prefs) {
-      await supabase
-        .from("user_preferences")
-        .update(payload)
-        .eq("user_id", user.id);
+      await supabase.from("user_preferences").update(payload).eq("user_id", user.id);
     } else {
       await supabase.from("user_preferences").insert(payload);
     }
@@ -159,12 +168,11 @@ export default function PreferencesPage() {
     return (
       <>
         <Navbar />
-        <div className="max-w-xl mx-auto p-4 animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/2 mb-4" />
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded-xl" />
-            ))}
+        <div className="mx-auto max-w-4xl px-4 py-6">
+          <div className="space-y-5">
+            <div className="h-36 rounded-[34px] skeleton" />
+            <div className="h-32 rounded-[28px] skeleton" />
+            <div className="h-32 rounded-[28px] skeleton" />
           </div>
         </div>
       </>
@@ -174,184 +182,194 @@ export default function PreferencesPage() {
   return (
     <>
       <Navbar />
-      <main className="max-w-xl mx-auto w-full px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">
-          Recommendation Settings
-        </h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Tell us what you enjoy so we can recommend the best activities for you.
-        </p>
+      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 pb-14 pt-6">
+        <section className="surface-card rounded-[36px] px-6 py-8 md:px-8">
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-600">
+            Discovery engine
+          </p>
+          <h1 className="display-font mt-3 text-4xl font-extrabold leading-tight text-coral-900">
+            Personalize the activity feed.
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-coral-900/62">
+            Choose what to pull closer, what to mute, and how often Dispart
+            should nudge you with new ideas.
+          </p>
+        </section>
 
-        <div className="space-y-6">
-          {/* Favorite Categories */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-1">
-              Include Categories
-            </h2>
-            <p className="text-xs text-gray-400 mb-3">
-              Show me activities in these categories
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => (
+        <div className="mt-6 space-y-6">
+          <PreferenceCard
+            label="Categories to include"
+            description="Give extra weight to the kinds of plans you usually say yes to."
+          >
+            <ChipGrid
+              items={CATEGORIES}
+              activeItems={categories}
+              onToggle={toggleCategory}
+              activeClassName="bg-teal-600 text-teal-200"
+            />
+          </PreferenceCard>
+
+          <PreferenceCard
+            label="Categories to mute"
+            description="Turn down the noise from activity lanes that aren’t for you right now."
+          >
+            <ChipGrid
+              items={CATEGORIES}
+              activeItems={excludeCategories}
+              onToggle={toggleExcludeCategory}
+              activeClassName="bg-coral-600 text-white"
+            />
+          </PreferenceCard>
+
+          <PreferenceCard
+            label="Hobby allowlist"
+            description="Boost plans that match your hobbies and favorite subcultures."
+          >
+            <ChipGrid
+              items={POPULAR_HOBBIES}
+              activeItems={hobbyAllowlist}
+              onToggle={toggleHobby}
+              activeClassName="bg-teal-600 text-teal-200"
+            />
+          </PreferenceCard>
+
+          <PreferenceCard
+            label="Hobby mute list"
+            description="Hide activities centered on hobbies you don’t want in the feed."
+          >
+            <ChipGrid
+              items={POPULAR_HOBBIES}
+              activeItems={hobbyBlocklist}
+              onToggle={toggleBlockedHobby}
+              activeClassName="bg-coral-600 text-white"
+            />
+          </PreferenceCard>
+
+          <PreferenceCard
+            label="Search radius"
+            description="Choose how far the feed should reach when we can estimate location."
+          >
+            <div className="grid gap-3 sm:grid-cols-5">
+              {DISTANCES.map((distance) => (
                 <button
-                  key={cat}
-                  onClick={() => toggleCategory(cat)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                    categories.includes(cat)
-                      ? "bg-coral-500 text-white border-coral-500"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  key={distance}
+                  type="button"
+                  onClick={() => setMaxDistance(distance)}
+                  className={`rounded-full px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] ${
+                    maxDistance === distance
+                      ? "bg-coral-600 text-white"
+                      : "bg-coral-100 text-coral-900/72 hover:bg-coral-200"
                   }`}
                 >
-                  {cat}
+                  {distance} mi
                 </button>
               ))}
             </div>
-          </div>
+          </PreferenceCard>
 
-          {/* Exclude Categories */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-1">
-              Mute Categories
-            </h2>
-            <p className="text-xs text-gray-400 mb-3">
-              Hide activities from these categories
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => (
+          <PreferenceCard
+            label="Digest rhythm"
+            description="Email only for now. SMS remains stored as off until that channel is live."
+          >
+            <div className="grid gap-3 sm:grid-cols-3">
+              {(["off", "daily", "weekly"] as const).map((value) => (
                 <button
-                  key={cat}
-                  onClick={() => toggleExclude(cat)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                    excludeCategories.includes(cat)
-                      ? "bg-gray-800 text-white border-gray-800"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  key={value}
+                  type="button"
+                  onClick={() => setDigestFrequency(value)}
+                  className={`rounded-full px-4 py-3 text-sm font-bold uppercase tracking-[0.16em] ${
+                    digestFrequency === value
+                      ? "bg-teal-600 text-teal-200"
+                      : "bg-coral-100 text-coral-900/72 hover:bg-coral-200"
                   }`}
                 >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Hobbies */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-1">
-              Hobby Allowlist
-            </h2>
-            <p className="text-xs text-gray-400 mb-3">
-              Prioritize activities matching your hobbies
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {POPULAR_HOBBIES.map((hobby) => (
-                <button
-                  key={hobby}
-                  onClick={() => toggleHobby(hobby)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                    hobbyAllowlist.includes(hobby)
-                      ? "bg-teal-500 text-white border-teal-500"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {hobby}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-1">
-              Hobby Mute List
-            </h2>
-            <p className="text-xs text-gray-400 mb-3">
-              Hide activities centered around these hobbies
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {POPULAR_HOBBIES.map((hobby) => (
-                <button
-                  key={`${hobby}-blocked`}
-                  onClick={() => toggleBlockedHobby(hobby)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${
-                    hobbyBlocklist.includes(hobby)
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {hobby}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Distance */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-3">
-              Max Distance
-            </h2>
-            <div className="flex gap-2">
-              {DISTANCES.map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setMaxDistance(d)}
-                  className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition ${
-                    maxDistance === d
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {d} mi
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Digest */}
-          <div className="bg-white rounded-2xl p-5">
-            <h2 className="font-semibold text-gray-900 text-sm mb-3">
-              Email Digest
-            </h2>
-            <div className="flex gap-2 mb-4">
-              {(["off", "daily", "weekly"] as const).map((freq) => (
-                <button
-                  key={freq}
-                  onClick={() => setDigestFrequency(freq)}
-                  className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium border transition capitalize ${
-                    digestFrequency === freq
-                      ? "bg-coral-500 text-white border-coral-500"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {freq}
+                  {value}
                 </button>
               ))}
             </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label className="mt-5 flex items-start gap-4 rounded-[26px] bg-coral-50 px-5 py-5">
               <input
                 type="checkbox"
                 checked={emailOptIn}
-                onChange={(e) => setEmailOptIn(e.target.checked)}
-                className="rounded border-gray-300 text-coral-500 focus:ring-coral-400"
+                onChange={(event) => setEmailOptIn(event.target.checked)}
+                className="mt-1 rounded border-none text-teal-600"
               />
-              <span className="text-sm text-gray-700">
-                Receive email notifications about recommended activities
-              </span>
+              <div>
+                <p className="display-font text-xl font-bold text-coral-900">
+                  Email digest enabled
+                </p>
+                <p className="mt-2 text-sm leading-6 text-coral-900/64">
+                  Receive curated recommendations based on your current settings.
+                </p>
+              </div>
             </label>
+          </PreferenceCard>
+        </div>
 
-            <p className="mt-3 text-xs text-gray-400">
-              SMS is not enabled yet. We only store your email digest preference
-              for now.
-            </p>
-          </div>
-
+        <div className="glass-nav sticky bottom-4 mt-8 flex justify-end rounded-[28px] px-4 py-4 ambient-shadow">
           <button
             onClick={handleSave}
             disabled={saving}
-            className="w-full py-3 rounded-xl bg-coral-500 text-white font-semibold hover:bg-coral-600 transition disabled:opacity-50"
+            className="gradient-cta rounded-full px-7 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[0_14px_30px_rgb(160,58,15,0.18)] disabled:opacity-50"
           >
-            {saving ? "Saving..." : "Save Preferences"}
+            {saving ? "Saving..." : "Save settings"}
           </button>
         </div>
       </main>
     </>
+  );
+}
+
+function PreferenceCard({
+  label,
+  description,
+  children,
+}: {
+  label: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="surface-card rounded-[32px] px-6 py-6">
+      <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-coral-900/42">
+        {label}
+      </p>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-coral-900/62">
+        {description}
+      </p>
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+function ChipGrid({
+  items,
+  activeItems,
+  onToggle,
+  activeClassName,
+}: {
+  items: string[];
+  activeItems: string[];
+  onToggle: (value: string) => void;
+  activeClassName: string;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => onToggle(item)}
+          className={`rounded-full px-4 py-2 text-sm font-semibold capitalize ${
+            activeItems.includes(item)
+              ? activeClassName
+              : "bg-coral-100 text-coral-900/72 hover:bg-coral-200"
+          }`}
+        >
+          {item}
+        </button>
+      ))}
+    </div>
   );
 }
