@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Navbar from "@/components/Navbar";
 import CommunityBadge from "@/components/CommunityBadge";
@@ -25,40 +25,61 @@ export default function CommunitiesPage() {
 
   const supabase = createClient();
 
+  const refreshCommunities = useCallback(async (currentUserId: string) => {
+    const { data: allCommunities, error: communitiesError } = await supabase
+      .from("communities")
+      .select("*")
+      .order("name");
+
+    if (communitiesError) {
+      setError("Could not load communities right now.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: myMemberships, error: membershipsError } = await supabase
+      .from("community_memberships")
+      .select("community_id, role")
+      .eq("user_id", currentUserId);
+
+    if (membershipsError) {
+      setError("Could not load your memberships right now.");
+      setLoading(false);
+      return;
+    }
+
+    const membershipMap = new Map(
+      (myMemberships || []).map((membership) => [
+        membership.community_id,
+        membership.role,
+      ])
+    );
+
+    const merged = (allCommunities || []).map((community) => ({
+      ...community,
+      is_member: membershipMap.has(community.id),
+      role: membershipMap.get(community.id) || null,
+    })) as CommunityWithMembership[];
+
+    setCommunities(merged);
+    setLoading(false);
+  }, [supabase]);
+
   useEffect(() => {
     async function load() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
       setUserId(user.id);
-
-      const { data: allCommunities } = await supabase
-        .from("communities")
-        .select("*")
-        .order("name");
-
-      const { data: myMemberships } = await supabase
-        .from("community_memberships")
-        .select("community_id, role")
-        .eq("user_id", user.id);
-
-      const membershipMap = new Map(
-        (myMemberships || []).map((m) => [m.community_id, m.role])
-      );
-
-      const merged = (allCommunities || []).map((c) => ({
-        ...c,
-        is_member: membershipMap.has(c.id),
-        role: membershipMap.get(c.id) || null,
-      })) as CommunityWithMembership[];
-
-      setCommunities(merged);
-      setLoading(false);
+      await refreshCommunities(user.id);
     }
 
     load();
-  }, [supabase]);
+  }, [supabase, refreshCommunities]);
 
   async function handleJoin(community: CommunityWithMembership) {
     if (!userId) return;
@@ -106,17 +127,26 @@ export default function CommunitiesPage() {
   async function joinCommunity(communityId: string) {
     if (!userId) return;
 
+    const alreadyJoined = communities.find(
+      (community) => community.id === communityId
+    )?.is_member;
+
     const { error: insertError } = await supabase
       .from("community_memberships")
-      .insert({ community_id: communityId, user_id: userId });
+      .upsert(
+        { community_id: communityId, user_id: userId },
+        { onConflict: "community_id,user_id" }
+      );
 
     if (insertError) {
       setError(insertError.message);
     } else {
-      setCommunities((prev) =>
-        prev.map((c) =>
-          c.id === communityId ? { ...c, is_member: true, role: "member" } : c
-        )
+      await refreshCommunities(userId);
+      const community = communities.find((item) => item.id === communityId);
+      setSuccessMessage(
+        alreadyJoined
+          ? `You're already in ${community?.name || "this community"}`
+          : `Joined ${community?.name || "community"}`
       );
     }
     setActionLoading(null);
@@ -172,11 +202,7 @@ export default function CommunitiesPage() {
     if (deleteError) {
       setError(deleteError.message);
     } else {
-      setCommunities((prev) =>
-        prev.map((c) =>
-          c.id === communityId ? { ...c, is_member: false, role: null } : c
-        )
-      );
+      await refreshCommunities(userId);
     }
     setActionLoading(null);
   }
@@ -225,6 +251,14 @@ export default function CommunitiesPage() {
                 className="h-24 bg-white rounded-xl animate-pulse"
               />
             ))}
+          </div>
+        ) : error && communities.length === 0 ? (
+          <div className="text-center py-16 text-gray-400">
+            <p className="text-lg">We couldn&apos;t load your community state</p>
+            <p className="text-sm mt-1">
+              This usually means the database membership rules need to be
+              updated.
+            </p>
           </div>
         ) : communities.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
@@ -279,9 +313,18 @@ export default function CommunitiesPage() {
                     <button
                       onClick={() => handleLeave(community.id)}
                       disabled={actionLoading === community.id}
-                      className="px-4 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
+                      className="group rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 transition hover:border-red-200 hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
                     >
-                      {actionLoading === community.id ? "..." : "Leave"}
+                      {actionLoading === community.id ? (
+                        "..."
+                      ) : (
+                        <>
+                          <span className="group-hover:hidden">Joined</span>
+                          <span className="hidden group-hover:inline">
+                            Unjoin
+                          </span>
+                        </>
+                      )}
                     </button>
                   ) : (
                     <button

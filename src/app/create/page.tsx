@@ -59,24 +59,65 @@ export default function CreateActivityPage() {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user) return;
+      if (!user) {
+        setCommunities([]);
+        setCommunityId("");
+        return;
+      }
 
-      const { data: memberships } = await supabase
+      const { data: memberships, error: membershipsError } = await supabase
         .from("community_memberships")
-        .select("community_id, communities(*)")
+        .select("community_id")
         .eq("user_id", user.id);
 
-      const items = (memberships || [])
-        .map((membership) => (membership as Record<string, unknown>).communities as Community)
-        .filter(Boolean);
+      if (membershipsError) {
+        setCommunities([]);
+        setCommunityId("");
+        return;
+      }
+
+      const communityIds = (memberships || []).map(
+        (membership) => membership.community_id
+      );
+
+      if (communityIds.length === 0) {
+        setCommunities([]);
+        setCommunityId("");
+        return;
+      }
+
+      const { data: joinedCommunities } = await supabase
+        .from("communities")
+        .select("*")
+        .in("id", communityIds)
+        .order("name");
+
+      const items = (joinedCommunities || []) as Community[];
 
       setCommunities(items);
-      if (items.length > 0) {
-        setCommunityId(items[0].id);
+      setCommunityId((currentCommunityId) => {
+        if (items.length === 0) return "";
+        return items.some((community) => community.id === currentCommunityId)
+          ? currentCommunityId
+          : items[0].id;
+      });
+    }
+
+    function handleVisibilityRefresh() {
+      if (document.visibilityState === "visible") {
+        void loadCommunities();
       }
     }
 
-    loadCommunities();
+    void loadCommunities();
+
+    window.addEventListener("focus", loadCommunities);
+    document.addEventListener("visibilitychange", handleVisibilityRefresh);
+
+    return () => {
+      window.removeEventListener("focus", loadCommunities);
+      document.removeEventListener("visibilitychange", handleVisibilityRefresh);
+    };
   }, [supabase]);
 
   function canAdvance() {
